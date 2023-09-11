@@ -556,6 +556,21 @@ Standardization changes the value of the regression slope for the interaction bu
 Centering and standardization change all lower-order regression slopes and hypothesis tests that individual slopes equal zero but make them more interpretable in the presence of an interaction.
 The method we will describe for further examining interaction terms using simple slopes is also unaffected by centering but is affected by standardizing predictor variables.
 
+## Indicator (dummy) variables
+
+There are often situations when we would like to incorporate a categorical variable into our multiple regression modeling.
+If our linear model only has categorical predictor variables ("factors"), then they are usually considered as classical analyses of variance models.
+Commonly, we have linear models with a mixture of categorical and continuous variables.
+The simplest case is one categorical predictor (converted to dummy variables) and one continuous predictor.
+
+Categorical variables cannot be directly included as covariates in a linear model because their values are names (or labels) and not numbers: we need to convert them into a format that can be used in your regression analysis work with.
+
+This means making all categories a dummy (yes/no) and fit a linear model including each of these dummy variables as predictors.
+For a predictor variable with $c$ categories, we only need $c-1$ dummy variables.
+Interpreting the regression coefficients is a little tricky.
+The coefficients for $X_2$, $X_3$, $...$, and $X_c$ indicate how different the effects of beeing of a particular class respectively when compared to the effect of the $X_1$ class or the reference category, i.e. the coefficients for dummy variables measure the differential effects of each category compared to a reference category (in which all dummy variables equal zero, or a predefined one).
+The choice of the reference category should be made prior to analysis.
+
 ## Polynomial regression
 
 Generally, curvilinear models fall into the class of nonlinear regression modeling because they are best fitted by models that are nonlinear in the parameters (e.g. power functions).

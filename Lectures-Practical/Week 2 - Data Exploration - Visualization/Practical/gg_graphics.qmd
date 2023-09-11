@@ -1,0 +1,1001 @@
+---
+title: "ggplot2 graphics"
+author: "Alejandro Ordonez"
+editor: 
+  markdown: 
+    wrap: sentence
+format:
+  html:
+    embed-resources: true
+---
+
+```{r}
+#| echo: false
+#| warning: false
+library(tidyverse)
+library(palmerpenguins)
+penguins <- na.omit(penguins)
+library(knitr)
+library(patchwork)
+```
+
+For many people, using R to create informative and pretty figures is one of the more rewarding aspects of using R.
+These can either take the form of a rough and ready plot to get a feel for what's going on in your data, or a fancier, more complex figure to use in a publication or a report.
+This process is often as close as many scientists get to having a professional creative side (at least that's true for us), and it's a source of pride for some folk.
+
+One of the many reasons for the rise in the popularity of R is its ability to produce publication quality figures.
+Not only can R users make figures well suited for publication, but the means in which the figures are produced also offers a wide-range of customisation.
+Because of this inherent flexibility when producing figures, data visualisation in R and supporting packages has grown substantially over the years.
+
+In this lesson, we will focus on creating figures using a specialised package called `ggplot2`.
+
+Before we get going with making some plots of the `gg` variety, how about a quick history of one of the most commonly used packages in R?
+`ggplot2`\index{ggplot2 package} was based on a book called *Grammar of Graphics* by Leland Wilkinson (hence the gg in `ggplot2`). The *Grammar of Graphics* approach moves away from the idea that to create, for example, a scatterplot, users should click the `scatterplot` button or use the `scatterplot()` function.
+Instead, by breaking figures down into their various components (e.g. the underlying statistics, the geometric arrangement, the theme), users will be able to manipulate each of these components (i.e. layers) and produce a tailor-made figure fit for their specific needs.
+
+Contrast this approach with the one used by, for example, Microsoft Excel.
+The user specifies the data and then clicks the scatterplot button.
+This inherently locks the user into many choices made by the software developer and not the user.
+Think of how easily you can spot an Excel scatterplot because other than a couple of pre-set options, there's really not much you can do to change the way the plot displays the data.
+
+In 2007 `ggplot2` was released by [Hadley Wickham](https://en.wikipedia.org/wiki/Hadley_Wickham) - chief scientist at Posit.
+By 2017 the package had reportedly been downloaded 10 million times and over the last few years `ggplot2` has become the foundation for numerous other packages which expand its functionality even more.
+`ggplot2` is now part of the `tidyverse` collection of R packages.
+
+It's important to note that `ggplot2` is not **required** to make "fancy" and informative figures in R.
+If you prefer using base R graphics then feel free to continue as almost all `ggplot2` type figures can be created using base R.
+The difference between`ggplot2` and base R is how you *get* to the end product rather than any substantial differences in the end product itself.
+This is, never-the-less, a common belief probably due to the fact that making a moderately attractive figure is (for many), easier to do with `ggplot2` as many aesthetic decisions are made for the user, without you necessarily even knowing that a decision was ever made!
+
+With that in mind, let's get started making some figures.
+
+## Beginning at the end
+
+The approach we'll use in this lesson will be to start off by showing you a figure which we suggest is at a standard that you could use in a poster or presentation.
+Using that as the aim, we will then work towards it step-by-step.
+**You should not view this final figure as any sort of holy grail**.
+For instance, you would be very unlikely to use this in a publication (you'd be much more likely to use some results from your hard earned-analysis).
+Regardless, this "final figure" is, and will only ever be, a an example of some preferences.
+As with anything subjective, you may well disagree, and to some extent we hope you do.
+Much better that we all have slightly (or grossly) different views on what a good figure is - otherwise we may as well go back to using cookie-cutter figures.
+
+So what's the figure we're going to make together?
+
+```{r final-figure-start, echo = FALSE, out.width = "75%", fig.align = "center", warning = FALSE, message=FALSE}
+
+final_figure <- ggplot(aes(x = body_mass_g, y = flipper_length_mm), data = penguins) +
+  geom_point(aes(colour = species, shape = sex), size = 2, alpha = 0.6) +
+  geom_smooth(colour = "black", method = "lm", se = FALSE, linetype = 2, alpha = 0.6) +
+  geom_smooth(aes(colour = species), method = "lm", se = FALSE, size = 1.2) +
+  xlab("Body mass (g)") +
+  ylab("Flipper length (mm)") +
+  #geom_hline(aes(yintercept = 79.7833), size = 0.5, colour = "black", linetype = 3) +
+  labs(shape = "Island", 
+  		 colour = "Penguin\nSpecies", 
+  		 caption = "Note: Regression assumptions are unvalidated") +
+  scale_colour_manual(
+    values = c("#5C1AAE", "#AE5C1A", "#1AAE5C"),
+    labels = c("Adelie", "Chinstrap", "Gentoo")
+  ) +
+  scale_shape_manual(
+    values = c(1, 2),
+    labels = c("female", "male")) +
+  facet_grid(year~ island)
+
+final_figure
+```
+
+
+Before we go further, let's take a second and talk about what this figure is showing.
+On the y axes of the four plots we have the flipper length (in mm), and on the x axes we have the boddy mass (g) of the different evaluated individuals.
+Each column of plots shows the island where the individuals were sampled.
+
+The different colors represents the penguin species (`Adelie`, `Chinstrap`, `Gentoo`), and the shape represent the sex (`female`,`male`).
+For example, green colored triangles are males, represent `Adelie` penguins.
+
+We have also added trend lines to each plot (using a linear model, you will get to these soon).
+The solid colored lines show the relationship between body mass and flipper length for each species.
+The dashed black line in each plot represents the relationship between body mass and flipper length whilst ignoring any species.
+
+For the purposes of this lesson, we won't worry about the biology here.
+Do not take this as standard practice, you should absolutely care deeply about the science in your own data.
+It's the science that should be the driving force behind the questions you ask, which in turn determines what figures you should make.
+
+## The start of the end
+
+The first step in producing a plot with `ggplot()`\index{ggplot()} is the easiest!
+We just need to install and then make the package avaialble.
+Note that although most people refer to the package as `ggplot`, it's proper name is `ggplot2`.
+
+```r
+install.packages("ggplot2")
+library(ggplot2)
+```
+
+With that taken care of, let's make our first `ggplot`!
+
+### The purest of ggplots
+
+When we run our 'in person' R courses that accompany this book, we often ask our students to name all of the functions they have either learnt during the course, have heard of previously, or have used before (we call it R bingo!).
+At this point in the course, the students have not yet learnt about `ggplot2`, but never-the-less one year a student suggested the function `ggplot()`.
+When asked what the `ggplot()` function does, they joked that it obviously makes a `ggplot.` This makes intuitive sense, so let's make a `ggplot` now:
+
+```{r pure-ggplot, out.width = "75%", fig.align = "center", message=FALSE}
+ggplot()
+```
+
+And here we have it.
+A fully formed, perfect `ggplot`.
+We may have a small issue though.
+Some puritan data visualisers/plotists/figurines make the claim that figures should include some form of information beyond a light grey background.
+As loathe as we are to agree with purists, we'll do so here.
+We really should include some information, but to do so, we need data.
+
+We'll keep using the `penguin` data set.
+Let's have a quick reminder of what the structure of the data looks like.
+
+```r
+penguins <- read.table("penguins.csv",
+                       stringsAsFactors = TRUE, 
+                       header = TRUE, sep = ",")
+str(penguins)
+```
+
+We know from the "final figure" that we want the variable `flipper_length_mm` on the y axis (response/dependent variable) and `body_mass_g` on the x axis (explanatory/independent variable).
+To do this in `ggplot2` we need to make use of the `aes()`\index{aes()} function and also add a `data =` argument.
+`aes` is short for aesthetics, and it's the function we use to specify what we want displayed in the figure.
+
+If we did not include the `aes()`\index{aes()} function, then the `x =` and `y =` arguments would produce an error saying that the object was not found.
+A good rule to keep in mind when using `ggplot2` is that the variables which we want displayed on the figure must be included in `aes()` function via the `mapping =` argument.
+
+All features in the figure which alter the displayed information, not based on a variable in our dataset (e.g. increasing the size of points to an arbitrary value), is included outside of the `aes()` function.
+Don't worry if that doesn't make sense for now, we'll come back to this later.
+
+Let's update our code to include the 'data' and 'mapping' layers (indicated by the grey Data and mustard Mapping *layer bubbles* which will precede relevant code chunks):
+
+```{r ggplot-with-xy-axis, out.width = "75%", fig.align = "center", message=FALSE}
+# Including aesthetics for x and y axes as well as specifying the dataset
+ggplot(mapping = aes(x = body_mass_g, y = flipper_length_mm), data = penguins)
+```
+
+ 
+
+That's already much better.
+At least it's no longer a blank grey canvas.
+We've now told `ggplot2` what we want as our x and y axes as well as where to find that data.
+But what's missing here is where we tell `ggplot2` *how* to display that data.
+This is now the time to introduce you to 'geoms' or geometry layers.
+
+Geometries are the way that `ggplot2` displays information.
+For instance `geom_point()`\index{geom\_point()} tells `ggplot2` that you want the information to be displayed as points (making scatterplots possible for example).
+Given that the "final figure" uses points, this is clearly the appropriate geom to use here.
+
+Before we can do that, we need to talk about the coding structure used by `ggplot2`.
+The analogy that we and many others use is to say that making a figure in `ggplot2` is much like painting.
+What we've did in the above code was to make our "canvas".
+Now we are going to add sequential layers to that painting, increasing the complexity and detail over time.
+Each time we want to include a new layer we need to end a preceding layer with a `+` at the end to tell `ggplot2` that there are additional layers coming.
+
+Let's add (`+`) a new geometry layer now:
+
+```{r ggplot-with-geom_point, out.width = "75%", fig.align = "center", message=FALSE}
+ggplot(aes(x = body_mass_g, y = flipper_length_mm), data = penguins) +
+		geom_point()     # Adding a geom to display data as point data
+```
+
+ 
+
+When you first start using `ggplot2` there are three crucial layers that require your input.
+You can safely ignore the other layers initially as they all receive sensible (if sometimes ugly) defaults.
+The three crucial layers are:
+
+Given that 'data' only requires us to specify the dataset we want to use, it is trivially easy to complete.
+'Mapping' only requires you to specify what variables in the data to use, often just the x- and y-axes (specified using `aes()`).
+Lastly, 'geometry' is where we choose how we want the data to be visualised.
+
+With just these three fundamentals, you will be able to produce a large variety of plots (see later in this lesson for a [bestiary](#bestiary) of plots).
+
+If what we wanted was a quick and dirty figure to get a grasp of the trend in the data we can stop here.
+From the scatterplot that we've produced, we can see that `flipper_length_mm` looks like it's increasing with `body_mass_g` in a linear fashion.
+So long as this answers the question we were asking from these data, we have a figure that is fit for purpose.
+However, for showing to other people we might want something a bit more developed.
+If we glance back to our "final figure" we can see that we have lines representing the different nitrogen concentrations.
+We can include lines using a geom.
+If you have a quick look through the available geoms [here](https://r02pro.github.io/summary-geom.html), you might think that `geom_line()`\index{geom\_line()} would be appropriate.
+Let's try it.
+
+```{r geom_line, out.width="75%", fig.align="center", message=FALSE}
+ggplot(aes(x = body_mass_g, y = flipper_length_mm), data = penguins) +
+  geom_point() +
+	geom_line()     # Adding geom_line
+```
+
+Not quite what we were going for.
+The problem that we have is that `geom_line()` is actually just playing join-the-dots in the order they appear in the data (an alternative to `geom_path()`\index{geom\_path()}).
+The geom we actually want to use is called `geom_smooth()`\index{geom\_smooth()}.
+We can fix that very easily just by changing "line" to "smooth".
+
+```{r geom_smooth, out.width = "75%", fig.align = "center", message=FALSE}
+ggplot(aes(x = body_mass_g, y = flipper_length_mm), data = penguins) +
+  geom_point() +
+	geom_smooth()    # Changing to geom_smooth
+```
+
+ 
+
+Better, but still not what we wanted.
+The challenge here is that drawing a line is actually somewhat complicated.
+The way our line above was drawn was by using a method called "LOESS" (locally estimated scatterplot smoothing) which gives something very close to a moving average; useful in some cases, less so in others.
+`ggplot2` will use LOESS as default when you have \< 1000 observations, so we'll need to manually specify the method.
+Instead of a wiggly line, we want a nice simple 'line of best fit' to be drawn using a method called "lm" (short for linear model).
+Try looking at the help file, using `?geom_smooth`, to see what other options are available for the `method =` argument.
+
+While we're at it, let's get rid of the confidence interval ribbon around the line.
+We prefer to do this as we think it's clearer to the audience that this isn't a properly analysed line and to treat it as a visual aid only.
+We can do this at the same time as changing the method by setting the `se =` argument (short for standard error) to `FALSE`.
+
+Let's update the code to use a linear model without confidence intervals.
+
+```{r geom_smooth-lm, out.width = "75%", fig.align = "center", message=FALSE}
+ggplot(aes(x = body_mass_g, y = flipper_length_mm), data = penguins) +
+  geom_point() +
+	geom_smooth(method = "lm", se = FALSE)    # method and se 
+```
+
+We get the straight line that we wanted, though it's still not matching the "final figure".
+We need to alter `geom_smooth()` so that it draws lines for each species.
+Getting `ggplot2` to do that is pretty straightforward.
+We can use the `colour =` argument within `aes()` (remember whatever we include in `aes()`\index{aes()} will be something displayed in the figure) to tell `ggplot2` to draw a different coloured lines depending on the `species` variable.
+Keep in mind that we have no variable in our dataset called "island_colour", so `ggplot2` is taking care of that for us here and assigning a colour to each unique island level.
+
+An aside: `ggplot2` was written with both UK English and American English in mind, so both `colour` and `color` spellings work in `ggplot2`.
+
+```{r geom_smooth-colour-lm, out.width = "75%", fig.align = "center", message=FALSE}
+ggplot(aes(x = body_mass_g, y = flipper_length_mm), data = penguins) +
+  geom_point() +
+  # Including colour argument in aes()
+  geom_smooth(aes(colour = species), method = "lm", se = FALSE)
+```
+
+
+We're getting closer, especially since `ggplot2` has automatically created a legend for us.
+At this point it's a good time to talk about where to include information - whether to include it within a geom or in the main call to `ggplot()`.
+When we include information such as `data =` and `aes()` in `ggplot()` we are setting those as the default, universal values which all subsequent geoms use.
+Whereas if we were to include that information within a geom, only that geom would use that specific information.
+In this case, we can easily move the information around and get exactly the same figure.
+
+```{r universal-vrs-geom, out.width="75%", fig.align="center", message=FALSE}
+ggplot() +
+	# Moved aes() and data into geoms
+  geom_point(aes(x = body_mass_g, y = flipper_length_mm), data = penguins) +
+  geom_smooth(aes(x = body_mass_g, y = flipper_length_mm, colour = species), 
+  						data = penguins, method = "lm", se = FALSE)
+```
+
+ 
+
+Doing so we get exactly the same figure.
+This ability to move information between the main `ggplot()`\index{ggplot()} call or in specific geoms is surprisingly powerful (although sometime confusing!).
+It can allow different geoms to display different (albeit similar) information (see more on this later).
+
+For this worked example, we'll move the same information back to the universal `ggplot()`, but we'll also move `colour = species` into `ggplot()` so that we can have the points coloured according to island concentration as well.
+
+```{r universal-colours, out.width = "75%", fig.align = "center", message=FALSE}
+# Moved colour = species into the universal ggplot()
+ggplot(aes(x = body_mass_g, y = flipper_length_mm, colour = species), data = penguins) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+This figure is now what we would consider to be the typical `ggplot2` figure (once you know to look for it, you'll see it everywhere).
+We have specified some information, with only a few lines of code, yet we have something that looks quite attractive.
+While it's not yet the "final figure" it's perfectly suited for displaying the information we need from these data.
+You have now created your first "pure" `ggplot` using only the 'data', 'mapping' and 'geom' layers (as well as others indirectly).
+
+Let's keep going as we're aiming for something a bit more "sophisticated".
+
+### Wrapping grids
+
+Having made our "pure" `ggplot`, the next big obstacle we're going to tackle is the grid like layout of the "final figure" where our main figure has been split according to the `island` variables, with new trends shown for each combination.
+
+Each of these panels (technically "multiples") are a great way to help other people understand what's going on in the data.
+This is especially true with large datasets which can obscure subtle trends simply because so much data is overlaid on top of each other.
+When we split a single figure into multiples, the same axes are used for all multiples which serve to highlight shifts in the data (data in some multiples may have inherently higher or lower values for instance).
+
+`ggplot2` includes options for specifying the layout of plots using the 'facets' layer.
+We'll start off by using `facet_wrap()`\index{facet\_wrap()} to show what this does.
+For `facet_wrap()` to work we need to specify a formula for how the facets will be defined (see `?facet_wrap` for more details and also how to define facets without using a formula).
+In our example we want to use the factor `island` to determine the layout so our formula would look like `~ island`.
+You can read `~ island` as saying "according to treatment".
+Let's see how it works:
+
+```{r facet_wrap, out.width = "75%", fig.align = "center", message=FALSE}
+ggplot(aes(x = body_mass_g, y = flipper_length_mm, colour = species), data = penguins) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+	# Splitting the single figure into multiple depending on treatment
+  facet_wrap(~ island)
+```
+
+That's pretty good.
+Notice how we can see the differences in the relations in the two morphological variables between `isalnds`. 
+
+While this looks pretty good, we are still missing information showing any potential differences between sexes blocks.
+Given that `facet_wrap()` can use a formula, maybe we could simply include `year` in the formula?
+Remember that the `block` variable refers to the region in the greenhouse where the plants were grown.
+Let's try it and see what happens.
+
+```{r facet_wrap-formula, out.width = "75%", fig.align = "center", message=FALSE}
+ggplot(aes(x = body_mass_g, y = flipper_length_mm, colour = species), data = penguins) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+	# Adding "block" to formula
+  facet_wrap(~ island + year)
+```
+
+This facet layout is what we want.
+You could reach the same reslut using `facet_grid()`\index{facet\_grid()}, an alternative to `facet_wrap()`.
+
+The important thing to remember here is that `facet_wrap()` will create a new figure for each value in a variable.
+So when you wrap using a continuous variable like flowers, it makes a plot for every unique number of flowers counted.
+Be aware of what it is that you are doing, but never be scared to experiment.
+Mistakes are easily fixed in R - it's not like a point and click programme where you'd have to go back through all those clicks to get the same figure produced.
+Made a mistake?
+
+Let's try using `facet_grid` instead of `facet_wrap` to produce the following plot.
+
+```{r facet_grid, out.width = "75%", fig.align = "center", message=FALSE}
+ggplot(aes(x = body_mass_g, y = flipper_length_mm, colour = species), data = penguins) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+	# Changing to facet_grid
+  facet_grid(~ island)
+```
+
+It's pretty much the same as what we had before.
+
+As an exercise, you can try to create a figure with "islands" as columns and years as "rows" using the `facet_grid()` funtion and the `year ~ island` as formula.
+
+
+```{r facet-grid-formula, out.width = "75%", fig.align = "center", message=FALSE}
+ggplot(aes(x = body_mass_g, y = flipper_length_mm, colour = species), data = penguins) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+	# Rearranging formula, block in relation to treatment
+  facet_grid(year ~ island)
+```
+
+This looks nice, right!! 
+
+### Plotting multiple ggplots
+
+While we've made multiples of the same figure, what if we wanted to take two completely different figures and plot them together in the same frame?
+As a demonstration, let's plot the last figure we made and the "final figure" shown at the start of this lesson one on top of the other to see how they compare.
+To do this we are going to use a package called `patchwork`\index{patchwork package}.
+First you will need to install and make the `patchwork` package available.
+
+```r
+install.packages("patchwork")
+library(patchwork)
+```
+
+An important note: For those who have used base R to produce their figures and are familiar with using `par(mfrow = c(2,2))` (which allows plotting of four figures in two rows and two columns) be aware that this does not work for `ggplot2` objects.
+Instead you will need to use either the `patchwork` package or alternative packages such as `gridArrange` or `cowplot` or covert the `ggplot2` objects to grobs.
+
+To plot both of the plots together we need to go back to our previous code and do something clever.
+We need to assign each figure to a separate object and then use these objects when we use `patchwork`.
+For instance, we can assigned our "final figure" plot to an object called `final_figure` (we're not very imaginative!), you haven't see the code yet so you'll just have to take our word for it!
+You may see this method used a lot in other textbooks or online, especially when adding addition layers.
+Something like this:
+
+```{r named-ggplot-example, eval = FALSE, message=FALSE}
+p <- ggplot(df, mapping = aes(x = x, y = y))
+```
+
+And later to add additional layers:
+
+```{r named-ggplot-example-adding-layer, eval = FALSE, message=FALSE}
+p + geom_point()
+```
+
+We prefer not to use this approach here, as we like to always have the code visible to you while you're reading this book.
+Anyway, let's remind ourselves of the final figure.
+
+
+```{r calling-figure-name, echo=FALSE, out.width = "75%", fig.align = "center", message=FALSE}
+final_figure
+```
+
+
+We'll now assign the code we wrote when creating our previous plot to an object called `rbook_figure`:
+
+
+```{r naming-figure, out.width = "75%", fig.align = "center", message=FALSE}
+# Naming our figure object
+rbook_figure <- ggplot(aes(x = body_mass_g, y = flipper_length_mm, colour = species), data = penguins) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_grid(~island)
+```
+
+ 
+
+Now when the code is run, the figure won't be shown immediately.
+To show the figure we need to type the name of the object.
+We'll do this at the same time as showing you how `patchwork` works.
+
+An old headache when using `ggplot2` was that it could be difficult to create a nested figure (different plots, or "multiples", all part of the same dataset).
+`patchwork` resolves this problem very elegantly and simply.
+We have two immediate and simple options with patchwork; arrange figures on top of each other (specified with a `/`) or arrange figures side-by-side (specified with either a `+` or a `|`).
+Let's try to plot both figures, one on top of the other.
+
+ 
+
+```{r side-by-side-patchwork, echo=TRUE, out.width = "85%", fig.align = "center", message=FALSE}
+rbook_figure / final_figure
+```
+
+ 
+
+*Play around*: Try to create a side-by-side version of the above figure (hint: try the other operators).
+
+We can take this one step further and assign nested `patchwork` figures to an object and use this in turn to create labels for individuals figures.
+
+ 
+
+```{r labelled-nested, out.width = "75%", fig.align = "center", message=FALSE}
+nested_compare <- rbook_figure / final_figure
+
+nested_compare +
+  plot_annotation(tag_levels = "A", tag_suffix = ")")
+```
+
+This is only the basics of what the `patchwork` package can do but there are many other uses.
+We won't go into them in any great detail here.
+
+### Make it your own
+
+While we already have a great figure showing the main aspects of our data, it uses many default layer options.
+Whilst the default options are fine we may want to change them to get our plot looking exactly how we want it.
+Maybe we're going to use this figure in a presentation and we want to make sure someone in the very back of the room can easily read the figure.
+Maybe we want to use our own colour scheme.
+Maybe we want to change the grey background to a nice bright neon pink.
+In essence, maybe we want to decide things for ourselves.
+This next section will go through how to customise the appearance of our figure.
+
+Let's start with the easier stuff, namely changing the size of the plotting symbols using the `size =` argument.
+Before we do, have a think about where we'd include this argument?
+Should it be in main call to `ggplot()`\index{ggplot()} or in the `geom_point()` geom?
+Does size depend on a variable in our dataset and is therefore something we want displayed on the figure (meaning we should include it within `aes()`)?
+Or is it merely changing the appearance of information?
+
+Let's include it in the `geom_point` geom.
+
+```{r change-size, out.width = "75%", fig.align = "center", message=FALSE}
+ggplot(aes(x = body_mass_g, y = flipper_length_mm, colour = species), data = penguins) +
+	# Including size argument to change the size of the points
+	geom_point(size = 2) +
+	geom_smooth(method = "lm", se = FALSE) +
+	facet_grid(year ~ island)
+```
+
+
+Pretty straight forward, we changed the size from the default of `size = 1` to a value that we decide for ourselves.
+What happens if you included size in `ggplot()` or within the `aes()` of `geom_point()`?
+
+If we wanted to change the shape of the plotting symbols to reflect the different sexes concentrations (female and male), how do you think we'd do that?
+We'd use the `shape =` argument, but this time we need to include an `aes()` within `geom_point()` because we want to include specific information to be displayed on the figure.
+
+```{r change-shape, out.width = "75%", fig.align = "center", message=FALSE}
+ggplot(aes(x = body_mass_g, y = flipper_length_mm, colour = species), data = penguins) +
+	# Including shape argument to change the shape of the points
+	geom_point(aes(shape = species), size = 2) +
+	geom_smooth(method = "lm", se = FALSE) +
+	facet_grid(year ~ island)
+```
+
+Try including `shape = species` without also including `aes()`\index{aes()} and see what happens.
+
+We're edging our way closer to our "final figure".
+Another thing we may want to be able to do is change the transparency of the points.
+While it's not actually that useful here, changing the transparency of points is really valuable when you have lots of data resulting in clusters of points obscuring information.
+Doing this is easily accomplished using the `alpha =` argument.
+Again, ask yourself where you think the `alpha =` argument should be included (hint: you should put it in the `geom_point` geom!).
+
+ 
+
+```{r change-alpha, out.width = "75%", fig.align = "center", message=FALSE}
+ggplot(aes(x = body_mass_g, y = flipper_length_mm, colour = species), data = penguins) +
+	# Including alpha argument to change the transparency of the points
+	geom_point(aes(shape = species), size = 2, alpha = 0.6) +
+	geom_smooth(method = "lm", se = FALSE) +
+	facet_grid(year ~ island)
+```
+
+We can also include user defined labels for the x and y axis.
+There are a couple of ways to do this, but a more familiar way may be to use the same syntax as used in base R figures; using `xlab()`\index{xlab()} and `ylab()`\index{ylab()}.
+We'll specify that these belong to the `ggplot` by using the `+` symbol.
+
+ 
+
+```{r axis-labels, out.width = "75%", fig.align = "center", message=FALSE}
+ggplot(aes(x = body_mass_g, y = flipper_length_mm, colour = species), data = penguins) +
+	geom_point(aes(shape = species), size = 2, alpha = 0.6) +
+	geom_smooth(method = "lm", se = FALSE) +
+	facet_grid(year ~ island) +
+	# Adding layers for x and y labels
+	xlab("Body mass (g)") +
+	ylab("Flipper length (mm)")
+```
+
+Let's now work on the legend title while also including a caption to warn people looking at the figure to treat the trend lines with caution.
+We'll use a new layer called `labs()`\index{labs()}, short for labels, which we could have also used for specifying the x and y axes labels (we didn't only for demonstration purposes, but give it a shot).
+`labs()` is a fairly straightforward function.
+Have a look at the help file (using `?labs`) to see which arguments are available.
+We'll be using `caption =` argument for our caption, but notice that there isn't a single simple argument for `legend =`?
+That's because the legend actually contains multiple pieces of information; such as the colour and shape of the symbols.
+So instead of `legend =` we'll use `colour =` and `shape =`.
+Here's how we do it:
+
+ 
+
+```{r extra-labels, out.width = "75%", fig.align = "center", message=FALSE}
+ggplot(aes(x = body_mass_g, y = flipper_length_mm, colour = species), data = penguins) +
+	geom_point(aes(shape = species), size = 2, alpha = 0.6) +
+	geom_smooth(method = "lm", se = FALSE) +
+	facet_grid(year ~ island) +
+	xlab("Body mass (g)") +
+	ylab("Flipper length (mm)") +
+	# Adding labels for shape, colour and a caption	
+	labs(shape = "Sex", colour = "Penguins Species", 
+			 caption = "Regression assumptions are unvalidated")
+```
+
+*Play around*: Try removing `colour =` or `shape =` from `labs()` to see what happens.
+The resulting legends are why we need to specify both colour and shape (and call it the same thing).
+
+Now's a good time to introduce the `\n`.
+This is a base R feature that tells R that a string should be continued on a new line.
+We can use that with "Species" so that the legend title becomes more compact.
+
+```{r compact-labels, out.width = "75%", fig.align = "center", message=FALSE}
+ggplot(aes(x = body_mass_g, y = flipper_length_mm, colour = species), data = penguins) +
+	geom_point(aes(shape = species), size = 2, alpha = 0.6) +
+	geom_smooth(method = "lm", se = FALSE) +
+	facet_grid(year ~ island) +
+	xlab("Body mass (g)") +
+	ylab("Flipper length (mm)") +
+	# Including \n to split legend title over two lines	
+	labs(shape = "Sex", colour = "Penguins\nSpecies", 
+			 caption = "Regression assumptions are unvalidated")
+```
+
+We can now move onto some more wholesale-stylistic choices using the themes layer.
+
+### Setting the theme
+
+Themes control the general style of a `ggplot` (things like the background colour, size of text etc.) and comes with a whole bunch of predefined themes.
+Let's play around with themes using some skills we've already learnt; assigning plots to an object and plotting multiple `ggplots` in a single figure using `patchwork`.
+We assign themes by creating a new layer with the general notation - `theme_NameOfTheme()`.
+For example, to use the `theme_classic`\index{theme\_classic()}, `theme_bw`\index{theme\_bw()}, `theme_minimal`\index{theme\_minimal()} and `theme_light`\index{theme\_light()} themes
+
+```{r testing-themes, out.width = "85%", fig.align = "center", message=FALSE}
+classic <- ggplot(aes(x = body_mass_g, y = flipper_length_mm, colour = species), data = penguins) +
+	geom_point(aes(shape = species), size = 2, alpha = 0.6) +
+	geom_smooth(method = "lm", se = FALSE) +
+	facet_grid(year ~ island) +
+	xlab("Body mass (g)") +
+	ylab("Flipper length (mm)") +
+	labs(shape = "Sex", colour = "Penguins\nSpecies", 
+			 caption = "Regression assumptions are unvalidated") +
+	# Classic theme
+	theme_classic()
+
+bw <- ggplot(aes(x = body_mass_g, y = flipper_length_mm, colour = species), data = penguins) +
+	geom_point(aes(shape = species), size = 2, alpha = 0.6) +
+	geom_smooth(method = "lm", se = FALSE) +
+	facet_grid(year ~ island) +
+	xlab("Body mass (g)") +
+	ylab("Flipper length (mm)") +
+	labs(shape = "Sex", colour = "Penguins\nSpecies", 
+			 caption = "Regression assumptions are unvalidated") +
+	# Black and white theme
+	theme_bw()
+
+minimal <- ggplot(aes(x = body_mass_g, y = flipper_length_mm, colour = species), data = penguins) +
+	geom_point(aes(shape = species), size = 2, alpha = 0.6) +
+	geom_smooth(method = "lm", se = FALSE) +
+	facet_grid(year ~ island) +
+	xlab("Body mass (g)") +
+	ylab("Flipper length (mm)") +
+	labs(shape = "Sex", colour = "Penguins\nSpecies", 
+			 caption = "Regression assumptions are unvalidated") +
+	# Minimal theme
+	theme_minimal()
+
+light <- ggplot(aes(x = body_mass_g, y = flipper_length_mm, colour = species), data = penguins) +
+	geom_point(aes(shape = species), size = 2, alpha = 0.6) +
+	geom_smooth(method = "lm", se = FALSE) +
+	facet_grid(year ~ island) +
+	xlab("Body mass (g)") +
+	ylab("Flipper length (mm)") +
+  	labs(shape = "Sex", colour = "Penguins\nSpecies", 
+       caption = "Regression assumptions are unvalidated") +
+	# Light theme
+	theme_light()
+
+(classic | bw) /
+	(minimal | light)
+```
+
+In terms of finding a theme that most closely matches our "final figure", it's probably going to be `theme_classic()`\index{theme\_classic()}.
+There are additional themes available to you, and even more available online.
+`ggthemes`\index{ggthemes package} is a package which contains many more themes for you to use.
+The BBC even have their own `ggplot2` theme called "BBplot" which they use when making their own figures (while good, we don't like it too much for scientific figures).
+
+### Prettification
+
+We've pretty much replicated our "final figure".
+We just have a few final adjustments to make, and we'll do so in order of difficulty.
+
+Let's remind ourselves of what that "final figure" looked like.
+Remember, since we've previously stored the figure as an object called `final_figure` we can just type that into the console and pull up the figure.
+
+ 
+
+```{r final-figure-reminder, out.width = "75%", fig.align = "center", message=FALSE}
+final_figure + 
+	labs(title = "Reminder of the final figure")
+```
+
+Let's begin the final push by including that dashed horizontal line at the average shoot area, at about 80, on our y axis.
+This represents the overall mean area of a shoot, regardless of nitrogen concentration, treatment, or block.
+To draw a horizontal line we use a geom called `geom_hline()`\index{geom\_hline()}, and the most important thing we need to specify is the y intercept value (in this case the mean area of a shoot).
+We can also change the type of line using the argument `linetype =` and also the colour (as we did before).
+Let's see how it works.
+
+```{r geom_hline, out.width = "75%", fig.align = "center", message=FALSE}
+ggplot(aes(x = body_mass_g, y = flipper_length_mm, colour = species), data = penguins) +
+	geom_point(aes(shape = species), size = 2, alpha = 0.6) +
+	geom_smooth(method = "lm", se = FALSE) +
+	facet_grid(year ~ island) +
+	xlab("Body mass (g)") +
+	ylab("Flipper length (mm)") +
+	labs(shape = "Sex", colour = "Penguins\nSpecies", 
+			 caption = "Regression assumptions are unvalidated") +
+	# Added a horizontal line using geom_hline
+	geom_hline(aes(yintercept = mean(flipper_length_mm)), size = 0.5, colour = "black", linetype = 3)
+```
+
+Notice how we included the function `mean(flipper_length_mm)` within the `geom_hline()` function?
+We could also do that externally to the `ggplot2` code and get the same result.
+
+```{r flipper_length_mm-mean, message=FALSE, collapse=TRUE}
+mean(penguins$flipper_length_mm)
+```
+
+```{r geom_hline-alternative, out.width = "75%", fig.align = "center", message=F}
+ggplot(aes(x = body_mass_g, y = flipper_length_mm, colour = species), data = penguins) +
+	geom_point(aes(shape = species), size = 2, alpha = 0.6) +
+	geom_smooth(method = "lm", se = FALSE) +
+	facet_grid(year ~ island) +
+	xlab("Body mass (g)") +
+	ylab("Flipper length (mm)") +
+	labs(shape = "Sex", colour = "Penguins\nSpecies", 
+			 caption = "Regression assumptions are unvalidated") +
+	# Manually entering mean value
+	geom_hline(aes(yintercept = 79.8), size = 0.5, colour = "black", linetype = 3)
+```
+
+
+Exactly the same figure but produced in a slightly different way (the point being that there are always multiple ways to get what you want).
+
+Now let's tackle that "overall" species effect.
+This overall line is effectively the figure we produced much earlier when we learnt how to include a line of best fit from a linear model.
+However, we are already using `geom_smooth()`\index{geom\_smooth()}, surely we can't use it again?
+This may shock and/or surprise you so please ensure you are seated.
+You *can* use `geom_smooth()` again.
+In fact you can use it as many times as you want.
+You can use any layer as many times as you want!
+Isn't the world full of wonderful miracles?
+... Anyway, here's the code...
+
+```{r geom_smooth2, out.width = "75%", fig.align = "center", message=FALSE}
+ggplot(aes(x = body_mass_g, y = flipper_length_mm, colour = species), data = penguins) +
+	geom_point(aes(shape = species), size = 2, alpha = 0.6) +
+	geom_smooth(method = "lm", se = FALSE) +
+	# Adding a SECOND geom_smooth :O
+	geom_smooth(method = "lm", se = FALSE, linetype = 2, alpha = 0.6, colour = "black") +
+	facet_grid(year ~ island) +
+	xlab("Body mass (g)") +
+	ylab("Flipper length (mm)") +
+	labs(shape = "Sex", colour = "Penguins\nSpecies", 
+			 caption = "Regression assumptions are unvalidated") +
+	geom_hline(aes(yintercept = 79.8), size = 0.5, colour = "black", linetype = 3)
+```
+
+That's great!
+But you should be asking yourself why that worked.
+Why when we specified the first `geom_smooth()` did it draw 3 lines, whereas the second time we used `geom_smooth()` it just drew a single line?
+The secret lies in a "conflict" (it isn't actually a conflict but that's what we'll call it) between the colour specified in the main call to `ggplot()`\index{ggplot()} and the colour specified in the second `geom_smooth()`.
+Notice how in the second we've specifically told `ggplot2` that the colour will be black, while prior to this it drew lines based on the number of groups (or colours) in species?
+In "overriding" the universal `ggplot()` with a geom specific argument we're able to get `ggplot2` to plot what we want.
+
+The only things left to do are to change the colour and the shape of the points to something of our choosing and include information on the "overall" trend line in the legend.
+We'll begin with the former; changing colour and shape to something we specifically want.
+When we first started using `ggplot2` this was the thing which caused us the most difficulty.
+We think the reason is, that to manually change the colours actually requires an additional layer, where we assumed this would be done in either the main call to `ggplot()` or in a geom.
+
+Instead of doing this within the specific geom, we'll use `scale_colour_manual()`\index{scale\_colour\_manual()} as well as `scale_shape_manual()`\index{scale\_shape\_manual()}.
+Doing it this way will allow us to do two things at once; change the shape and colour to our choosing, and assign labels to these (much like what we did with `xlab()` and `ylab()`).
+Doing so is not too complex but will require nesting a function (`c()`\index{c()}) within our `scale_colour_manual` and `scale_shape_manual` functions (see [lesson 2](#basics_r) for a reminder on the concatenate function (`c()`) if you've forgotten).
+
+Choosing colours can be fiddly.
+We've found using a colour wheel helps with this step.
+You can always use Google to find an interactive colour wheel, or use Google's Colour picker.
+Any decent website should give you a HEX code, something like: #5C1AAE which is a "code" representation of a colour.
+Alternatively, there are colour names which R and `ggplot2` will also understand (e.g. "firebrick4").
+Having chosen our colours using whichever means, let's see how we can do it:
+
+```{r scale-manual, out.width = "75%", fig.align = "center", message=FALSE}
+ggplot(aes(x = body_mass_g, y = flipper_length_mm, colour = species), data = penguins) +
+	  geom_point(aes(colour = species, shape = sex), size = 2, alpha = 0.6) +
+	geom_smooth(method = "lm", se = FALSE) +
+	geom_smooth(method = "lm", se = FALSE, linetype = 2, alpha = 0.6, colour = "black") +
+	facet_grid(year ~ island) +
+	xlab("Body mass (g)") +
+	ylab("Flipper length (mm)") +
+	labs(shape = "Sex", colour = "Penguins\nSpecies", 
+			 caption = "Regression assumptions are unvalidated") +
+	geom_hline(aes(yintercept = 79.8), size = 0.5, colour = "black", linetype = 3) +
+	# Setting colour and associated labels
+	scale_colour_manual(values = c("#5C1AAE", "#AE5C1A", "#1AAE5C"),
+       labels = c("Adelie", "Chinstrap", "Gentoo")) +
+  scale_shape_manual(
+    values = c(1, 2),
+    labels = c("female", "male")) +
+  facet_grid(year~ island)
+
+```
+
+To make sense of that code (or any code for that matter) try running it piece by piece.
+For instance in the above code, if we run `c("#5C1AAE", "#AE5C1A", "#1AAE5C")` we'll get a list of those strings.
+That list is then passed on to `scale_colour_manual()` as the colours we wish to use.
+Since we only have three species, it will use these three colours.
+
+Try including an additional colour in the list and see what happens (if you place the new colour at the end of the list, nothing will happen since it will use the first three colours of the list - try adding it to the start of the list).
+The same is true for `scale_shape_manual()`.
+
+And we've done it!
+Our final figure matches the "final figure" exactly.
+We can then save the final figure to our computer so that we can include it in a poster etc.
+The code for this is straightforward, but does require an understanding of file paths.
+Be sure to check [lesson 1](#work-d) for an explanation if you're unsure.
+To save `ggplot` figures to an external file we use the function `ggsave`.
+
+This is the point when having assigned the code to the object named `rbook_figure` comes in handy.
+Doing so allows us to specify which figure to save within `ggsave()`\index{ggsave()}.
+If we hadn't specified which plot to save, `ggsave()` would instead save the last figure produced.
+
+Other important arguments to take note of are: `device =` which tells `ggplot2` what format we want to save the figure (in this case a pdf) though `ggplot2` is often smart enough to guess this based on the extension we give our file name, so it is often redundant; `units =` which specifies the units used in `width =` and `height =`; `width =` and `height =` specify the width and height of figure (in this case in mm as specified using `units =`); `dpi =` which controls the resolution of the saved figure; and `limitsize =` which prevents accidentally saving a massive figure of 1 km x 1 km!
+
+```{r ggsave, eval = FALSE, message=FALSE}
+ggsave(filename = "areashoot_body_mass_g_facet.pdf", plot = rbook_figure, device = "pdf", 
+			 path = "output", width = 250, height = 150, units = "mm", 
+			 dpi = 500, limitsize = TRUE)
+```
+
+This concludes the worked example to reproduce our final figure.
+While absolutely not an exhaustive list of what you can do with `ggplot2`, this will hopefully help when you're making your own from scratch or, perhaps likely when starting, copying `ggplots` made by other people (in which case hopefully this will help you understand what they've done).
+
+## A ggplot bestiary
+
+What follows is a quick run through of example `ggplots`.
+These will predominantly be created by changing the geoms used, but there will be additional tweaks which we'll highlight.
+
+### Density plot
+
+Below is a density plot which is much like a histogram.
+The x axis shows observations of given numbers of flowers, while the y axis is the density of observations (roughly equivalent to number of rows with that many flowers, calculated in the background by the statistics layer).
+Each density is coloured according to nitrogen concentration, though note that we're using `fill =` instead of `colour =`.
+Try using colour instead to see what happens.
+
+Notice that we haven't used `data = penguins` here and instead just used `penguins`?
+When an object is not assigned with an argument, `ggplot2` will assume that it is the dataset.
+We're using that here, but we actually prefer to explicitly state the argument name in our own work.
+
+ 
+
+```{r density-plot, out.width = "75%", fig.align = "center", message=FALSE}
+ggplot(penguins) +
+	geom_density(aes(x = body_mass_g, fill = species), alpha = 0.5) +
+	labs(y = "Density", x = "Body mass", fill = "Penguins\n species") +
+	scale_fill_manual(labels = c("Adelie", "Chinstrap", "Gentoo"),
+        values = c("#DB24BC", "#BCDB24", "#24BCDB"))
+
+```
+
+### Histogram
+
+Next is a histogram (a much more traditional version of a density plot).
+There are a couple of things to take note of here.
+The first is that we've specified `bins = 20`.
+The number of bins control how many times the y-axis is broken up to show the data.
+Try increasing and decreasing to see the effect.
+The last is using the `position =` argument and stating that we do not want the bars to be stacked (the default position), instead we want them side-by-side, a.k.a. dodged.
+
+ 
+
+```{r histogram, out.width = "75%", fig.align = "center", message=FALSE}
+ggplot(penguins) +
+	geom_histogram(aes(x = body_mass_g, fill = species), colour = "black", bins = 20,
+                 position = "dodge") +
+	labs(y = "Count", x = "Body mass", fill = "Penguins\n species") +
+	scale_fill_manual(labels = c("Adelie", "Chinstrap", "Gentoo"),
+        values = c("#DB24BC", "#BCDB24", "#24BCDB"))
+
+
+```
+
+### Frequency polygons
+
+A frequency polygon is yet another visualisation of the above two.
+The only difference here is that we are drawing a line to each value, instead of a density curve or bars.
+
+ 
+
+```{r freqpoly, out.width = "75%", fig.align = "center", message=FALSE}
+ggplot(penguins) +
+	geom_freqpoly(aes(x = body_mass_g, colour = species), size = 1, bins = 20) +
+	labs(y = "Count", x = "Body mass", colour = "Penguins\n species") +
+	scale_fill_manual(labels = c("Adelie", "Chinstrap", "Gentoo"),
+        values = c("#DB24BC", "#BCDB24", "#24BCDB"))
+
+```
+
+### Boxplot
+
+Boxplots are a classic way to show to spread of data, and they're easy to make in `ggplot2`.
+The dark line in the middle of the box shows the median, the boxes show the 25th and 75th percentiles (which is different from the base R `boxplot()`\index{boxplot()}), and the whiskers show 1.5 times the inter-quartile range (i.e. the distance between between the lower and upper quartiles).
+
+ 
+
+```{r boxplot, out.width = "75%", fig.align = "center", message=FALSE}
+ggplot(penguins) +
+	geom_boxplot(aes(y = body_mass_g, x = species)) +
+	labs(y = "Body mass", x = "Penguin species")
+
+```
+
+### Violin plots
+
+Violin plots are an increasingly popular alternative to boxplots.
+They display much of the same information, as well as showing a version of the density plot above (imagine each violin plot, cut in half vertically and place on it's side, thus showing the overall distribution of the data).
+In the plot below the figure is slightly more complex than those above and so deserves some explanation.
+
+Within `geom_violin()`\index{geom\_violin()} we've included `draw_quantiles =` where we've specified we want quantile lines drawn at the 25, 50 and 75 quantiles (using the `c()`\index{c()} function).
+In combination with `geom_violin()` we've also included `geom_jitter()`\index{geom\_jitter()}.
+`geom_jitter()` is similar to `geom_point()` but induces a slight random spread of the points, often helpful when those points would otherwise be clustered.
+Within `geom_jitter()` we've also set `height = 0`, and `width = 0.1` which specifies how much to jitter the points in a given dimension (here essentially telling `ggplot2` not to jitter by height, and only to jitter width by a small amount).
+
+Finally, we're also using this plot to show `scale_y_log10`.
+Hopefully this is largely self-explanatory (it converts the y-axis to the log_10\_ scale).
+There are additional scaling options for axis (for instance `scale_y_sqrt()`\index{scale\_y\_sqrt()}).
+Please note that using a log scaled axis in this case is actually doing harm in terms of understanding the data, we'd actually be much better off not doing so in this particular case.
+
+ 
+
+```{r violin-plot, out.width = "75%", fig.align = "center", message=FALSE}
+ggplot(penguins) +
+  geom_violin(aes(y = body_mass_g, x = species, fill = species), 
+              draw_quantiles = c(0.25, 0.5, 0.75)) +
+  geom_jitter(aes(y = body_mass_g, x = species), colour = "black", height = 0, 
+              width = 0.1, alpha = 0.5) +
+	scale_fill_manual(labels = c("Adelie", "Chinstrap", "Gentoo"),
+         values = c("#5f7f5c", "#749770", "#9eb69b")) +
+	labs(y = "Body mass", x = "Penguin species") +
+	scale_y_log10()
+
+```
+
+### Barchart
+
+Below is an example of barcharts.
+It is included here for completeness, but be aware that they are viewed with contention (with good reason).
+Briefly, barcharts can hide information, or imply there is data where there is none; ultimately misleading the reader.
+There are almost always better alternatives to use that better demonstrate the data.\index{geom\_bar()}
+
+ 
+
+```{r barchart, out.width = "75%", fig.align = "center", message=FALSE}
+ggplot(penguins) +
+  geom_bar(aes(x = species, fill = species)) +
+	scale_fill_manual(labels = c("Adelie", "Chinstrap", "Gentoo"),
+         values = c("#2613EC", "#9313EC", "#EC13D9")) +
+	labs(y = "Count", x = "species")
+
+```
+
+ 
+
+The barchart shows the numbers of observations in each block, with each bar split according to the number of observations in each nitrogen concentration.
+In this case they are equal because the dataset (and experimental design) was balanced.
+
+### Quantile lines
+
+While we can draw a straight line, perhaps we would also like to include the descriptive nature of a boxplot, except using continuous data.
+We can use quantile lines in such cases.
+Note that for quantiles to be calculated `ggplot2` requires the installation of the package `quantreg`.\index{geom\_quantile()}
+
+ 
+
+```{r quantile-lines, out.width = "75%", fig.align = "center", message=FALSE}
+library(quantreg)
+ggplot(aes(x = body_mass_g, y = flipper_length_mm), data = penguins) +
+	geom_point(size = 0.5, alpha = 0.6) +
+	geom_quantile(colour = "darkgrey", size = 1) +
+	labs(y = "Flipper length (mm) Area", x = "Body mass (g)")
+
+```
+
+### Heatmap
+
+Heatmaps are a great tool to visualise spatial patterns.
+`ggplot2` can easily handle such data using `geom_bin2d()`\index{geom\_bin2d()} to allow us to see if our data is more (or less) clustered.
+
+ 
+
+```{r heat, out.width = "75%", fig.align = "center", message=FALSE}
+ggplot(aes(x = body_mass_g, y = flipper_length_mm), data = penguins) +
+	geom_bin2d() +
+	labs(y = "Flipper length (mm) Area", x = "Body mass (g)")
+
+```
+
+ 
+
+In this example, lighter blue squares show combinations of leaf area and shoot area where we have more data, and dark blue shows the converse.
+
+### Hex map
+
+A similar version to `geom_density2d()`\index{geom\_density2d()} is `geom_hex()`\index{geom\_hex()}.
+The only difference between the two is that the squares are replaced with hexagons.
+Note that `geom_hex()` requires you to first install an additional package called `hexbin`\index{hexbin package}.
+
+ 
+
+```{r hex, out.width = "75%", fig.align = "center", message=FALSE}
+library(hexbin)
+
+ggplot(aes(x = body_mass_g, y = flipper_length_mm), data = penguins) +
+	geom_hex() +
+	labs(y = "Flipper length (mm) Area", x = "Body mass (g)")
+```
+
+### Contour map
+
+Similar to a heatmap we can make a contour map using `geom_density_2d()`\index{geom\_density\_2d()}.
+The way to read this figure is much the same way as you'd read a topographical map showing mountains or peaks.
+The central polygon represents the space (amongst shoot and leaf area) where there are most observations.
+As you "step" down this mountain to the next line, we step down in the number of counts.
+Think of this as showing where points are most clustered, as in `geom_bin2d()`.
+
+
+```{r contour, out.width = "75%", fig.align = "center", message=FALSE}
+ggplot(aes(x = body_mass_g, y = flipper_length_mm), data = penguins) +
+	geom_density2d() +
+labs(y = "Flipper length (mm) Area", x = "Body mass (g)")
+```
+
+We can then expand on this using the statistics layer, via `stat_nameOfStatistic`.
+For instance, we can use the calculated "level" (representing the height of contour) to fill in our figure.
+To do so, we'll swap out `geom_density_2d()` for `stat_density_2d()` which will allow us to colour in the contour map.
+
+ 
+
+```{r stat-contour, out.width = "75%", fig.align = "center", message=FALSE}
+ggplot(aes(x = body_mass_g, y = flipper_length_mm), data = penguins) +
+	stat_density_2d(aes(fill = after_stat(level)), geom = "polygon") +
+labs(y = "Flipper length (mm) Area", x = "Body mass (g)")
+```
+

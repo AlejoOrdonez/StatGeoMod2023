@@ -1,0 +1,1052 @@
+{
+    "type": "Feature",
+    "stac_version": "1.0.0",
+    "stac_extensions": [
+        "https://landsat.usgs.gov/stac/landsat-extension/v1.1.1/schema.json",
+        "https://stac-extensions.github.io/view/v1.0.0/schema.json",
+        "https://stac-extensions.github.io/projection/v1.0.0/schema.json",
+        "https://stac-extensions.github.io/eo/v1.0.0/schema.json",
+        "https://stac-extensions.github.io/alternate-assets/v1.1.0/schema.json",
+        "https://stac-extensions.github.io/storage/v1.0.0/schema.json",
+        "https://stac-extensions.github.io/file/v1.0.0/schema.json",
+        "https://stac-extensions.github.io/accuracy/v1.0.0/schema.json",
+        "https://stac-extensions.github.io/classification/v1.0.0/schema.json"
+    ],
+    "id": "LT05_L1TP_196021_19840425_20200918_02_T1",
+    "description": "Landsat Collection 2 Level-1 Top of Atmosphere Radiance Product",
+    "bbox": [
+        8.496589168917561,
+        54.90561333073134,
+        12.214918271500057,
+        56.88498980956088
+    ],
+    "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+            [
+                [
+                    9.285714066968414,
+                    56.88498980956088
+                ],
+                [
+                    8.496589168917561,
+                    55.32685590932634
+                ],
+                [
+                    11.323410051483771,
+                    54.90561333073134
+                ],
+                [
+                    12.214918271500057,
+                    56.45018184781593
+                ],
+                [
+                    9.285714066968414,
+                    56.88498980956088
+                ]
+            ]
+        ]
+    },
+    "properties": {
+        "datetime": "1984-04-25T09:47:27.236044Z",
+        "eo:cloud_cover": 2.0,
+        "view:sun_azimuth": 149.08342413,
+        "view:sun_elevation": 44.06497939,
+        "platform": "LANDSAT_5",
+        "instruments": [
+            "TM"
+        ],
+        "view:off_nadir": 0,
+        "landsat:cloud_cover_land": 2.0,
+        "landsat:wrs_type": "2",
+        "landsat:wrs_path": "196",
+        "landsat:wrs_row": "021",
+        "landsat:scene_id": "LT51960211984116KIS00",
+        "landsat:collection_category": "T1",
+        "landsat:collection_number": "02",
+        "landsat:correction": "L1TP",
+        "accuracy:geometric_x_bias": 0,
+        "accuracy:geometric_y_bias": 0,
+        "accuracy:geometric_x_stddev": 4.069,
+        "accuracy:geometric_y_stddev": 3.529,
+        "accuracy:geometric_rmse": 5.386,
+        "proj:epsg": 32632,
+        "proj:shape": [
+            7401,
+            8051
+        ],
+        "proj:transform": [
+            30.0,
+            0.0,
+            462885.0,
+            0.0,
+            -30.0,
+            6306315.0
+        ]
+    },
+    "assets": {
+        "thumbnail": {
+            "title": "Thumbnail image",
+            "type": "image/jpeg",
+            "roles": [
+                "thumbnail"
+            ],
+            "href": "https://landsatlook.usgs.gov/data/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_thumb_small.jpeg",
+            "alternate": {
+                "s3": {
+                    "storage:platform": "AWS",
+                    "storage:requester_pays": true,
+                    "href": "s3://usgs-landsat/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_thumb_small.jpeg"
+                }
+            },
+            "file:checksum": "1340163d49c7c5ae1f840d5d18a44796a8dbb9e9b1f5595e9e375c63aa72a71fcb6c590fcad40226e6ad63b6e91547ecbd64116162c94d44a9dddc771a9648fb784d"
+        },
+        "reduced_resolution_browse": {
+            "title": "Reduced resolution browse image",
+            "type": "image/jpeg",
+            "roles": [
+                "overview"
+            ],
+            "href": "https://landsatlook.usgs.gov/data/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_thumb_large.jpeg",
+            "alternate": {
+                "s3": {
+                    "storage:platform": "AWS",
+                    "storage:requester_pays": true,
+                    "href": "s3://usgs-landsat/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_thumb_large.jpeg"
+                }
+            },
+            "file:checksum": "1340e77cee8f908ccfa37ff5a57a6e8f83ea7d43a0207d3bd72ef98798fd688ca5d45acdd1c8de38e7316faba445b3f9dadcb8cbee858521fb27fc318b5b820c12c3"
+        },
+        "index": {
+            "title": "HTML index page",
+            "type": "text/html",
+            "roles": [
+                "metadata"
+            ],
+            "href": "https://landsatlook.usgs.gov/stac-browser/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1"
+        },
+        "MTL.json": {
+            "title": "Product Metadata File (json)",
+            "description": "Collection 2 Level-1 Product Metadata File (json)",
+            "type": "application/json",
+            "roles": [
+                "metadata"
+            ],
+            "href": "https://landsatlook.usgs.gov/data/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_MTL.json",
+            "alternate": {
+                "s3": {
+                    "storage:platform": "AWS",
+                    "storage:requester_pays": true,
+                    "href": "s3://usgs-landsat/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_MTL.json"
+                }
+            },
+            "file:checksum": "1340ab9abdbddc6ebcb7d1078dc7f150ecd415415cf89ee4b5979e51da6c3ceb5df1bd4ddb68536a1d9aef035a07d9fe5b7b25e755c9aed0692b53d352eb3d569bbb"
+        },
+        "blue": {
+            "title": "Blue Band (B1)",
+            "description": "Collection 2 Level-1 Blue Band (B1) Top of Atmosphere Radiance",
+            "type": "image/vnd.stac.geotiff; cloud-optimized=true",
+            "roles": [
+                "data"
+            ],
+            "eo:bands": [
+                {
+                    "name": "B1",
+                    "common_name": "blue",
+                    "gsd": 30,
+                    "center_wavelength": 0.49
+                }
+            ],
+            "href": "https://landsatlook.usgs.gov/data/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_B1.TIF",
+            "alternate": {
+                "s3": {
+                    "storage:platform": "AWS",
+                    "storage:requester_pays": true,
+                    "href": "s3://usgs-landsat/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_B1.TIF"
+                }
+            },
+            "file:checksum": "1340b61cbe651584d856e0914d5765ce2c5450877b9799f297b873dfe4a23c05fa7c38c8a8f232f6efd5a91c7814f96d5ab6dab76a4d052be018f2e46d36a57d14fb"
+        },
+        "green": {
+            "title": "Green Band (B2)",
+            "description": "Collection 2 Level-1 Green Band (B2) Top of Atmosphere Radiance",
+            "type": "image/vnd.stac.geotiff; cloud-optimized=true",
+            "roles": [
+                "data"
+            ],
+            "eo:bands": [
+                {
+                    "name": "B2",
+                    "common_name": "green",
+                    "gsd": 30,
+                    "center_wavelength": 0.56
+                }
+            ],
+            "href": "https://landsatlook.usgs.gov/data/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_B2.TIF",
+            "alternate": {
+                "s3": {
+                    "storage:platform": "AWS",
+                    "storage:requester_pays": true,
+                    "href": "s3://usgs-landsat/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_B2.TIF"
+                }
+            },
+            "file:checksum": "13408d394e8acf1ed6117cda452116de9c0fa9cfab85947ad67f882a0945fdc6a1d4bcce73799ca01b245253022817df4b9cf3c547fadb760bd999aefd73756f5bc8"
+        },
+        "red": {
+            "title": "Red Band (B3)",
+            "description": "Collection 2 Level-1 Red Band (B3) Top of Atmosphere Radiance",
+            "type": "image/vnd.stac.geotiff; cloud-optimized=true",
+            "roles": [
+                "data"
+            ],
+            "eo:bands": [
+                {
+                    "name": "B3",
+                    "common_name": "red",
+                    "gsd": 30,
+                    "center_wavelength": 0.66
+                }
+            ],
+            "href": "https://landsatlook.usgs.gov/data/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_B3.TIF",
+            "alternate": {
+                "s3": {
+                    "storage:platform": "AWS",
+                    "storage:requester_pays": true,
+                    "href": "s3://usgs-landsat/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_B3.TIF"
+                }
+            },
+            "file:checksum": "134041fc123981b6775a91c62b485c0e489d196f609b3af0d86243989eea78f8f3df765f7a35bcf651a8441d6d7790c8cbb7462c8530e279b6b9c74094430ce66e44"
+        },
+        "nir08": {
+            "title": "Near Infrared Band 0.8 (B4)",
+            "description": "Collection 2 Level-1 Near Infrared Band 0.8 (B4) Top of Atmosphere Radiance",
+            "type": "image/vnd.stac.geotiff; cloud-optimized=true",
+            "roles": [
+                "data",
+                "reflectance"
+            ],
+            "eo:bands": [
+                {
+                    "name": "B4",
+                    "common_name": "nir08",
+                    "gsd": 30,
+                    "center_wavelength": 0.84
+                }
+            ],
+            "href": "https://landsatlook.usgs.gov/data/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_B4.TIF",
+            "alternate": {
+                "s3": {
+                    "storage:platform": "AWS",
+                    "storage:requester_pays": true,
+                    "href": "s3://usgs-landsat/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_B4.TIF"
+                }
+            },
+            "file:checksum": "134016e1bf3bce09e125319549c68e704047974c3a1621c6899ef022d98f32eefaa8e10194810da1b9789192dd9cb8320a19a11b32c9c64790b7ea107881f5fae9f5"
+        },
+        "swir16": {
+            "title": "Short-wave Infrared Band 1.6 (B5)",
+            "description": "Collection 2 Level-1 Short-wave Infrared Band 1.6 (B5) Top of Atmosphere Radiance",
+            "type": "image/vnd.stac.geotiff; cloud-optimized=true",
+            "roles": [
+                "data",
+                "reflectance"
+            ],
+            "eo:bands": [
+                {
+                    "name": "B5",
+                    "common_name": "swir16",
+                    "gsd": 30,
+                    "center_wavelength": 1.65
+                }
+            ],
+            "href": "https://landsatlook.usgs.gov/data/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_B5.TIF",
+            "alternate": {
+                "s3": {
+                    "storage:platform": "AWS",
+                    "storage:requester_pays": true,
+                    "href": "s3://usgs-landsat/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_B5.TIF"
+                }
+            },
+            "file:checksum": "134036cf2f8cd05292a5325bedbac4d158520fd1fedce2365a6a6ec6ac58e529532c38a21923e10c8224bd10e40cfd8dc98f622b370c7969a4d35920c90a24c8e725"
+        },
+        "lwir": {
+            "title": "Thermal Infrared Band (B6)",
+            "description": "Collection 2 Level-1 Thermal Infrared Band (B6) Top of Atmosphere Radiance",
+            "type": "image/vnd.stac.geotiff; cloud-optimized=true",
+            "roles": [
+                "data",
+                "temperature"
+            ],
+            "eo:bands": [
+                {
+                    "name": "B6",
+                    "common_name": "lwir",
+                    "gsd": 120,
+                    "center_wavelength": 11.45
+                }
+            ],
+            "href": "https://landsatlook.usgs.gov/data/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_B6.TIF",
+            "alternate": {
+                "s3": {
+                    "storage:platform": "AWS",
+                    "storage:requester_pays": true,
+                    "href": "s3://usgs-landsat/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_B6.TIF"
+                }
+            },
+            "file:checksum": "134027ead566bf139355c8a3bafa4675cf8370c05ee9e32f525d10301b87c4b4ed3c0633f544b986ff84cda24fe29bde125f3c3eb7b55dba7da108797d3fa8ef46f7"
+        },
+        "swir22": {
+            "title": "Short-wave Infrared Band 2.2 (B7)",
+            "description": "Collection 2 Level-1 Short-wave Infrared Band 2.2 (B7) Top of Atmosphere Radiance",
+            "type": "image/vnd.stac.geotiff; cloud-optimized=true",
+            "roles": [
+                "data",
+                "reflectance"
+            ],
+            "eo:bands": [
+                {
+                    "name": "B7",
+                    "common_name": "swir22",
+                    "gsd": 30,
+                    "center_wavelength": 2.22
+                }
+            ],
+            "href": "https://landsatlook.usgs.gov/data/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_B7.TIF",
+            "alternate": {
+                "s3": {
+                    "storage:platform": "AWS",
+                    "storage:requester_pays": true,
+                    "href": "s3://usgs-landsat/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_B7.TIF"
+                }
+            },
+            "file:checksum": "1340f0215bf1b872c212c85735a1312d7b0b461a14a56682529352fb015a96c7f6245d814a2d27c073d0a1c29851ef029caa8ef43859eed5c69cdc6bfe939f46c275"
+        },
+        "qa_pixel": {
+            "title": "Pixel Quality Assessment Band",
+            "description": "Collection 2 Level-1 Pixel Quality Assessment Band Top of Atmosphere Radiance",
+            "type": "image/vnd.stac.geotiff; cloud-optimized=true",
+            "roles": [
+                "cloud",
+                "cloud-shadow",
+                "snow-ice",
+                "water-mask"
+            ],
+            "classification:bitfields": [
+                {
+                    "name": "fill",
+                    "description": "Corresponding pixels in L1 image bands are fill",
+                    "offset": 0,
+                    "length": 1,
+                    "classes": [
+                        {
+                            "name": "not_fill",
+                            "description": "L1 image band pixels are not fill",
+                            "value": 0
+                        },
+                        {
+                            "name": "fill",
+                            "description": "L1 image band pixels are fill",
+                            "value": 1
+                        }
+                    ]
+                },
+                {
+                    "name": "dilated",
+                    "description": "Dilated cloud",
+                    "offset": 1,
+                    "length": 1,
+                    "classes": [
+                        {
+                            "name": "not_dilated",
+                            "description": "Cloud is not dilated or no cloud",
+                            "value": 0
+                        },
+                        {
+                            "name": "dilated",
+                            "description": "Cloud dilation",
+                            "value": 1
+                        }
+                    ]
+                },
+                {
+                    "name": "unused",
+                    "description": "Unused bit",
+                    "offset": 2,
+                    "length": 1,
+                    "classes": [
+                        {
+                            "name": "unused",
+                            "description": "Unused bit",
+                            "value": 0
+                        }
+                    ]
+                },
+                {
+                    "name": "cloud",
+                    "description": "Cloud mask",
+                    "offset": 3,
+                    "length": 1,
+                    "classes": [
+                        {
+                            "name": "not_cloud",
+                            "description": "Cloud confidence is not high",
+                            "value": 0
+                        },
+                        {
+                            "name": "cloud",
+                            "description": "High confidence cloud",
+                            "value": 1
+                        }
+                    ]
+                },
+                {
+                    "name": "shadow",
+                    "description": "Cloud shadow mask",
+                    "offset": 4,
+                    "length": 1,
+                    "classes": [
+                        {
+                            "name": "not_shadow",
+                            "description": "Cloud shadow confidence is not high",
+                            "value": 0
+                        },
+                        {
+                            "name": "shadow",
+                            "description": "High confidence cloud shadow",
+                            "value": 1
+                        }
+                    ]
+                },
+                {
+                    "name": "snow",
+                    "description": "Snow/Ice mask",
+                    "offset": 5,
+                    "length": 1,
+                    "classes": [
+                        {
+                            "name": "not_snow",
+                            "description": "Snow/Ice confidence is not high",
+                            "value": 0
+                        },
+                        {
+                            "name": "snow",
+                            "description": "High confidence snow cover",
+                            "value": 1
+                        }
+                    ]
+                },
+                {
+                    "name": "clear",
+                    "description": "Cloud or dilated cloud bits set",
+                    "offset": 6,
+                    "length": 1,
+                    "classes": [
+                        {
+                            "name": "not_clear",
+                            "description": "Cloud or dilated cloud bits are set",
+                            "value": 0
+                        },
+                        {
+                            "name": "clear",
+                            "description": "Cloud and dilated cloud bits are not set",
+                            "value": 1
+                        }
+                    ]
+                },
+                {
+                    "name": "water",
+                    "description": "Water mask",
+                    "offset": 7,
+                    "length": 1,
+                    "classes": [
+                        {
+                            "name": "not_water",
+                            "description": "Land or cloud",
+                            "value": 0
+                        },
+                        {
+                            "name": "water",
+                            "description": "Water",
+                            "value": 1
+                        }
+                    ]
+                },
+                {
+                    "name": "cloud_confidence",
+                    "description": "Cloud confidence levels",
+                    "offset": 8,
+                    "length": 2,
+                    "classes": [
+                        {
+                            "name": "not_set",
+                            "description": "No confidence level set",
+                            "value": 0
+                        },
+                        {
+                            "name": "low",
+                            "description": "Low confidence cloud",
+                            "value": 1
+                        },
+                        {
+                            "name": "medium",
+                            "description": "Medium confidence cloud",
+                            "value": 2
+                        },
+                        {
+                            "name": "high",
+                            "description": "High confidence cloud",
+                            "value": 3
+                        }
+                    ]
+                },
+                {
+                    "name": "shadow_confidence",
+                    "description": "Cloud shadow confidence levels",
+                    "offset": 10,
+                    "length": 2,
+                    "classes": [
+                        {
+                            "name": "not_set",
+                            "description": "No confidence level set",
+                            "value": 0
+                        },
+                        {
+                            "name": "low",
+                            "description": "Low confidence cloud shadow",
+                            "value": 1
+                        },
+                        {
+                            "name": "reserved",
+                            "description": "Reserved - value not used",
+                            "value": 2
+                        },
+                        {
+                            "name": "high",
+                            "description": "High confidence cloud shadow",
+                            "value": 3
+                        }
+                    ]
+                },
+                {
+                    "name": "snow_confidence",
+                    "description": "Snow/Ice confidence levels",
+                    "offset": 12,
+                    "length": 2,
+                    "classes": [
+                        {
+                            "name": "not_set",
+                            "description": "No confidence level set",
+                            "value": 0
+                        },
+                        {
+                            "name": "low",
+                            "description": "Low confidence snow/ice",
+                            "value": 1
+                        },
+                        {
+                            "name": "reserved",
+                            "description": "Reserved - value not used",
+                            "value": 2
+                        },
+                        {
+                            "name": "high",
+                            "description": "High confidence snow/ice",
+                            "value": 3
+                        }
+                    ]
+                },
+                {
+                    "name": "unused",
+                    "description": "Unused Bit",
+                    "offset": 14,
+                    "length": 1,
+                    "classes": [
+                        {
+                            "name": "unused",
+                            "description": "Unused Bit",
+                            "value": 0
+                        }
+                    ]
+                },
+                {
+                    "name": "unused",
+                    "description": "Unused Bit",
+                    "offset": 15,
+                    "length": 1,
+                    "classes": [
+                        {
+                            "name": "unused",
+                            "description": "Unused Bit",
+                            "value": 0
+                        }
+                    ]
+                }
+            ],
+            "href": "https://landsatlook.usgs.gov/data/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_QA_PIXEL.TIF",
+            "alternate": {
+                "s3": {
+                    "storage:platform": "AWS",
+                    "storage:requester_pays": true,
+                    "href": "s3://usgs-landsat/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_QA_PIXEL.TIF"
+                }
+            },
+            "file:checksum": "1340d9d79e42bc7011c8a923efa603cf0544fd767da7b78b5c72c2e112d6d2f7f187be034827e5c6409cedde60da15dd6c8ee524e17591037f93ce0937da28813b21"
+        },
+        "qa_radsat": {
+            "title": "Radiometric Saturation Quality Assessment Band",
+            "description": "Collection 2 Level-1 Radiometric Saturation Quality Assessment Band Top of Atmosphere Radiance",
+            "type": "image/vnd.stac.geotiff; cloud-optimized=true",
+            "roles": [
+                "saturation"
+            ],
+            "classification:bitfields": [
+                {
+                    "name": "band1",
+                    "description": "Band 1 radiometric saturation",
+                    "offset": 0,
+                    "length": 1,
+                    "classes": [
+                        {
+                            "name": "not_saturated",
+                            "description": "Band 1 is not saturated",
+                            "value": 0
+                        },
+                        {
+                            "name": "saturated",
+                            "description": "Band 1 is saturated",
+                            "value": 1
+                        }
+                    ]
+                },
+                {
+                    "name": "band2",
+                    "description": "Band 2 radiometric saturation",
+                    "offset": 1,
+                    "length": 1,
+                    "classes": [
+                        {
+                            "name": "not_saturated",
+                            "description": "Band 2 is not saturated",
+                            "value": 0
+                        },
+                        {
+                            "name": "saturated",
+                            "description": "Band 2 is saturated",
+                            "value": 1
+                        }
+                    ]
+                },
+                {
+                    "name": "band3",
+                    "description": "Band 3 radiometric saturation",
+                    "offset": 2,
+                    "length": 1,
+                    "classes": [
+                        {
+                            "name": "not_saturated",
+                            "description": "Band 3 is not saturated",
+                            "value": 0
+                        },
+                        {
+                            "name": "saturated",
+                            "description": "Band 3 is saturated",
+                            "value": 1
+                        }
+                    ]
+                },
+                {
+                    "name": "band4",
+                    "description": "Band 4 radiometric saturation",
+                    "offset": 3,
+                    "length": 1,
+                    "classes": [
+                        {
+                            "name": "not_saturated",
+                            "description": "Band 4 is not saturated",
+                            "value": 0
+                        },
+                        {
+                            "name": "saturated",
+                            "description": "Band 4 is saturated",
+                            "value": 1
+                        }
+                    ]
+                },
+                {
+                    "name": "band5",
+                    "description": "Band 5 radiometric saturation",
+                    "offset": 4,
+                    "length": 1,
+                    "classes": [
+                        {
+                            "name": "not_saturated",
+                            "description": "Band 5 is not saturated",
+                            "value": 0
+                        },
+                        {
+                            "name": "saturated",
+                            "description": "Band 5 is saturated",
+                            "value": 1
+                        }
+                    ]
+                },
+                {
+                    "name": "band6",
+                    "description": "Band 6 radiometric saturation",
+                    "offset": 5,
+                    "length": 1,
+                    "classes": [
+                        {
+                            "name": "not_saturated",
+                            "description": "Band 6 is not saturated",
+                            "value": 0
+                        },
+                        {
+                            "name": "saturated",
+                            "description": "Band 6 is saturated",
+                            "value": 1
+                        }
+                    ]
+                },
+                {
+                    "name": "band7",
+                    "description": "Band 7 radiometric saturation",
+                    "offset": 6,
+                    "length": 1,
+                    "classes": [
+                        {
+                            "name": "not_saturated",
+                            "description": "Band 7 is not saturated",
+                            "value": 0
+                        },
+                        {
+                            "name": "saturated",
+                            "description": "Band 7 is saturated",
+                            "value": 1
+                        }
+                    ]
+                },
+                {
+                    "name": "unused",
+                    "description": "Unused bit",
+                    "offset": 7,
+                    "length": 1,
+                    "classes": [
+                        {
+                            "name": "unused",
+                            "description": "Unused bit",
+                            "value": 0
+                        }
+                    ]
+                },
+                {
+                    "name": "unused",
+                    "description": "Unused bit",
+                    "offset": 8,
+                    "length": 1,
+                    "classes": [
+                        {
+                            "name": "unused",
+                            "description": "Unused bit",
+                            "value": 0
+                        }
+                    ]
+                },
+                {
+                    "name": "dropped",
+                    "description": "Dropped Pixel",
+                    "offset": 9,
+                    "length": 1,
+                    "classes": [
+                        {
+                            "name": "not_dropped",
+                            "description": "Pixel Present",
+                            "value": 0
+                        },
+                        {
+                            "name": "dropped",
+                            "description": "No data",
+                            "value": 1
+                        }
+                    ]
+                },
+                {
+                    "name": "unused",
+                    "description": "Unused bit",
+                    "offset": 10,
+                    "length": 1,
+                    "classes": [
+                        {
+                            "name": "unused",
+                            "description": "Unused bit",
+                            "value": 0
+                        }
+                    ]
+                },
+                {
+                    "name": "unused",
+                    "description": "Unused bit",
+                    "offset": 11,
+                    "length": 1,
+                    "classes": [
+                        {
+                            "name": "unused",
+                            "description": "Unused bit",
+                            "value": 0
+                        }
+                    ]
+                },
+                {
+                    "name": "unused",
+                    "description": "Unused bit",
+                    "offset": 12,
+                    "length": 1,
+                    "classes": [
+                        {
+                            "name": "unused",
+                            "description": "Unused bit",
+                            "value": 0
+                        }
+                    ]
+                },
+                {
+                    "name": "unused",
+                    "description": "Unused bit",
+                    "offset": 13,
+                    "length": 1,
+                    "classes": [
+                        {
+                            "name": "unused",
+                            "description": "Unused bit",
+                            "value": 0
+                        }
+                    ]
+                },
+                {
+                    "name": "unused",
+                    "description": "Unused bit",
+                    "offset": 14,
+                    "length": 1,
+                    "classes": [
+                        {
+                            "name": "unused",
+                            "description": "Unused bit",
+                            "value": 0
+                        }
+                    ]
+                },
+                {
+                    "name": "unused",
+                    "description": "Unused bit",
+                    "offset": 15,
+                    "length": 1,
+                    "classes": [
+                        {
+                            "name": "unused",
+                            "description": "Unused bit",
+                            "value": 0
+                        }
+                    ]
+                }
+            ],
+            "href": "https://landsatlook.usgs.gov/data/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_QA_RADSAT.TIF",
+            "alternate": {
+                "s3": {
+                    "storage:platform": "AWS",
+                    "storage:requester_pays": true,
+                    "href": "s3://usgs-landsat/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_QA_RADSAT.TIF"
+                }
+            },
+            "file:checksum": "13407c20e21764a83f129c98be634aceab4bc7f7490a202146cee3ba620b30e58bf86133a871289c5dd63bf198e86e79ab3093b34879a6a5487484e6f63fc9c3a21d"
+        },
+        "GCP": {
+            "title": "Ground Control Point Residual Report",
+            "description": "Collection 2 Level-1 Ground Control Point Residual Report Top of Atmosphere Radiance",
+            "type": "image/vnd.stac.geotiff; cloud-optimized=true",
+            "roles": [
+                "data"
+            ],
+            "href": "https://landsatlook.usgs.gov/data/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_GCP.txt",
+            "alternate": {
+                "s3": {
+                    "storage:platform": "AWS",
+                    "storage:requester_pays": true,
+                    "href": "s3://usgs-landsat/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_GCP.txt"
+                }
+            },
+            "file:checksum": "1340ab0e0356e17897598ba5ce674464ad5ef706eb84605cd539f19ddc81caaf985d1010a4244694939931c9729732398ac4804d0fc4ca8b852aad207368720a6e12"
+        },
+        "ANG.txt": {
+            "title": "Angle Coefficients File",
+            "description": "Collection 2 Level-1 Angle Coefficients File (ANG)",
+            "type": "text/plain",
+            "roles": [
+                "metadata"
+            ],
+            "href": "https://landsatlook.usgs.gov/data/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_ANG.txt",
+            "alternate": {
+                "s3": {
+                    "storage:platform": "AWS",
+                    "storage:requester_pays": true,
+                    "href": "s3://usgs-landsat/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_ANG.txt"
+                }
+            },
+            "file:checksum": "13408d83e5e900c5a734ceef4f37c9a424bb15ae09e579ae4b32c36c61b7e22665107145f1208d0b9786286d8149e63b9544e4f8c1432e496999c30b714c645de78d"
+        },
+        "VAA": {
+            "title": "Sensor Azimuth Angle Band",
+            "description": "Collection 2 Level-1 Sensor Azimuth Angle Band",
+            "type": "image/vnd.stac.geotiff; cloud-optimized=true",
+            "roles": [
+                "azimuth"
+            ],
+            "href": "https://landsatlook.usgs.gov/data/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_VAA.TIF",
+            "alternate": {
+                "s3": {
+                    "storage:platform": "AWS",
+                    "storage:requester_pays": true,
+                    "href": "s3://usgs-landsat/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_VAA.TIF"
+                }
+            },
+            "file:checksum": "1340e9392082e8403ef02c10464b13941a3f8c4a13d0035573517990234c85f0732cec0b7f16703e0cba75581acbad663d6136c4039cda4bef2df422648d9d87a156"
+        },
+        "VZA": {
+            "title": "Sensor Zenith Angle Band",
+            "description": "Collection 2 Level-1 Sensor Zenith Angle Band",
+            "type": "image/vnd.stac.geotiff; cloud-optimized=true",
+            "roles": [
+                "data"
+            ],
+            "href": "https://landsatlook.usgs.gov/data/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_VZA.TIF",
+            "alternate": {
+                "s3": {
+                    "storage:platform": "AWS",
+                    "storage:requester_pays": true,
+                    "href": "s3://usgs-landsat/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_VZA.TIF"
+                }
+            },
+            "file:checksum": "13409e99235ae5a0ff102856b38fb4d470753c4e4abd042172830571c2f4ef3dadbf4b37f0508d2b45bdf806c3b06fb91f30a044faf28cf85e1618011bef0ac17684"
+        },
+        "SAA": {
+            "title": "Solar Azimuth Angle Band",
+            "description": "Collection 2 Level-1 Solar Azimuth Angle Band",
+            "type": "image/vnd.stac.geotiff; cloud-optimized=true",
+            "roles": [
+                "sun-azimuth"
+            ],
+            "href": "https://landsatlook.usgs.gov/data/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_SAA.TIF",
+            "alternate": {
+                "s3": {
+                    "storage:platform": "AWS",
+                    "storage:requester_pays": true,
+                    "href": "s3://usgs-landsat/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_SAA.TIF"
+                }
+            },
+            "file:checksum": "1340b81ea531821cf5fbf507b22baef0833f74d29381dfa43f80f457ccc323037a5957577aa81f647766076acebed4f12389db065563313db5ed65f9f3c24befd9ce"
+        },
+        "SZA": {
+            "title": "Solar Zenith Angle Band",
+            "description": "Collection 2 Level-1 Solar Zenith Angle Band",
+            "type": "image/vnd.stac.geotiff; cloud-optimized=true",
+            "roles": [
+                "data"
+            ],
+            "href": "https://landsatlook.usgs.gov/data/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_SZA.TIF",
+            "alternate": {
+                "s3": {
+                    "storage:platform": "AWS",
+                    "storage:requester_pays": true,
+                    "href": "s3://usgs-landsat/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_SZA.TIF"
+                }
+            },
+            "file:checksum": "1340e8ca00c692310226ac274cd2ef5b26c065aff1def0cbd5ac5ce920fe7bf88ac388c208dee7f8a8e45ef57edc31e873fae59e06b64b245ddc16bc76f80bda0745"
+        },
+        "MTL.txt": {
+            "title": "Product Metadata File",
+            "description": "Collection 2 Level-1 Product Metadata File (MTL)",
+            "type": "text/plain",
+            "roles": [
+                "metadata"
+            ],
+            "href": "https://landsatlook.usgs.gov/data/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_MTL.txt",
+            "alternate": {
+                "s3": {
+                    "storage:platform": "AWS",
+                    "storage:requester_pays": true,
+                    "href": "s3://usgs-landsat/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_MTL.txt"
+                }
+            },
+            "file:checksum": "134075ca91734ac3e21bf33ebe3de736b5311903b84d332389b1cbb1537960b2aa6f4638a2b768111ef6db7460317b078a8892c7fe056bf0f65e4b821938ad937d30"
+        },
+        "MTL.xml": {
+            "title": "Product Metadata File (xml)",
+            "description": "Collection 2 Level-1 Product Metadata File (xml)",
+            "type": "application/xml",
+            "roles": [
+                "metadata"
+            ],
+            "href": "https://landsatlook.usgs.gov/data/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_MTL.xml",
+            "alternate": {
+                "s3": {
+                    "storage:platform": "AWS",
+                    "storage:requester_pays": true,
+                    "href": "s3://usgs-landsat/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_MTL.xml"
+                }
+            },
+            "file:checksum": "1340c48eb0c591020d237f5f25c676c40d816924eb4940cb0f1e8e7bee42ac0954aee1391fea9cea618753a49a2b817e3f2084e0ef3376952b9cd626ff6358413e31"
+        },
+        "VER.txt": {
+            "title": "Geometric Verification Statistics File",
+            "description": "Collection 2 Level-1 Geometric Verification Statistics File Top of Atmosphere Radiance",
+            "type": "text/plain",
+            "roles": [
+                "data"
+            ],
+            "href": "https://landsatlook.usgs.gov/data/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_VER.txt",
+            "alternate": {
+                "s3": {
+                    "storage:platform": "AWS",
+                    "storage:requester_pays": true,
+                    "href": "s3://usgs-landsat/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_VER.txt"
+                }
+            },
+            "file:checksum": "134093b89d3dd5161943e41c9dde312eb9d130a1b8a376f77cda5a9b4584fb2bc8326e8bc754f6e075ad7ed67338b928312be1537b281a3fa062dbe7b930f5867192"
+        },
+        "VER.jpg": {
+            "title": "Three Band Verification Browse Image",
+            "description": "Collection 2 Level-1 Three Band Verification Browse Image Top of Atmosphere Radiance",
+            "type": "image/png",
+            "roles": [
+                "data"
+            ],
+            "href": "https://landsatlook.usgs.gov/data/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_VER.jpg",
+            "alternate": {
+                "s3": {
+                    "storage:platform": "AWS",
+                    "storage:requester_pays": true,
+                    "href": "s3://usgs-landsat/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_VER.jpg"
+                }
+            },
+            "file:checksum": "13402701ed90d29b527f737a85576152457bc339bd3a9070e97b699591df8bf42a285ad7bb3107be3314d55a4cb4d5c49583e2bc26a2d51649cda439e6acfeb40a30"
+        }
+    },
+    "links": [
+        {
+            "rel": "root",
+            "href": "https://landsatlook.usgs.gov/data/catalog.json"
+        },
+        {
+            "rel": "parent",
+            "href": "https://landsatlook.usgs.gov/data/collection02/level-1/standard/tm/1984/196/021/catalog.json"
+        },
+        {
+            "rel": "collection",
+            "href": "https://landsatlook.usgs.gov/data/collection02/landsat-c2l1.json"
+        },
+        {
+            "rel": "self",
+            "href": "https://landsatlook.usgs.gov/data/collection02/level-1/standard/tm/1984/196/021/LT05_L1TP_196021_19840425_20200918_02_T1/LT05_L1TP_196021_19840425_20200918_02_T1_stac.json"
+        }
+    ],
+    "collection": "landsat-c2l1"
+}

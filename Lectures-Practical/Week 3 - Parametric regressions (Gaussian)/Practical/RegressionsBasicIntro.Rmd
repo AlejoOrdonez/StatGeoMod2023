@@ -1,0 +1,57 @@
+---
+title: "Multiple Linear Regressions (GLMs)"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval=F)
+```
+
+# **The Set-up**
+
+## *Learning objectives.*
+1. Explore your dataset to avoid common statistical problems when performing a simple/multiple linear regression.
+2.	Implement as simple/multiple linear regression in `R`.  
+3.	Discriminate between raw and standardised regressions coefficients. 
+4.	Determine the fit of a linear regression and establish how good a model is.  
+5.	Reduce a model to the minimum adequate number of predictors using a stepwise procedure.   
+
+## *Before you start*
+The practical will be run using *RStudio cloud* to avoid individual machine troubleshooting. This means you **need** to have an account for *RStudio cloud*.
+
+However, remember to have [`R`](https://cran.r-project.org) and [R-studio](http://www.rstudio.com/) in your/room computer so you can work on the project after class.
+
+**You should have also **
+1. Read chapter 10 of Crawley the R book.
+2. Done the Tutorial for this week.
+
+## *The way it's going to be run*
+
+In this 3h practical you will to implement what you have learned in the class about Regression Analyses in `R`.
+
+You will be building and **R-Markdown** document during the class. **R-Markdown** documents allows you to combine your code, its results, and your prose commentary into a single document. If you manage to produce a document your code works. The resulting file (a html) is what you will hand-in at the end of the practical.
+
+This 3h practical is divided into seven parts (24 tasks in total). Also try to write your own `R`-code and run it **DO NOT COPY THE CODE OF SOMEONE ELSE**. Writing your code and figuring out why it does not work is the best way to understand the dynamics of the `R` language and the tasks you are doing. Also, you have an excellent teaching assistant resource - ask him and/or me all the questions you have.
+
+The final document will have three classes of boxes
+
+<div class="alert alert-info">
+<p class="text-center"; style = "font-size: 20px">
+The text in the blue filled box marked as <strong>Your task</strong> states what you need to do
+</p>
+</div>
+
+```{r }
+#
+# The code in the window marked like this shows where you need to write your code
+#
+
+```
+
+<div class="alert alert-success">
+<p class="text-center"; style = "font-size: 20px">
+The text in the green filled box marked as <strong>Question</strong> phrases a question, and where you will place the answer to the <strong>question</strong> is marked as ***PLACE YOUR ANSWER HERE**. </p>
+</div>
+

@@ -1,0 +1,214 @@
+<eml:eml xmlns:eml="eml://ecoinformatics.org/eml-2.1.1"
+         xmlns:dc="http://purl.org/dc/terms/"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="eml://ecoinformatics.org/eml-2.1.1 http://rs.gbif.org/schema/eml-gbif-profile/1.1/eml.xsd"
+         packageId="http://danbif.au.dk/ipt/resource?id=biowide_species_data/v1.1" system="http://gbif.org" scope="system"
+         xml:lang="eng">
+
+<dataset>
+  <alternateIdentifier>http://danbif.au.dk/ipt/resource?r=biowide_species_data</alternateIdentifier>
+  <title xml:lang="eng">Biowide Species data</title>
+      <creator>
+    <individualName>
+        <givenName>Ane</givenName>
+      <surName>Brunbjerg</surName>
+    </individualName>
+    <organizationName>Aarhus University</organizationName>
+    <positionName>Postdoc</positionName>
+    <address>
+        <deliveryPoint>Grenaavej 14</deliveryPoint>
+        <city>Roende</city>
+        <administrativeArea>Jylland</administrativeArea>
+        <postalCode>8410</postalCode>
+        <country>DK</country>
+    </address>
+    <electronicMailAddress>akb@bios.au.dk</electronicMailAddress>
+          <userId directory="http://orcid.org/">0000-0003-0666-6535</userId>
+      </creator>
+      <creator>
+    <individualName>
+        <givenName>Rasmus</givenName>
+      <surName>Ejrnæs</surName>
+    </individualName>
+    <organizationName>Aarhus University</organizationName>
+    <positionName>Senior researcher</positionName>
+    <address>
+        <deliveryPoint>Grenaavej 14</deliveryPoint>
+        <city>Roende</city>
+        <administrativeArea>Jylland</administrativeArea>
+        <postalCode>8410</postalCode>
+        <country>DK</country>
+    </address>
+    <electronicMailAddress>rasmus@bios.au.dk</electronicMailAddress>
+      </creator>
+      <metadataProvider>
+    <individualName>
+        <givenName>Ane</givenName>
+      <surName>Brunbjerg</surName>
+    </individualName>
+    <organizationName>Aarhus University</organizationName>
+    <positionName>Postdoc</positionName>
+    <address>
+        <deliveryPoint>Grenaavej 14</deliveryPoint>
+        <city>Roende</city>
+        <administrativeArea>Jylland</administrativeArea>
+        <postalCode>8410</postalCode>
+        <country>DK</country>
+    </address>
+    <phone>87158865</phone>
+    <electronicMailAddress>akb@bios.au.dk</electronicMailAddress>
+          <userId directory="http://orcid.org/">0000-0003-0666-6535</userId>
+      </metadataProvider>
+      <associatedParty>
+    <individualName>
+        <givenName>Isabel</givenName>
+      <surName>Calabuig</surName>
+    </individualName>
+    <organizationName>DanBIF, Natural History Museum of Denmark</organizationName>
+    <positionName>Node manager, Data curator</positionName>
+    <address>
+        <city>Copenhagen</city>
+        <country>DK</country>
+    </address>
+    <electronicMailAddress>icalabuig@snm.ku.dk</electronicMailAddress>
+          <userId directory="http://orcid.org/">0000-0001-5515-7900</userId>
+    <role>distributor</role>
+      </associatedParty>
+  <pubDate>
+      2019-05-27
+  </pubDate>
+  <language>eng</language>
+  <abstract>
+    <para>The Biowide project (2014-2018) was a project aiming at collecting biodiversity data from 130 terrestrial sampling sites across Denmark. Data was collected with both classical means (observation and trapping) and by eDNA metabarcoding (sequencing of amplified marker genes. Data was also collected on environmental variables. Biowide (Biodiversity in Width and Depth) took place in collaboration between Århus Universiity (main project holder) and the two major Danish natural history museums and the University of Copenhagen, and was supported by the Villum Foundation. During the first two years of the project, a host of professionals and volunteers collected data on the environment from the 130 sample plots – on everything from soil moisture, temperature, nutrients, plant biomass, trees, dead wood, stone and ant hills, expanses of water and flowers. The major effort has been collecting information on plants, mosses, lichens, invertebrates and fungi that live in the surfaces. With the help of volunteers, it was attempted to map as much as possible. Sampling was stratified across the three gradients expected to have most importance for terrestrial biodiversity: fertility, humidity and disturbance. Landscape types as diverse as sand dunes, meadows, bogs, agricultural land and also forest plantations and Danish natural forest are included. The project and methods are described in Brunbjerg et al. (2017)</para>
+  </abstract>
+      <keywordSet>
+            <keyword>Biodiversity</keyword>
+            <keyword>Denmark</keyword>
+            <keyword>Abiotic gradients</keyword>
+        <keywordThesaurus>GBIF Dataset Type Vocabulary: http://rs.gbif.org/vocabulary/gbif/dataset_type.xml</keywordThesaurus>
+      </keywordSet>
+  <intellectualRights>
+    <para>This work is licensed under a <ulink url="http://creativecommons.org/licenses/by-nc/4.0/legalcode"><citetitle>Creative Commons Attribution Non Commercial (CC-BY-NC) 4.0 License</citetitle></ulink>.</para>
+  </intellectualRights>
+  <distribution scope="document">
+    <online>
+      <url function="information">http://www.biowide.dk</url>
+    </online>
+  </distribution>
+  <coverage>
+      <geographicCoverage>
+          <geographicDescription>Denmark</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>7.646</westBoundingCoordinate>
+          <eastBoundingCoordinate>12.964</eastBoundingCoordinate>
+          <northBoundingCoordinate>57.798</northBoundingCoordinate>
+          <southBoundingCoordinate>54.585</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+          <temporalCoverage>
+              <rangeOfDates>
+                  <beginDate>
+                    <calendarDate>2014-05-01</calendarDate>
+                  </beginDate>
+                <endDate>
+                  <calendarDate>2016-11-30</calendarDate>
+                </endDate>
+              </rangeOfDates>
+          </temporalCoverage>
+          <taxonomicCoverage>
+              <generalTaxonomicCoverage>Plants (vascular plants and bryophytes), fungi (lichens and macrofungi), gastropods, arthropods</generalTaxonomicCoverage>
+              <taxonomicClassification>
+                  <taxonRankName>kingdom</taxonRankName>
+                <taxonRankValue>Plantae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>kingdom</taxonRankName>
+                <taxonRankValue>Fungi</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>class</taxonRankName>
+                <taxonRankValue>Gastropoda</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>phylum</taxonRankName>
+                <taxonRankValue>Arthropoda</taxonRankValue>
+              </taxonomicClassification>
+          </taxonomicCoverage>
+  </coverage>
+  <maintenance>
+    <description>
+      <para></para>
+    </description>
+    <maintenanceUpdateFrequency>notPlanned</maintenanceUpdateFrequency>
+  </maintenance>
+
+      <contact>
+    <individualName>
+        <givenName>Ane</givenName>
+      <surName>Brunbjerg</surName>
+    </individualName>
+    <organizationName>Aarhus University</organizationName>
+    <positionName>Postdoc</positionName>
+    <address>
+        <deliveryPoint>Grenaavej 14</deliveryPoint>
+        <city>Roende</city>
+        <administrativeArea>Jylland</administrativeArea>
+        <postalCode>8410</postalCode>
+        <country>DK</country>
+    </address>
+    <electronicMailAddress>akb@bios.au.dk</electronicMailAddress>
+          <userId directory="http://orcid.org/">0000-0003-0666-6535</userId>
+      </contact>
+      <contact>
+    <individualName>
+        <givenName>Rasmus</givenName>
+      <surName>Ejrnæs</surName>
+    </individualName>
+    <organizationName>Aarhus University</organizationName>
+    <positionName>Senior researcher</positionName>
+    <address>
+        <deliveryPoint>Grenaavej 14</deliveryPoint>
+        <city>Roende</city>
+        <administrativeArea>Jylland</administrativeArea>
+        <postalCode>8410</postalCode>
+        <country>DK</country>
+    </address>
+    <electronicMailAddress>rasmus@bios.au.dk</electronicMailAddress>
+      </contact>
+  <methods>
+        <methodStep>
+          <description>
+            <para>For details on methods see Brunbjerg et al. (2017)</para>
+          </description>
+        </methodStep>
+      <sampling>
+        <studyExtent>
+          <description>
+            <para>Denmark</para>
+          </description>
+        </studyExtent>
+        <samplingDescription>
+          <para>From 130 40x40m plots across Danish nature types species lists of plants, bryophytes, lichens, macrofungi, gastropods and arthropods were collected.</para>
+        </samplingDescription>
+      </sampling>
+      <qualityControl>
+        <description>
+          <para>N/A</para>
+        </description>
+      </qualityControl>
+  </methods>
+</dataset>
+  <additionalMetadata>
+    <metadata>
+      <gbif>
+          <dateStamp>2019-02-11T02:08:05.009+01:00</dateStamp>
+          <hierarchyLevel>dataset</hierarchyLevel>
+            <citation>Brunbjerg A, Ejrnæs R (2019): Biowide Species data. v1.1. Danish Biodiversity Information Facility. Dataset/Occurrence. http://danbif.au.dk/ipt/resource?r=biowide_species_data&amp;v=1.1</citation>
+          <bibliography>
+                <citation identifier="https://doi.org/10.1101/158030">Brunbjerg A.K., Bruun H.H., Brøndum L., Classen A.T., Fog K., Frøslev T.G., Goldberg I., Hansen M.D.D., Høye T.T, Læssøe T, Newman G, Skipper L., Søchting U., Ejrnæs R. (2017) A systematic survey of regional multitaxon biodiversity: evaluating strategies and coverage. bioRxiv, 158030</citation>
+          </bibliography>
+          <dc:replaces>http://danbif.au.dk/ipt/resource?id=biowide_species_data/v1.1.xml</dc:replaces>
+      </gbif>
+    </metadata>
+  </additionalMetadata>
+</eml:eml>

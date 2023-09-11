@@ -1,0 +1,83 @@
+"Common.name","Scientific.name","Conservation.status","BodyMass"
+"Giant Panda","Ailuropoda melanoleuca","Vulnerable",125
+"Red Panda","Ailurus fulgens","Endangered",6.2
+"Marine Iguana","Amblyrhynchus cristatus","Vulnerable",12
+"Pronghorn","Antilocapra americana","Least Concern",65
+"Macaw","Ara ararauna ","Least Concern",1814
+"Black Spider Monkey","Ateles paniscus","Vulnerable",7.8
+"Bowhead Whale","Balaena mysticetus","Least Concern",1e+05
+"Sei Whale","Balaenoptera borealis","Endangered",0.001
+"Blue Whale","Balaenoptera musculus","Endangered",190000
+"Fin Whale","Balaenoptera physalus","Endangered",70000
+"Plains Bison","Bison bison bison","Near Threatened",900
+"Arctic Wolf","Canis lupus arctos","Least Concern",80
+"Great White Shark","Carcharodon carcharias","Vulnerable",3000
+"Loggerhead Turtle","Caretta caretta","Vulnerable",545
+"Greater Sage-Grouse","Centrocercus urophasianus","Near Threatened",3
+"Hector's Dolphin","Cephalorhynchus hectori","Endangered",60
+"White Rhino","Ceratotherium simum","Near Threatened",3600
+"Mountain Plover","Charadrius montanus","Near Threatened",0.1
+"Humphead Wrasse","Cheilinus undulatus","Endangered",150
+"Green Turtle","Chelonia mydas","Endangered",200
+"Monarch Butterfly","Danaus plexippus","Endangered",1e-04
+"Beluga","Delphinapterus leucas","Near Threatened",1600
+"Leatherback Turtle","Dermochelys coriacea","Vulnerable",900
+"Sumatran Rhino","Dicerorhinus sumatrensis","Critically Endangered",1000
+"Black Rhino","Diceros bicornis","Critically Endangered",1400
+"Dugong","Dugong dugon","Vulnerable",400
+"Bornean Elephant","Elephas maximus borneensis","Endangered",6000
+"Asian Elephant","Elephas maximus indicus","Endangered",6000
+"Indian Elephant","Elephas maximus indicus","Endangered",6000
+"Sri Lankan Elephant","Elephas maximus maximus","Endangered",6000
+"Sumatran Elephant ","Elephas maximus sumatranus","Critically Endangered",6000
+"Hawksbill Turtle","Eretmochelys imbricata","Critically Endangered",127
+"Gray Whale","Eschrichtius robustus","Least Concern",36000
+"North Atlantic Right Whale","Eubalaena glacialis","Endangered",95000
+"Southern rockhopper penguin","Eudyptes chrysocome","Vulnerable",3
+"Mountain Gorilla","Gorilla beringei beringei","Endangered",200
+"Eastern Lowland Gorilla","Gorilla beringei graueri","Critically Endangered",200
+"Gorilla","Gorilla gorilla","",200
+"Cross River Gorilla","Gorilla gorilla diehli","Critically Endangered",275
+"Western Lowland Gorilla","Gorilla gorilla gorilla","Critically Endangered",200
+"Hippopotamus","Hippopotamus amphibius","Vulnerable",4500
+"Amazon River Dolphin","Inia geoffrensis","",185
+"Skipjack Tuna","Katsuwonus pelamis","Least Concern",34.5
+"Olive Ridley Turtle","Lepidochelys olivacea","Vulnerable",45
+"African Elephant","Loxodonta africana","",6100
+"African savanna elephant","Loxodonta africana africana","Endangered",6100
+"African Wild Dog","Lycaon pictus","Endangered",36
+"Narwhal","Monodon monoceros","Least Concern",1600
+"Black-footed Ferret","Mustela nigripes","Endangered",1.1
+"Yangtze Finless Porpoise","Neophocaena asiaeorientalis ssp. asiaeorientalis","Critically Endangered",71.8
+"Irrawaddy Dolphin","Orcaella brevirostris","Endangered",133
+"Bonobo","Pan paniscus","Endangered",61
+"Chimpanzee","Pan troglodytes","Endangered",70
+"Lion ","Panthera Leo","Vulnerable",272
+"Jaguar","Panthera onca","Near Threatened",136
+"Amur Leopard","Panthera pardus orientalis","Critically Endangered",65
+"Tiger","Panthera tigris","Endangered",423
+"Sunda Tiger","Panthera tigris sondaica","Critically Endangered",423
+"Continental Tiger","Panthera tigris tigris","",423
+"Snow Leopard","Panthera uncia","Vulnerable",75
+"Vaquita","Phocoena sinus","Critically Endangered",55
+"Ganges River Dolphin","Platanista gangetica gangetica","Endangered",89
+"Indus River Dolphin","Platanista minor","Endangered",84
+"Orangutan","Pongo abelii","Critically Endangered",90
+"Sumatran Orangutan","Pongo abelii","Critically Endangered",90
+"Bornean Orangutan","Pongo pygmaeus","Critically Endangered",87
+"Saola","Pseudoryx nghetinhensis","Critically Endangered",100
+"Whale Shark","Rhincodon typus","Endangered",30844
+"Javan Rhino","Rhinoceros sondaicus","Critically Endangered",2000
+"Greater One-Horned Rhino","Rhinoceros unicornis","Vulnerable",2400
+"Galápagos Penguin","Spheniscus mendiculus","Endangered",2600
+"Albacore Tuna","Thunnus alalunga","Near Threatened",60.3
+"Yellowfin Tuna","Thunnus albacares","Near Threatened",180
+"Bigeye Tuna","Thunnus obesus","Vulnerable",95
+"Bluefin Tuna","Thunnus Thynnus","Endangered",680
+"Common Bottlenose Dolphin","Tursiops truncates","Least Concern",500
+"Brown Bear","Ursus arctos","Least Concern",600
+"Polar Bear","Ursus maritimus ","Vulnerable",800
+"Arctic Fox","Vulpes lagopus","Least Concern",5.2
+"Swift Fox","Vulpes velox","Least Concern",3
+"Sea Lions","Zalophus wollebaeki","Endangered",250
+"African forest elephant","Loxodonta cyclotis","Critically Endangered",5000

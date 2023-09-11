@@ -1,0 +1,582 @@
+---
+title: "Linear regressions"
+author: "Adapted from Quinn & Keough (2002) Experimental Design and Data Analysis for Biologists"
+editor: 
+  markdown: 
+    wrap: sentence
+format:
+  html:
+    embed-resources: true
+---
+
+```{r}
+#| echo: false
+
+library(palmerpenguins)
+```
+
+# Regression Analysis
+
+Biologists commonly record more than one variable from each sampling or experimental unit.
+For example, a physiologist may record blood pressure and body weight from experimental animals, or an ecologist may record the abundance of a particular species of shrub and soil pH from a series of plots during vegetation sampling.
+Such data are termed bivariate when we have two random variables recorded from each unit or multivariate when we have more than two random variables recorded from each unit.
+There are a number of relevant questions that might prompt us to collect such data, based on the nature of the biological and statistical relationship between the variables.
+This lecture considers the statistical procedures for describing the relationship(s) between two or more continuous variables, and using that relationship for prediction.
+
+## Correlation analysis
+
+Consider a situation where we are interested in the statistical relationship between two random variables, designated $Y_{1}$ and $Y_{2}$, in a population.
+Both variables are continuous and each sampling or experimental unit *(i)* in the population has a value for each variable, designated $y_{i1}$ and $y_{i2}$.
+
+The most common statistical procedure for measuring the 'strength' of the relationship between two continuous variables is based on distributional assumptions, i.e. it is a parametric procedure.
+Rather than assuming specific distributions for the individual variables, however, we need to think of our data as a population of *y~i1~* and *y~i2~* pairs.
+We now have a joint distribution of two variables (a bivariate distribution, as shown in @fig-Bivar) that underlies the most commonly used measure of the strength of a bivariate relationship.
+The bivariate normal distribution is defined by the mean and standard deviation of each variable and a parameter called the correlation coefficient, which measures the strength of the relationship between the two variables.
+***A bivariate normal distribution implies that the individual variables are also normally distributed and also implies that any relationship between the two variables is a linear one***.
+Nonlinear relationships between two variables indicate that the bivariate normal distribution does not apply and we must use other procedures that do not assume this distribution for quantifying the strength of such relationships.
+
+```{r}
+#| label: fig-Bivar
+#| echo: false
+#| out-width: null
+#| fig-cap: | 
+#|   Bivariate normal distribution for (a) two variables with little correlation and (b) two variables with strong positive correlation.
+
+knitr::include_graphics("fig-Bivar.png")
+```
+
+One measure of the strength of a linear relationship between two continuous random variables is to determine how much the two variables vary together, we call this linkage *covariation*.
+If one variable increases (or decreases) as the other increases (or decreases), then the two variables covary; if one variable does not change as the other variable increases (or decreases), then the variables do not covary.
+We can measure how much two variables covary in a sample of observations by the covariance (@tbl-Covar).
+The covariance ranges from $-\infty$ to $\infty$.
+
++--------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------+
+| Parameter          | Estimate                                                                                                                                                        | Standard error                      |
++====================+=================================================================================================================================================================+=====================================+
+| Covariance:        | $S_{Y_1,Y_2}=\frac{\sum_{i=1}^{N}(y_{i1}-\bar{y}_{1})(y_{i,2}-\bar{y}_{2})}{n-1}$                                                                               | NA                                  |
+|                    |                                                                                                                                                                 |                                     |
+| $\sigma_{Y_1,Y_2}$ |                                                                                                                                                                 |                                     |
++--------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------+
+| Correlation:       | $r_{Y_1,Y_2} = \frac{ \sum_{i=1}^{n}(y_{i1}-\bar{y}_1)(y_{i2}-\bar{y}_2) }{\sqrt{\sum_{i=1}^{n}(y_{i1}-\bar{x}_1)^2}\sqrt{\sum_{i=1}^{n}(y_{i2}-\bar{y}_2)^2}}$ | $s_r= \sqrt{\frac{(1-r^2)}{(n-2)}}$ |
+|                    |                                                                                                                                                                 |                                     |
+| $\rho_{Y_1,Y_2}$   |                                                                                                                                                                 |                                     |
++--------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------+
+
+: Parameters used for parametric correlation analysis and their estimates, with standard error for correlation coefficient. {#tbl-Covar}
+
+One limitation of the covariance as a measure of the strength of a linear relationship is that its absolute magnitude depends on the units of the two variables.
+We can standardize the covariance by dividing by the standard deviations of the two variables so that our measure of the strength of the linear relationship lies between $-1$ and $+1$.
+This is called the Pearson (product-- moment) correlation and it measures the "strength" of the linear (straight-line) relationship between $Y_1$ and $Y_2$.
+If our sample data comprise a random sample from a population of ($y_{i1}$,$y_{i2}$) pairs then the sample correlation coefficient is called $r$.
+Note that r can be positive or negative with $-1$ or $+1$ indicating that the observations fall along a straight line and zero indicating no correlation.
+
+Since the sample correlation coefficient is a statistic.
+and in many cases the distribution of $r$ is close to normal and the sample standard error of $r$ can be calculated and used to estimate the "significance" of the relation.
+Here, the The null hypothesis most commonly tested with Pearson's correlation coefficient is that $r$ equals zero, i.e. the population correlation coefficient equals zero and there is no linear relationship between the two variables in the population.
+Because the sampling distribution of $r$ can be assumed, in many cases, to be normal (or be approximated to be so), we can easily test this *H~0~* with a *t-*statistic:$t=\frac{r}{s}$
+
+We compare t with the sampling distribution of *t* (the probability distribution of t when *H~0~* is true) with $n-2$ *df*.
+This is simply a $t-$test that a single population parameter equals zero, which means no correlation between variables.
+
+Besides the usual assumptions of random sampling and independence of observations, the Pearson correlation coefficient assumes that the joint probability distribution of $Y_1$ and $Y_2$ is bivariate normal.
+If either or both variables have non-normal distributions, then their joint distribution cannot be bivariate normal and any relationship between the two variables might not be linear.
+Nonlinear relationships can even arise if both variables have normal distributions.
+Remembering that the Pearson correlation coefficient measures the strength of the linear relationship between two variables, checking for a nonlinear relationship with a simple scatterplot and for asymmetrical distributions of the variables with boxplots is important (@fig-BivarPlt).
+
+```{r}
+#| label: fig-BivarPlt
+#| echo: false
+#| out-width: null
+#| fig-cap: | 
+#|   Comparison of 95% confidence ellipses (solid lined) and kernel density estimators (dashed line) for the relationship between total crab biomass and number of burrows at sites LS and DS on Christmas Island.
+
+knitr::include_graphics("fig-BivarPlt.png")
+```
+
+If the assumption of bivariate normality is suspect, based on either of the two variables having non-normal distributions and/or apparent nonlinearity in the relationship between the two variables, we have two options.
+***First***, we can transform one or both variables if they are skewed and their nature suggests an alternative scale of measurement might linearize their relationship.
+***Second***, we can use more robust measures of correlation that do not assume bivariate normality and linear relationships - the Spearman's rank correlation coefficient.
+
+Spearman's rank correlation coefficient ($r_s$) is simply the Pearson correlation coefficient after the two variables have been separately transformed to ranks but the ($y_{i1}$,$y_{i2}$) pairing is retained after ranking.
+The null hypothesis being tested is that there is no [monotonic relationship](https://en.wikipedia.org/wiki/Monotonic_function) between $Y_1$ and $Y_2$ in the population.
+An alternative measure is Kendall's rank correlation coefficient, sometimes termed Kendall's tau ($\tau$).
+The value of Spearman's $r_s$ will be slightly greater than ($\tau$) for a given data set, and both are more conservative measures than Pearson's correlation when distribution assumptions hold.
+Note that these non-parametric correlation analyses do not detect all nonlinear associations between variables, **just monotonic relationships**.
+
+## Linear regression analysis
+
+From now on we will focus on with fitting statistical models.
+These are used in situations where we can clearly specify a response variable, also termed the dependent variable and designated $Y$, and one or more predictor variables, also termed the independent variables or covariates and designated $X_1$, $X_2$, etc.
+A value for each response and predictor variable is recorded from sampling or experimental units in a population.
+We expect that the predictor variables may provide some biological explanation for the pattern we see in the response variable.
+The statistical models we will use take the following general form:
+
+::: {.callout style="text-align: center; font-size: 20px"}
+response variable = model + error
+:::
+
+The model component incorporates the predictor variables and parameters relating the predictors to the response.
+In most cases, the predictor variables, and their parameters, are included as a linear combination, although nonlinear terms are also possible.
+The predictor variables can be continuous or categorical or a combination of both.
+The error component represents the part of the response variable not explained by the model, i.e. uncertainty in our response variable.
+
+::: callout-Important
+**What does "linear" mean?** The term linear model has been used in two distinct ways.
+First, it means a model of a straight-line relationship between two variables.
+This is the interpretation most biologists are familiar with.
+A second, **more correct, definition** is that a linear model is simply one in which any value of the variable of interest ($y_i$) is described by a linear combination of a series of parameters (regression slopes, intercept), and "no parameter appears as an exponent or is multiplied or divided by another parameter".
+***Now the term "linear" refers to the combination of parameters, not the shape of the relationship***.
+Under this definition, linear models with a single predictor variable can represent not only straight-line relationships, but also curvilinear relationships, such as the models with polynomial terms.
+:::
+
+Our primary aim is to fit our model to our observed data, i.e. confront our model with the data.
+This fitting is basically an estimation procedure and can be done with [ordinary least squares](https://en.wikipedia.org/wiki/Ordinary_least_squares) or [maximum likelihood](https://en.wikipedia.org/wiki/Maximum_likelihood_estimation).
+Parameter estimation for most basic models will be done using a ordinary least squares (OLS) for most of our models, assuming normality of the error terms for interval estimation and hypothesis testing.
+Such models are called **general linear models**, the term "general" referring to the fact that both continuous and categorical predictors are allowed.
+If other distributions are applicable, especially when there is a relationship between the mean and the variance of the response variable, then maximum likelihood (ML) must be used for estimation.
+These models are called generalized linear models, generalized meaning that other distributions besides normal and relationships between the mean and the variance can be accommodated.
+
+We nearly always have more than one statistical model to consider.
+For example, we might have the simplest model under a null hypothesis versus a more complex model under some alternative hypothesis.
+When we have many possible predictor variables, we may be comparing a large number of possible models.
+In all cases, however, the set of models will be nested whereby we have a full model with all predictors of interest included and the other models are all subsets of this full model.
+Testing hypotheses about predictors and their parameters involves comparing the fit of models with and without specific terms in this nested hierarchy.
+Non-nested models can also be envisaged but they cannot be easily compared using the estimation and testing framework that will be described later, although some measures of fit are possible.
+
+Finally, it is important to remember that **there will not usually be any best or correct model in an absolute sense**.
+We will only have sample data with which to assess the fit of the model and estimate parameters.
+We may also not have chosen all the relevant predictors nor considered combinations of predictors, such as interactions, that might affect the response variable.
+All the procedure for analyzing linear models can do is help us decide which of the models we have available is the best fit to our observed sample data and enable us to test hypotheses about the parameters of the model.
+
+## Relationship between regression and correlation
+
+Before going deep into regression analysis we need to make a clear distinction between **regressions and correlations**.
+There are mathematical and conceptual similarities between linear regression and correlation analysis.
+In short, in the case of a single variable, the population slope of the linear regression between $Y$ on $X$ ($\beta_{YX}$) is related to the sample correlation coefficient between $Y$ on $X$ ($\r_{YX}$) via the ratio of the standard deviations of $Y$ and $X$.
+
+These relationships between regression slopes and correlation coefficients result in some interesting equivalencies in hypothesis tests.
+In short, the test of the OLS regression slope of $Y$ on $X$ is identical to the test of the OLS regression slope of $X$ on $Y$ and both are identical to the test of the Pearson correlation coefficient between $Y$ and $X$, although neither estimated value of the slope will be the same as the estimated value of the correlation coefficient.
+
+Simple correlation analysis is appropriate when we have bivariate data and we simply wish to measure the strength of the linear relationship (the correlation coefficient) between the two variables and test an *H~0~* about that correlation coefficient.
+Regression analysis is called for when we can biologically distinguish a response ($Y$) and a predictor variable ($X$) and we wish to describe the form of the model relating $Y$ to $X$ and use our estimates of the parameters of the model to predict $Y$ from $X$.
+
+## Linear regression analysis.
+
+In this section, we consider statistical models that assume a linear relationship between a continuous response variable and a single, usually continuous, predictor variable.
+Such models are termed simple linear regression models and their analysis has three major purposes:
+
+1.  to describe the linear relationship between $Y$ and $X$,
+2.  to determine how much of the variation (uncertainty) in $Y$ can be explained by the linear relationship with $X$ and how much of this variation remains unexplained, and
+3.  to predict new values of $Y$ from new values of $X$.
+
+Our experience is that biologists, especially ecologists, mainly use linear regression analysis to describe the relationship between $Y$ and $X$ and to explain the variability in $Y$ - that is to say regresiposn are used manly to test a *H~0~*.
+They less commonly use it for prediction, but that is a topic to be touched upon later.
+
+### Simple linear regression analysis
+
+Simple linear regression analysis is one of the most widely applied statistical techniques in biology and we will use two recent examples from the literature to illustrate the issues associated with the analysis.
+
+Consider a set of $i=1$ to $n$ observations where each observation was selected because of its specific $X-$value, i.e. the $X-$values were fixed by the investigator, whereas the $Y-$value for each observation is sampled from a population of possible $Y-$values.
+The simple linear regression model is:
+
+::: {.callout style="text-align: center; font-size: 20px;"}
+$y_i = \beta_0 + \beta_1X_i + \epsilon_i$
+:::
+
+In this model, the response variable $Y$ is a random variable whereas the predictor variable $X$ represents fixed values chosen by the researcher.
+This means that repeated sampling from the population of possible sampling units would use the same values of $X$; this restriction on $X$ has important ramifications for the use of regression analysis in biology because usually both $Y$ and $X$ are random variables with a joint probability distribution.
+
+Some aspects of classical regression analysis, like prediction and tests of hypotheses, might not be affected by $X$ being a random variable whereas the estimates of regression coefficients can be inaccurate.
+
+The main aim of regression analysis is to estimate the parameters ($\beta_0$ and $\beta_i$) of the linear regression model based on our sample of $n$ observations with fixed $X-$values and random $Y-$values.
+Actually, there are three parameters we need to estimate: $\beta_0$, $\beta_i$ and $\sigma^2_\epsilon$ (the common variance of $\epsilon_i$ and therefore of $y_i$).
+Once we have estimates of these parameters, we can determine the sample regression line:
+
+::: {.callout style="text-align: center; font-size: 20px;"}
+$\hat{y}_i = b_0 + b_1x_i$
+:::
+
+$\hat{y}_i$ is the value of $y_i$ predicted by the fitted regression line for each $x_i$.
+$b_0$ is the sample estimate of $\beta_0$, the $Y-$intercept; and $b_1$ is the sample estimate of $\beta_0$, the regression slope.
+The OLS estimates of $\beta_0$ and $\beta_1$ are the values that minimize the sum of squared deviations (SS) between each observed value of the response and the vakues predicted by the repression.
+
+***Slope***: The parameter of most interest is the slope of the regression line $\beta_1$ because this measures the strength of the relationship between $Y$ and $X$.
+The sample regression slope can be positive or negative (or zero) with no constraints on upper and lower limits.
+The estimate of the $\beta_1$ is based on $X$ being fixed so in the common case where $X$ is random, we need a different approach to estimating the regression slope.
+
+***Standardized regression slope***: Note that the value of the regression slope depends on the units in which $X$ and $Y$ are measured.
+This makes it difficult to compare estimated regression slopes between different data sets.
+We can calculate a standardized regression slope $b^*_1$ termed a beta coefficient of Standardized regression slope:
+
+::: {.callout style="text-align: center; font-size: 20px;"}
+$b^*_1 = b_1\frac{S_X}{S_Y}$
+:::
+
+This is simply the sample regression slope multiplied by the ratio of the standard deviation of $X$ and the standard deviation of $Y$.
+The same result can be achieved by first standardizing $X$ and $Y$ (each to a mean of zero and a standard deviation of one) and then calculating the usual sample regression slope.
+The value of $b^*_1$ provides an estimate of the slope of the regression model that is independent of the units of $X$ and $Y$ and is useful for comparing regression slopes between data sets.
+Note that the *linear regression model for standardized variables does not include an intercept because its OLS (or ML) estimate would always be zero*.
+Standardized regression slopes are produced by most statistical software
+
+***Intercept***: The OLS regression line must pass through $\bar{y}$ and $\bar{x}$.
+Therefore, the estimate ($b_0$ of the intercept of our regression model is derived from a simple rearrangement of the sample regression equation, substituting $b_1$, $\bar{y}$ and $\bar{x}$. The intercept might not be of much practical interest in regression analysis because the range of our observations rarely includes $X$ equals zero and we should not usually extrapolate beyond the range of our sample observations. A related issue is whether the linear regression line should be forced through the origin ($Y$ equals zero and X equals zero) if we know theoretically that $Y$ must be zero if $X$ equals zero.
+
+***Confidence intervals***: Now we have a point estimate for both ($\sigma^2_\epsilon$ and $\beta_1$, we can look at the sampling distribution and standard error of $b_1$ and confidence intervals for $\beta_1$. It turns out that the Central Limit Theorem applies to $b_1$ so its sampling distribution is normal with an expected value (mean) of $\beta_1$.
+Confidence intervals for $\beta_1$ are calculated using a normal aprximation when we know the standard error of a statistic and use the t distribution.
+The 95% confidence interval for $\beta_1$ is:
+
+::: {.callout style="text-align: center; font-size: 20px;"}
+$b^*_1 = b_1 \pm t_{0.05,n-2} S_{b_1}$
+:::
+
+Note that we use $n-2$ degrees of freedom (df) for the $t-$statistic.
+To illustrate using 95% confidence interval, under repeated sampling, we would expect 95% of these intervals to contain the fixed, but unknown, true slope of our linear regression model.
+Using this estimate we candetermine a confidence band (e.g. 95%) for the regression line.
+The 95% confidence band is a biconcave band that will contain the true population regression line 95% of the time.
+
+***Predicted values and residuals***: Prediction from the OLS regression equation is straightforward by substituting an $X-$value into the regression equation and calculating the predicted $Y-$value.
+Be wary of extrapolating when making such predictions - **do not predict from** $X-$values outside the range of your data.
+The predicted $Y-$values have a sampling distribution that is normal but dont worry about the formula as R give you these values.
+This predicted $Y-$value is an estimate of the true mean of $Y$ for the new $X-$value from which we are predicting.
+Confidence intervals (also called prediction intervals) for this mean of $Y$ can be calculated in the usual manner using this standard error and the $t-$distribution with $n-2$ df.
+This difference between each observed $y_i$ and each predicted $\hat{y)_i$ is called a residual ($\epsilon_i$):
+
+::: {.callout style="text-align: center; font-size: 20px;"}
+$\epsilon_i = y_i - \hat{y}_i$
+:::
+
+We will use the residuals for checking the fit of the model to our data.
+
+### Assumptions of regression analysis
+
+The assumptions of the linear regression model **strictly concern** the error terms ($\epsilon_i$) in the model.
+Since these error terms are the only random ones in the model, then the assumptions also apply to observations of the response variable $y_i$.
+
+The residuals from the fitted model (that is the error term) are important for checking whether the assumptions of linear regression analysis are met.
+Residuals indicate how far each observation is from the fitted OLS regression line, in $Y-$variable space (i.e. vertically).
+Observations with larger residuals are further from the fitted line that those with smaller residuals.
+Patterns of residuals represent patterns in the error terms from the linear model and can be used to check assumptions and also the influence each observation has on the fitted model.
+
+***Normality***: This assumption is that the populations of $Y-$values and the error terms ($\epsilon_i$) are normally distributed for each level of the predictor variable $x_i$.
+*Confidence intervals and hypothesis tests based on OLS estimates of regression parameters are robust to this assumption unless the lack of normality results in violations of other assumptions*.
+In particular, skewed distributions of $y_i$ can cause problems with homogeneity of variance and linearity, as discussed below.
+Without replicate $Y-$values for each $x_i$, this assumption is difficult to verify.
+However, reasonable checks can be based on the residuals from the fitted model.
+The methods for checking normality, including formal tests or graphical methods such as Q-Q plots, can be applied to these residuals.
+If the assumption is not met, then there are at least two options.
+First, a transformation of $Y$ may be appropriate if the distribution is positively skewed.
+Second, we can fit a linear model using techniques that allow other distributions of error terms other than normal.
+These generalized linear models (GLMs) will be described in in the next lesson.
+Note that non-normality of $Y$ is very commonly associated with heterogeneity of variance and/or nonlinearity.
+
+***Homogeneity of variance***: This assumption is that the populations of $Y-$values, and the error terms ($\epsilon_1$), have the same variance for each $x_i$:
+
+::: {.callout style="text-align: center; font-size: 20px;"}
+$\sigma^2_1$ = $\sigma^2_2$ = $...$ = $\sigma^2_1$ = $\sigma^2_\epsilon$ for $i=1$ to $n$
+:::
+
+*The homogeneity of variance assumption is important, its violation having a bigger effect on the reliability of interval estimates of, and tests of hypotheses about, regression parameters (and parameters of other linear models) than nonnormality*.
+Heterogeneous variances are often a result of our observations coming from populations with skewed distributions of $Y-$values at each $x_i$ and can also be due to a small number of extreme observations or outliers.
+The general pattern of the residuals for the different $x-i$ can be very informative to test this asumption.
+The most useful check is a plot of residuals against $x_i$ or $\hat{y}_i$.
+There are a couple of options for dealing with heterogeneous variances.
+If the unequal variances are due to skewed distributions of $Y-$values at each $x_i$, then appropriate transformations will always help and generalized linear models (GLMs) are always an option.
+Alternatively, weighted least squares can be applied if there is a consistent pattern of unequal variance, e.g. increasing variance in $Y$ with increasing $X$.
+Both approaches will be part of the course.
+
+***Independence***: There is also the assumption that the $Y-$values and the $\epsilon_i$ are independent of each other, i.e. the $Y-$value for any $x_i$ does not influence the $Y-$values for any other $x_i$.
+The most common situation in which this assumption might not be met is when the observations represent repeated measurements on sampling or experimental units.
+Error terms and $Y-$values that are non-independent through time are described as autocorrelated.
+Autocorrelation can result in underestimation of the true residual variance and seriously inflated Type I error rates for hypothesis tests on regression parameters.
+Dealing with this issue is part of later lectures in the course.
+
+If our $Y-$values come from populations in which the error terms are autocorrelated between adjacent $x_i$, then we would expect the residuals from the fitted regression line also to be correlated.
+Autocorrelation can be detected in plots of residuals against $x_i$ by an obvious positive, negative or cyclical trend in the residuals.
+
+***Fixed*** $X$: Linear regression analysis assumes that the $x_i$ are known constants, i.e. they are fixed values controlled or set by the investigator with no variance associated with them.
+A linear model in which the predictor variables are fixed is known as Model I or a fixed effects model.
+This will often be the case in designed experiments where the levels of X are treatments chosen specifically.
+In these circumstances we would commonly have replicate $Y-$values for each $x-i$ and $X$ may well be a qualitative variable, so analyses that compare mean values of treatment groups might be more appropriate.
+The fixed $X$ assumption is probably not met for most regression analyses in biology because $X$ and $Y$ are usually both random variables recorded from a bivariate distribution.
+
+### Multiple linear regression analysis
+
+A common extension of simple linear regression is the case where we have recorded more than one predictor variable.
+When all the predictor variables are continuous, the models are referred to as multiple regression models.
+When all the predictor variables are categorical (grouping variables), then we are dealing with analysis of variance (ANOVA) models.
+The distinction between regression and ANOVA models is not always helpful as general linear models can include both continuous and categorical predictors.
+Nonetheless, the terminology is entrenched in the applied statistics, and the biological, literature.
+
+Consider a set of $i=1$ to $n$ observations where each observation was selected because of its specific $X-$values, i.e. the values of the predictor variables $X_1$, $X_2$, $...$, $X_j$ were fixed by the investigator, whereas the $Y-$value for each observation was sampled from a population of possible $Y-$values.
+The multiple linear regression model that we usually fit to the data is:
+
+::: {.callout style="text-align: center; font-size: 20px;"}
+$y_i = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + ... + \beta_jx_{ij} + \epsilon_i$
+:::
+
+A multiple regression model cannot be represented by a two-dimensional line as in simple regression and a multidimensional plane is needed (@fig-2Dplot).
+We can only graphically present such a model with two predictor variables although such graphs are rarely included in research publications.
+Note that this is an additive model where all the explained variation in $Y$ is due to the additive effects of the response variables.
+
+```{r}
+#| label: fig-2Dplot
+#| echo: false
+#| out-width: null
+#| fig-cap: | 
+#|   RStudio's command palette makes it easy to access every RStudio command
+#|   using only the keyboard.
+#| fig-alt: |
+#|   Scatterplot of the log-transformed relative abundance of C3 plants against longitude and latitude for 73 sites from Paruelo & Lauenroth (1996) showing OLS fitted multiple regression linear response surface.
+
+knitr::include_graphics("fig-2Dplot.png")
+```
+
+This model does not allow for interactions (multiplicative effects) between the predictor variables, although such interactions are possible (even likely).
+$\hat{y}_i$ is the value of $Y$ for the $i^{th}$ observation when the predictor variable $X_1$ equals $x_{i1}$, $X_2$ equals $x_{i2}$, $X_j$ equals $x_{ij}$, etc. $\beta_0$, $\beta_1$, $\beta_2$, $\beta_j$ etc. are population parameters, also termed regression coefficients, where $\beta_0$ is the population intercept.
+$\beta_1$ is the population slope for $Y$ on $X_1$ holding $X_2$, $X_3$, etc., constant (unusually at their mean values).
+$\beta_2$ is the population slope for $Y$ on $X_2$ holding $X_1$, $X_3$, etc., constant.
+$\beta_j$ measures the change in $Y$ per unit change in $X_j$ holding the value of the other $j-1$ $X-$variables constant.
+$\epsilon_i$ is random or unexplained error associated with the $i^{th}$ observation.
+
+The slope parameters ($\beta_1$, $\beta_2$, $...$, $\beta_j$) are termed **partial regression slopes (coefficients)** because they measure the change in $Y$ per unit change in a particular $X$ holding the other $p-1$ $X-$variables constant (unusually at their mean values).
+
+It is important to distinguish these partial regression slopes in multiple linear regression from the regression slope in simple linear regression.
+If we fit a simple regression model between $Y$ and just one of the $X-$variables, then that slope is the change in $Y$ per unit change in $X$, ignoring the other $p-1$ predictor variables we might have recorded plus any predictor variables we didn't measure.
+By comparison, ***multiple regression models enable us to assess the relationship between the response variable and each of the predictors, adjusting for the remaining predictors***.
+
+## Null hypotheses and model comparisons
+
+The null hypothesis commonly tested in linear regression analysis is that $\beta_1$ equals zero, i.e. the slope of the population regression model equals zero and there is no linear relationship between $Y$ and $X$.
+The basic null hypothesis we can test when we fit a multiple linear regression model is that all the partial regression slopes equal zero, i.e.
+*H~0~*: $\beta_1 = \beta_2 = ... \beta_j = 0$.
+
+In the case of a single predictor, testing for the no relation *H~0~* means determining if $\beta_1$ equals zero.
+This can be done via an ANOVA tests, using a F-ratio test mased on the regression vs residuals mean sums os squares - If *H~0~* is not true and $\beta_1$ does not equal zero, then the expected value of MS~Regression~ is larger than that of MS~Residual~ and their ratio should be greater than one.
+The *H~0~* 0 that $\beta_1$ equals zero can also be assesed using a single parameter $t-$test .
+We calculate a t statistic from our data:
+
+::: {.callout style="text-align: center; font-size: 20px;"}
+$t = \frac{b_1 - \theta}{S_{b_1}}$
+:::
+
+In the equation above, $\theta$ is the value of $\beta_1$ specified in the *H~0~* (in this case 0).
+We compare the observed $t-$statistic to a $t$ distribution with ($n-2$) df with the usual logic of a $t-$test.
+
+While the test of the *H~0~* that $\beta_1$ equals zero is most common, a test whether $\beta_1$ equals some other value may also be relevant, especially when variables have been log transformed.
+Examples include increases in metabolic rate with body size, an allometric relationship with a predicted slope of 0.75, and the self-thinning rule, that argues that the relationship between log plant size and log plant density would have a slope of \~3/2.
+
+In the case of a multiple regression, we are interested in testing the null hypotheses about each partial regression coefficient, i.e. the *H~0~* that a particular $\beta_j$ equals zero.
+This will be done in the same way as done for a single predictor regression.
+
+We can also test if a given predictor improves the performance of the model.
+For this, you compare comparing the fit of full and reduced models to test these null hypotheses.
+In this case, imagine we have a model with three predictor variables ($X_1$, $X_2$, $X_3$).
+The full model is:
+
+::: {.callout style="text-align: center; font-size: 20px;"}
+$y_i = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \beta_3x_{i3} + \epsilon_i$
+:::
+
+This models assume the *H~0~* ($\beta_1$ equals zero) is true.
+If the explained variance (SS~Regression~) of the model is not different, then there is no evidence to reject *H~0~*; if there is an increase in explained variation for the full model compared to the reduced model, we have evidence suggesting the *H~0~* is false.
+We calculate the extra SS explained by including $\beta_1$ in the model:
+
+::: {.callout style="text-align: center; font-size: 20px;"}
+$SS_{Extra} = Full\:SS_{Regression} - Reduced\:SS_{Regression}$
+:::
+
+This SS~Extra~ can be viewed as the the change in explanatory power (measured as a change in the SS~Regression~) when $X_1$ is added to a model already including $X_2$ and $X_3$.
+This is identical to measuring the drop in unexplained variation by omitting $\beta_1$ from the model:
+
+We convert the SS~Extra~ into a MS by dividing by the df.
+There is one df in this case because we are testing a single regression parameter.
+In general, the df is the number of predictor variables in the full model minus the number of predictor variables in the reduced model.
+We can then use an $F-$test, now termed a partial $F-$test, to test the *H~0~* that a single partial regression slope equals zero.
+
+::: {.callout style="text-align: center; font-size: 20px;"}
+$F_{1,n-1}=\frac{MS_{Extra}}{Full\:MS_{Residual}}$
+:::
+
+Do not worry about this formulas as R does these estimations automatically by contrasting two models (Full Vs Reduced) using the `anova()` argument.
+
+We can also test the *H~0~* that $\beta_0$ equals zero, i.e. the intercept of the population regression model is zero.
+Just as with the test that $\beta_1$ equals zero, the *H~0~* that $\beta_0$ equals zero can be tested with a $t-$test, where the $t-$statistic is the sample intercept divided by the standard error of the sample intercept.
+This *H~0~* is not usually of much biological interest unless we are considering excluding an intercept from our final model and forcing the regression line through the origin.
+
+## Variance explained
+
+The multiple $r^2$ is the proportion of the total variation in $Y$ explained by the regression model:
+
+::: {.callout style="text-align: center; font-size: 20px;"}
+$r^2=1-\frac{Full\:MS_{Residual}}{Reduced\:MS_{Residual}}$
+:::
+
+Here the reduced model is one with just an intercept and no predictor variables (i.e. $\beta_1=\beta_2=...=\beta_j=0$).
+
+Interpretation of $r^2$ in multiple linear regression must be done carefully.
+Just like in simple regression, $r^2$ is not directly comparable between models based on different transformations.
+Additionally, $r^2$ is not a useful measure of fit when comparing models with different numbers of, or combinations of, predictor variables.
+As more predictors are added to a model, $r^2$ cannot decrease so that models with more predictors will always appear to fit the data better.
+Comparing the fit of models with different numbers of predictors should use alternative measures.
+
+The first is the adjusted $r^2$ which takes into account the number of predictors in the model and, in contrast to the usual $r^2$, basically uses mean squares instead of sum of squares and can increase or decrease as new variables are added to the model.
+A larger value indicates a better fit.
+Using the MS~Residual~ from the fit of the model is equivalent where a lower value indicates a better fit.
+
+The second is Mallow's *C~p~*, which works by comparing a specific reduced model to the full model with all *P* predictors included.
+For the full model with all *P* predictors, *C~p~* will equal *P+1* (the number of parameters including the intercept).
+The choice of the best model using Cp has two components: *C~p~* should be as small as possible and as close to *p* as possible.
+
+The remaining two measures are in the category of information criteria, introduced by Akaike and Schwarz to summarize the information in a model, accounting for both sample size and number of predictors.
+Although these information criteria are usually based on likelihoods, they can be adapted for use with OLS since the estimates of parameters will be the same when assumptions hold.
+The first of these criteria is the Akaike information criterion (AIC).
+The Bayesian (or Schwarz) information criterion (BIC) is similar but adjusts for sample size and number of predictors differently.
+It more harshly penalizes models with a greater number of predictors than the AIC.
+
+For both AIC and BIC, smaller values indicate better, more parsimonious, models.
+We recommend the Schwarz criterion for determining the model that best fits the data with the fewest number of parameters.
+
+## Finding the "best" regression model
+
+In many uses of multiple regression, biologists want to find the smallest subset of predictors that provides the "best fit" to the observed data.
+There are two apparent reasons for this, related to the two main purposes of regression analysis -- explanation and prediction.
+First, the "best" subset of predictors should include those that are most important in explaining the variation in the response variable.
+Second, other things being equal, the precision of predictions from our fitted model will be greater with fewer predictor variables in the model.
+Note that, biologists, especially ecologists, seem to rarely use their regression models for prediction and that biologists are usually searching for the "best" regression model to explain the response variable.
+
+It is important to remember that there will rarely be, for any real data set, a single "best" subset of predictors, particularly if there are many predictors and they are in any way correlated with each other.
+There will usually be a few models, with different numbers of predictors, which provide similar fits to the observed data.
+The choice between these competing models will still need to be based on how well the models meet the assumptions, diagnostic considerations of outliers and other influential observations and biological knowledge of the variables retained.
+
+Irrespective of which method is used for selecting which variables are included in the model (see below), some criterion must be used for deciding which is the "best" model.
+here is where adjusted $r^2$, Mallow's $C_p$, AIC, and BIC become handy as these allow you deterine if a given varibale shlud be in the model or not.
+
+The most sensible approach to selecting a subset of important variables in a complex linear model is to compare all possible subsets.
+This procedure simply fits all the possible regression models (i.e. all possible combinations of predictors) and chooses the best one (or more than one) based on one of the criteria described above - these are names Stepwise procedures.
+There are three types of stepwise procedures, forward selection, backward selection and stepwise selection.
+
+***Forward selection*** starts off with a model with no predictors and then adds the one (we'll call $X_a$) with greatest $F-$statistic (or $t-$statistic or correlation coefficient) for the simple regression of $Y$ against that predictor.
+If the *H~0~* that this slope equals zero is rejected, then a model with that variable is fitted.
+The next predictor ($X_b$) to be added is the one with the highest partial $F-$statistic for $X_b$ given that $X_a$ is already in the model \[$F(X_b|X_a)$\].
+If the H0 that this partial slope equals zero is rejected, then the model with two predictors is refitted and a third predictor added based on F(Xc\|Xa,Xb).
+The process continues until a predictor with a non-significant partial regression slope is reached or all predictors are included.
+
+***Backward selection*** (elimination) is the opposite of forward selection, whereby all predictors are initially included and the one with the smallest and non-significant partial $F-$statistic is dropped.
+The model is refitted and the next predictor with the smallest and non-significant partial F statistic is dropped.
+The process continues until there are no more predictors with nonsignificant partial $F-$statistics or there are no predictors left.
+
+***Stepwise selection*** is basically a forward selection procedure where, at each stage of refitting the model, predictors can also be dropped using backward selection.
+Predictors added early in the process can be omitted later and vice versa.
+
+For all three types of variable selection, the decision to add, drop or retain variables in the model is based on either a specified size of partial $F-$statistics or significance levels.
+
+It is difficult to recommend any variable selection procedure except all subsets.
+
+## Collinearity.
+
+One important issue in multiple linear regression analysis, and one that seems to be ignored bymany biologists who fit multiple regression models to their data, is the impact of correlated predictor variables on the estimates of parameters and hypothesis tests.
+If the predictors are correlated, then the data are said to be affected by (multi)collinearity.
+Severe collinearity can have important, and detrimental, effects on the estimated regression parameters.
+Lack of collinearity is also very difficult to meet with real biological data, where predictor variables that might be incorporated into a multiple regression model are likely to be correlated with each other to some extent.
+
+Collinearity among the $X-$variables causes computational problems.
+This translates into estimates of parameters (particularly the partial regression slopes) are also unstable.
+Small changes in the data or adding or deleting one of the predictor variables can change the estimated regression coefficients considerably, even changing their sign.
+
+A second effect of collinearity is that standard errors of the estimated regression slopes, and therefore confidence intervals for the model parameters, are inflated when some of the predictors are correlated.
+Therefore, the overall regression equation might be significant, i.e. the test of the *H~0~* that all partial regression slopes equal zero is rejected, but none of the individual regression slopes are significantly different from zero.
+This reflects lack of power for individual tests on partial regression slopes because of the inflated standard errors for these slopes.
+
+Note that as long as we are not extrapolating beyond the range of our predictor variables and we are making predictions from data with a similar pattern of collinearity as the data to which we fitted our model, collinearity doesn't necessarily prevent us from estimating a regression model that fits the data well and has good predictive power.
+***It does, however, mean that we are not confident in our estimates of the model parameters***.
+A different sample from the same population of observations, even using the same values of the predictor variables, might produce very different parameter estimates.
+
+Collinearity can be detected in a number of ways.
+First, we should examine a matrix of correlation coefficients (and associated scatterplots) between the predictor variables and look for large correlations.
+A scatterplot matrix is a very useful graphical method and, if the response variable is included, also indicates nonlinear relationships between the response variable and any of the predictor variables.
+
+Second, we should check the tolerance value for each predictor variable.
+Tolerance for $X_j$ is simply $1-r^2$ from the OLS regression of $X_j$ against the remaining $p-1$ predictor variables.
+A low tolerance indicates that the predictor variable is correlated with one or more of the other predictors.
+An approximate guide is to worry about tolerance values less than 0.1.
+Tolerance is sometimes expressed as the variance inflation factor (VIF), which is simply the inverse of tolerance.
+VIF values greater than ten suggest strong collinearity.
+
+## Dealing with collinearity
+
+Numerous solutions to collinearity have been proposed.
+All result in estimated partial regression slopes that are likely to be more precise (smaller standard errors) but are no longer unbiased.
+
+The first approach is the simplest: omit predictor variables if they are highly correlated with other predictor variables that remain in the model.
+Multiple predictor variables that are really measuring similar biological entities (e.g. a set of morphological measurements that are highly correlated) clearly represent redundant information and little can be gained by including all such variables in a model.
+Unfortunately, omitting variables may bias estimates of parameters for those variables that are correlated with the omitted variable( s) but remain in the model.
+Estimated partial regression slopes can change considerably when some predictor variables are omitted or added.
+Nonetheless, retaining only one of a number of highly correlated predictor variables that contain biologically and statistically redundant information is a sensible first step to dealing with collinearity.
+
+The second approach is based on a principal components analysis (PCA) of the $X-$variables and is termed principal components regression.
+This is a topic to be dealt later.
+
+The third approach is ridge regression, another biased regression estimation technique that is somewhat controversial.
+
+## Interactions in multiple regression
+
+The multiple regression model we have been using so far is an additive one, i.e. the effects of the predictor variables on $Y$ are additive.
+In many biological situations, however, we would anticipate interactions between the predictors so that their effects on Y are multiplicative.
+Note here that **Interactions** is DIFERENT from **Colinearity**.
+Interactions, mean that there is combined efect of two independend variables on $Y$.
+
+Let's just consider the case with two predictors, $X_1$ and $X_2$.
+The additive multiple linear regression model is:
+
+::: {.callout style="text-align: center; font-size: 20px;"}
+$y_i=\beta_0+\beta_1x_{i1}+\beta_2x_{i2}+\epsilon_i$
+:::
+
+This assumes that the partial regression slope of $Y$ on $X_1$ is independent of $X_2$ and vice-versa.
+The multiplicative model including an interaction is:
+
+::: {.callout style="text-align: center; font-size: 20px;"}
+$y_i=\beta_0+\beta_1x_{i1}+\beta_2x_{i2}+\beta_3x_{i1}x_{i2}+\epsilon_i$
+:::
+
+The newterm ($\beta_3x_{i1}x_{i2}$) in the model represents the interactive effect of $X_1$ and $X_2$ on $Y$.
+It measures the dependence of the partial regression slope of $Y$ against $X_1$ on the value of $X_2$ and the dependence of the partial regression slope of $Y$ against $X_2$ on the value of $X_1$.
+The partial slope of the regression of $Y$ against $X_1$ is no longer independent of $X_2$ and vice versa.
+Equivalently, the partial regression slope of $Y$ against $X_1$ is different for each value of $X_2$.
+
+One of the difficulties with including interaction terms in multiple regression models is that lowerorder terms will usually be highly correlated with their interactions, e.g. $X_1$ and $X_2$ will be highly correlated with their interaction $X_1X_2$.
+One solution to this problem is to rescale the predictor variables by centering, i.e. subtracting their mean from each observation, so the interaction is then the product of the centered values.
+If $X_1$ and $X_2$ are centered then neither will be strongly correlated with their interaction.
+Predictors can also be standardized (subtract the mean from each observation and divide by the standard deviation) which has an identical affect in reducing collinearity.
+
+When interaction terms are not included in the model, centering the predictor variables does not change the estimates of the regression slopes nor hypothesis tests that individual slopes equal zero.
+Standardizing the predictor variables does change the value of the regression slopes, but not their hypothesis tests because the standardization affects the coefficients and their standard errors equally.
+When interaction terms are included, centering does not affect the regression slope for the highest-order interaction term, nor the hypothesis test that the interaction equals zero.
+Standardization changes the value of the regression slope for the interaction but not the hypothesis test.
+Centering and standardization change all lower-order regression slopes and hypothesis tests that individual slopes equal zero but make them more interpretable in the presence of an interaction.
+The method we will describe for further examining interaction terms using simple slopes is also unaffected by centering but is affected by standardizing predictor variables.
+
+## Polynomial regression
+
+Generally, curvilinear models fall into the class of nonlinear regression modeling because they are best fitted by models that are nonlinear in the parameters (e.g. power functions).
+There is one type of curvilinear model that can be fitted by OLS (i.e. it is still a linear model) and is widely used in biology, the polynomial regression.
+
+Let's consider a model with one predictor variable (X1).
+A second-order polynomial model is:
+
+::: {.callout style="text-align: center; font-size: 20px;"}
+$y_i=\beta_0+\beta_1x_{i1}+\beta_2x^2_{i2}+\epsilon_i$
+:::
+
+where $\beta_1$ is the linear coefficient and $\beta_2$ is the quadratic coefficient.
+Such models can be fitted by simply adding the $x^2_{i1}$ term to the right-hand side of the model, and they have a parabolic shape.
+Note that $x^2_{i1}$ is just an interaction term (i.e. $x_{i1}$ by $x_{i1}$).
+There are two questions we might wish to ask with such a model.
+First, is the overall regression model significant?
+This is a test of the *H~0~* that $\beta_1 = \beta_1 = 0$ and is done with the usual $F-$test from the regression ANOVA.
+Second, is a second-order polynomial a better fit than a first-order model?
+We answer this with a partial $F-$statistic, which tests whether the full model including $X_2$ is a better fit than the reduced model excluding $X_2$.
+
+Polynomial models can also contain higher orders (cubic, quartic, quintic, etc.) and more predictors.
+We have to be very careful about extrapolation beyond the range of our data with polynomial regression models.
+For example, a quadratic model will have a parabolic shape although our observations may only cover part of that function.

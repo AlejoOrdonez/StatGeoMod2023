@@ -1,0 +1,667 @@
+---
+title: "Week1_Class-Doc"
+author: "Alejandro Ordonez"
+editor: 
+  markdown: 
+    wrap: sentence
+format:
+  html:
+    embed-resources: true
+---
+
+## A setup
+
+We will be based on the [Palmer's Penguins](https://allisonhorst.github.io/palmerpenguins/) Data set [(Gorman et al. 2014)](https://doi.org/10.1371/journal.pone.0090081).
+This data set was collected and made available by [Dr. Kristen Gorman](https://www.uaf.edu/cfos/people/faculty/detail/kristen-gorman.php) and the [Palmer Station](https://pallter.marine.rutgers.edu/), Antarctica LTER, a member of the [Long Term Ecological Research Network](https://lternet.edu/).
+
+## Scripts
+
+Using the console to run code is a great place to start, but you’ll find it gets cramped pretty quickly as you advance in your data analysis journey.
+Is better to use the script editor (in our case R-studio), as it allows you recap your process, and annotate your work.
+You can open an editor window in Rstudio by clicking the File menu, selecting New File, then R script.
+Alternatively using the keyboard shortcut Cmd/Ctrl + Shift + N. 
+
+```{r}
+#| echo: false
+#| fig-alt: |
+#|   Opening the script editor adds a new pane at the top-left of the IDE..
+knitr::include_graphics("script.png")
+```
+The script editor is a great place to experiment with your code. 
+Once you have written code that works and does what you want, you can save it as a script file to easily return to later.
+
+## Objects
+
+At the heart of almost everything you will do (or ever likely to do) in R is the concept that everything in R is an object.
+These objects can be almost anything, from a single number or character string (like a word) to highly complex structures like the output of a plot, a summary of your statistical analysis or a set of R commands that perform a specific task.
+Understanding how you create objects and assign values to objects is key to understanding R.
+
+To create an object we simply give the object a name.
+We can then assign a value to this object using the assignment operator `<-` (sometimes called the gets operator).
+The assignment operator is a composite symbol comprised of a 'less than' symbol `<` and a hyphen `-`.
+
+Now lets create a object with Palmer's Penguins names.
+
+```{r ObjAssg}
+palm_pen_names <- c('Adelie','Chinstrap','Gentoo') 
+```
+
+Notice that we have enclosed the string in quotes.
+If you forget to use the quotes you will receive an error message
+
+``` r
+palm_pen_names <- c(Adelie,Chinstrap,Gentoo) 
+#Error: object 'Adelie' not found
+```
+
+In the code above, you created an object called `palm_pen_names` and assigned it a series of names using the assignment operator (in our head we always read this as "palm_pen_names gets 'Adelie','Chinstrap' and 'Gentoo'").
+You can also use `=` instead of `<-` to assign values **but this is considered bad practice** and we would discourage you from using this notation.
+
+To view the value of the object you simply type the name of the object - I will be calling this operation "print the object"
+
+```{r ViewObj}
+palm_pen_names
+```
+
+Now that we've created this object, R knows all about it and will keep track of it during this current R session.
+All of the objects you create will be stored in the current work-space and you can view all the objects in your work-space in RStudio by clicking on the 'Environment' tab.
+
+```{r EnvImage}
+#| echo: false
+#| fig-alt: |
+#|   Change the environment view.
+knitr::include_graphics("rs_env.png")
+```
+
+If you click on the down arrow on the 'List' icon in the same pane and change to 'Grid' view RStudio will show you a summary of the objects including:
+
+1.  The type (numeric - it's a character).
+2.  The length (three values in this object).
+3.  Its 'physical' size and its value (256 in this case).
+
+```{r EnvGrdImage}
+#| echo: false
+#| fig-alt: |
+#|   Change the environment view from list to grid.
+knitr::include_graphics("rs_envGrid.png")
+```
+
+You can store charter, numeric (float or integer), logical, and factors to an object.
+You have already made a "charter" vector, so now is time to create a numeric vector.
+IN this case the average flipper length of each species.
+
+```{r FilpLngVct}
+flipp_leng <- c(189.9, 195.8, 217.1)
+```
+
+In the lecture notes I talk about the difference between float and integer numbers.
+In short float refers to a number with a points and integer refers to an exact numbers.
+Also note that decimal points are define with a `.` and that `,` is use to separate the elements in a vector.
+
+To change the value of an existing object we simply reassign a new value to it.
+For example, to change the value of `flipp_leng` from its current units (in mm) to the same measure in inches you will:
+
+```{r FilpLngVctInc}
+flipp_leng <- c(7.476378, 7.708661, 8.547244)
+```
+
+Note that now `flipp_leng` has new values assign to it.
+Be careful when re-assigning a vector, as there is no "undo" button in R, all reassignments are permanent.
+
+Once we have created a few objects, we can "do stuff" with these objects.
+For example, you can do operations to these, like "units" transformation.
+Now you will transform the `flipp_leng` values to cm
+
+```{r FilpLngVctcm}
+flipp_leng_cm <- flipp_leng*2.54
+flipp_leng_cm 
+```
+
+The above code works because the values in `flipp_leng` are numeric (i.e. a number).
+If you try to do this with objects with character values (character class) you will receive an error
+
+``` r
+palm_pen_names*2.54
+#Error in palm_pen_names * 2.54 : non-numeric argument to binary operator
+```
+
+The error message is essentially telling you that `palm_pen_names` is not a number and therefore cannot be multiplied by 2.54.
+
+When you first start learning R, dealing with errors and warnings can be frustrating as they're often difficult to understand (what's an argument? what's a binary operator?).
+One way to find out more information about a particular error is to Google a generalized version of the error message.
+For the above error try Googling 'non-numeric argument to binary operator error + r' or even 'common r error messages'.
+
+Another error message that you'll get quite a lot when you first start using R is Error: object 'XXX' not found.
+
+As an example, take a look at the code below
+
+``` r
+BillLng
+#Error: object 'BillLng' not found
+```
+
+R returns an error message because we haven't created (defined) the object `BillLng` yet.
+Another clue that there's a problem with this code is that, if you check your environment, you'll see that object `BillLng` has not been created.
+
+::: callout-note
+**Naming your objects** is one of the most difficult things you will do in R (honestly - we're serious).
+Ideally your object names should be kept both short and informative which is not always easy.
+If you need to create objects with multiple words in their name then use either an underscore or a dot between words or capitalize the different words.
+I prefer the underscore format (called snake case)
+
+``` r
+output_summary <- "my analysis"
+output.summary <- "my analysis"
+outputSummary <- "my analysis"
+```
+
+There are also a few limitations when it come to giving objects names.
+An object name cannot start with a number or a dot followed by a number (i.e. 2my_variable or .2my_variable).
+You should also avoid using non-alphanumeric characters in your object names (i.e. &, \^, /, ! etc).
+In addition, make sure you don't name your objects with reserved words (i.e. TRUE, NA) and it's never a good idea to give your object the same name as a built-in function.
+One that crops up more times than we can remember is:
+
+``` r
+data <- read.table("mydatafile", header = TRUE) #data is a function!
+```
+:::
+
+## Functions
+
+Back to objects and vectors.
+Once you have created a vector, you can use other functions to do useful stuff with this object.
+For example, we can calculate the mean, variance, standard deviation and number of elements in our vector by using the `mean()`, `var()`, `sd()` and `length()` functions
+
+```{r SummStat}
+mean(flipp_leng)    # returns the mean
+
+var(flipp_leng)     # returns the variance
+
+sd(flipp_leng)      # returns the standard deviation
+
+length(flipp_leng)  # returns the number of elements
+
+```
+
+If you wanted to use any of these values later on in our analysis just assign the resulting value to another object
+
+```{r VectAss}
+flipp_leng_mean <- mean(flipp_leng)    # returns the mean
+flipp_leng_mean # print the object
+```
+
+Sometimes it can be useful to create a vector that contains a regular sequence of values in steps of one.
+Here we can make use of a shortcut using the `:` symbol.
+
+```{r SeqVcr}
+# create regular sequence
+1:10     
+
+# create regular sequence in descending order
+10:1
+```
+
+Other useful functions for generating vectors of sequences include the `seq()` and `rep()` functions.
+Using these allow us to talk about a fundamental aspect of functions, their *arguments*.
+The argument(s) of a function are the parameters provided to a function to perform operations in These placed inside the round brackets and are separated by commas.
+As an example, look at the implementation of the seq function:
+
+```{r seqVct2}
+# create regular sequence
+seq(from = 1, to = 5, by = 0.5)
+```
+
+The function above (`seq()`) has three arguments: `from`, `to`, and `by`.
+These define the limits of the sequence (`from`, `to`) and specify the increment of the sequence (`by`).
+To see the full list of arguments a function can take use the help function (see the lecture notes), but as an example try `?seq`).
+Now, play around with other values for these arguments to see their effect.
+I would recommend that you check what happens if you use `from = 5` and, `to = 1`.
+
+Another very practical function is `rep()`.
+It allows you to replicate (repeat) values (numeric or characters) a specified number of times.
+As an example, repeat the value 2, 10 times AND repeats 'abc' 3 times:
+
+```{r repVct}
+# repeat the value 2, 10 times
+rep(x = 2, times = 10)
+
+# repeat ‘abc’ 3 times
+rep("abc", 3)
+```
+
+Note that in the second part of the code above the arguments of the `rep()` function were nor "specified", but still executed the command.
+The reason for this is that agreements in a R function are specified in a order, and if the argument is not specified, the "position" in the list of arguments is used to determine the value assigned to and argument.
+That is why the flowing instructions return different outputs:
+
+``` r
+rep(2,10) # The times argument is set to 10
+#[1] 2 2 2 2 2 2 2 2 2 2
+
+rep(10,2) # The times argument is set to 2
+#[1] 10 10
+```
+
+If you look at the help file for `rep()` you will see, in the section titled **Arguments**, that the function can take three different arguments `times =`, `length.out =` OR `each =`.
+These make the `rep()` function do different things.
+You now try these options on the object with the penguins names (`palm_pen_names`).
+
+```{r repVecOpt}
+
+# whole input repeated this many times
+rep(palm_pen_names, times = 10)
+
+# whole input repeated until a vector of this length is reached
+rep(palm_pen_names, length.out = 10)
+
+# Each element of input repeated as many times
+rep(palm_pen_names, each = 10)
+```
+
+## Working with vectors
+
+Manipulating, summarizing and sorting data using R is an important skill to master but one which many people find a little confusing at first.
+Now you will go through a few simple examples to illustrate some important concepts that are the bases for working with more complicated (and useful) data structures.
+
+## Extracting elements
+
+To extract (also known as indexing or sub-scripting) one or more values (more generally known as elements) from a vector we use the square bracket `[ ]` notation.
+The general approach is to name the object you wish to extract from, then a set of square brackets with an index of the element you wish to extract contained within the square brackets.
+This index can be a position or the result of a logical test.
+
+To extract elements based on their position (that is where they are in the vector) we simply write the position inside the `[ ]`.
+For example, to extract the 3rd value of `flipp_leng` you type:
+
+```{r PosSub}
+flipp_leng # remind ourselves what flipp_leng looks like
+
+flipp_leng[3] # extract the 3rd value
+```
+
+Note that the positional index starts at 1 rather than 0 like some other other programming languages (i.e. Python).
+We can also extract more than one value by using the `c()` function inside the square brackets.
+Here we extract the 1st, and 3rd element from the `palm_pen_names` object:
+
+```{r PosSub2}
+palm_pen_names # remind ourselves what palm_pen_names looks like
+
+palm_pen_names[c(1, 3)] # extract the 1st and 3rd value
+
+```
+
+Or we can extract a range of values using the `:` notation.
+As an example you will extract the values from the 3rd to the 8th elements of a vector that repeats the penguins names 10 times:
+
+```{r PosSubRng}
+# Repeated the penguin names 10  times
+palm_pen_long <- rep(palm_pen_names, times = 10)
+
+# extract the 3rd to the 8th elements
+palm_pen_long[3:8]
+
+#in one go
+rep(palm_pen_names, times = 10)[3:8]
+```
+
+Another really useful way to extract data from a vector is to use a logical expression as an index.
+These logical expression are the result of a logical test which assess if a given condition (i.e., equal: `==`, different `!=`, larger `>`, smaller `<`, larger or equal `>=`, and smaller or equal `<=`) is meet.
+For example, to extract the names of the penguins with flippers longer than 8 cm you will:
+
+```{r PosSubLog}
+# Test which flippers are longer than 8 cm
+flipp_leng > 8
+
+# use the text to get the name of these penguins
+palm_pen_names[flipp_leng > 8]
+```
+
+Here, the logical expression is `flipp_leng > 8` and R will only extract those elements that satisfy this logical condition.
+
+So how does this actually work?
+If we look at the output of just the logical expression without the square brackets (the first expression above) you can see that R returns a vector containing either `TRUE` or `FALSE` which correspond to whether the logical condition is satisfied for each element.
+In this case only the 4th and 8th elements return a `TRUE` as their value is greater than 8.
+
+Remember that you can also use composite operators to increase the complexity of your expressions.
+You can also combine multiple logical expressions using [Boolean expressions](https://en.wikipedia.org/wiki/Boolean_expression).
+In R, the `&` symbol means **AND** and the `|` symbol means **OR**.
+For example, to extract the penguins names of those with flippers that which are less than 8cm **AND** greater than 7.5cm you write:
+
+```{r PosSubBol1}
+# The logical test of the flipper length
+flipp_leng > 7.5 & flipp_leng < 8
+
+# Extract the names
+palm_pen_names[flipp_leng > 7.5 & flipp_leng < 8]
+```
+
+or to extract the penguins names of those with flippers that which are larger than 8cm OR smaller than 7.5cm you write:
+
+```{r PosSubBol2}
+# The logical test of the flipper length
+flipp_leng < 7.5 | flipp_leng > 8
+
+# Extract the names
+palm_pen_names[flipp_leng < 7.5 | flipp_leng > 8]
+```
+
+## Replacing elements
+
+We can change the values of some elements in a vector using our `[ ]` notation in combination with the assignment operator `<-`.
+For example, to replace the 3rd value of our `flipp_leng` object from 8.547244 to 9.547244 you write:
+
+```{r RepByPos}
+# Let's look at the 3rd element
+flipp_leng[3]
+# Replace the 3rd element 
+flipp_leng[3] <- 9.547244
+# Print the flipp_leng object
+flipp_leng
+```
+
+Replacing more than one value or even replace values based on a logical expression is also possible:
+
+```{r RepMulp}
+# replace the 1st and 2nd element
+flipp_leng[c(1,2)] <- c(8.476378, 8.708661)
+# Print the flipp_leng object
+flipp_leng
+
+# Replace element that are less than or equal to 9 with 7
+flipp_leng[flipp_leng<=9] <- 7
+# Print the flipp_leng object
+flipp_leng
+```
+
+## Ordering elements
+
+In addition to extracting particular elements from a vector we can also order the values contained in a vector to display the information in a said vector in the order we like.
+To sort the values from lowest to highest value we can use the `sort()` function.
+
+```{r SortFlipLen}
+# Lest rebuild flipp_leng
+flipp_leng <- c(7.708661, 7.476378, 8.547244)
+# Sort the flipper length vector
+sort(flipp_leng)
+```
+
+You can also order the vector using the `order()` function.
+
+```{r OrderFlipLen}
+# Order the flipper length vector
+order(flipp_leng)
+```
+
+OK, what's going on here?
+The first value, 2, (remember ignore \[1\]) should be read as 'the smallest value of height is the second element of the flipper length' vector.
+The reason for this is that `sort()` and `order()` return different outputs.
+While `sort()` reordered the vector, `order()` returns positions.
+Now that we have a vector of the positional indices of flipper length in ascending order, values from our penguin names vector in this order
+
+```{r SortWthOrder}
+# Sort the flipper length vector using the order flipper length vector
+palm_pen_names[order(flipp_leng)]
+```
+
+You're probably thinking 'what's the use of this?'
+Well, imagine you have a data-set which contains two columns of data and you want to sort each column.
+If you just use `sort()` to sort each column separately, the values of each column will become uncoupled from each other.
+By using the `order()` on one column, a vector of positional indices is created of the values of the column in ascending order.
+This vector can be used on the second column, as the index of elements which will return a vector of values based on the first column.
+
+## Vectorisation
+
+One of the great things about R functions is that most of them are vectorised.
+This means that the function will operate on all elements of a vector without needing to apply the function on each element separately.
+That is why you can multiple each element of a vector by a number as we did when transforming the units of the flipper length vector.
+
+However, you must be careful when using vectorisation with vectors of different lengths as R will quietly recycle the elements in the shorter vector rather than throw a wobbly (error).
+
+```{r RecurCycl}
+# Add a vector of length 3 to a vector of length 2
+flipp_leng + c(1,2)
+
+```
+
+## Missing data
+
+In R, missing data is usually represented by an `NA` symbol meaning 'Not Available'.
+Data may be missing for a whole bunch of reasons, maybe your machine broke down, maybe you broke down, maybe the weather was too bad to collect data on a particular day etc etc.
+Missing data can be a pain in the proverbial both from an R perspective and also a statistical perspective.
+From an R perspective missing data can be problematic as different functions deal with missing data in different ways.
+For example, let's say we collected flipper for lengths readings for 10 penguins, but the data for two of those measurement got "smudged" in your filed notebook due to melting snow, so we have no data for those two penguins.
+
+```{r MissVals}
+# flipper length in mm for 10 penguins 
+flipp_leng <- c(181, 180, 195,NA, NA, 190, 181, 195, 193, 190)
+#Print the new flipp_leng object
+flipp_leng
+```
+
+We now want to calculate the mean flipper length for these penguins using the `mean()` function
+
+```{r MeanFlpLng}
+# Estimate the mean
+mean_flipp_leng <- mean(flipp_leng)
+# Estimate the mean
+mean_flipp_leng
+```
+
+What's happened here?,
+Why does the `mean()` function return an `NA`?
+Actually, R is doing something very sensible.
+If a vector has a missing value then the only possible value to return when calculating a mean is NA.
+R doesn't know that you perhaps want to ignore the NA values (R can't read your mind - yet!).
+Happily, if we look at the help file (use `help("mean")` or `?mean` - see the lecture notes for more details) associated with the `mean()` function we can see there is an argument `na.rm =` which is set to `FALSE` by default.
+
+If this argument is changed to `na.rm = TRUE` when we use the `mean()` function this will allow us to ignore the `NA` values when calculating the mean:
+
+```{r MeanFlpLng2}
+# Estimate the mean
+mean_flipp_leng <- mean(flipp_leng, na.rm = TRUE)
+# Estimate the mean
+mean_flipp_leng
+```
+
+It's important to note that the `NA` values **have not** been removed from our temp object (that would be bad practice), rather the `mean()` function has just ignored them.
+The point of the above is to highlight how we can change the default behavior of a function using an appropriate argument.
+The problem is that not all functions will have an `na.rm =` argument, they might deal with NA values differently However, the good news is that every help file associated with any function will always tell you how missing data are handled by default.
+
+## Data structures
+
+Understanding the different types of data and how R deals with these data is important.
+The Lecture notes deal in detail with the particular aspects of these, and you have already used three of the most important ones: numeric (numbers that contain a decimal \[float\], whole numbers \[integers\]), logical (`TRUE` or `FALSE`), and character (words).
+
+The way you store these data types in the memory of your computer is the "data structure".
+You have use the most basic data structure *vectors*, but now you will look at some of the other main structures for storing these data.
+
+**Matrices and arrays**: Matrices are the basic data structure used in many disciplines such as population ecology, theoretical and applied statistics.
+A matrix is simply a vector that has additional attributes called dimensions.
+Arrays are just multidimensional matrices.
+And important characteristic of matrices and arrays is that these must contain elements all of the same data class.
+
+```{r FigMtrxArr}
+#| echo: false
+#| fig-alt: |
+#|   Graphical description fo a matrix and an Array.
+knitr::include_graphics("rs_MtxArr.png")
+```
+
+A convenient way to create a matrix or an array is to use the `matrix()` and `array()` functions respectively.
+While arrays are an interstice data structure is a very specialized data structure, so the focus below is Matrices.
+With this in mind, you will now create a matrix from the long vector of flipper lengths (`flipp_leng`) in four rows (`nrow = 2`) and fill the matrix row-wise (`byrow = TRUE`) rather than the default column-wise.
+
+```{r MatxCreat}
+matrix(flipp_leng, nrow = 2, byrow = TRUE)
+
+```
+
+Sometimes it's useful to define row and column names for your matrix but this is not a requirement.
+To do this use the `rownames()` and `colnames()` functions.
+
+```{r MatxNames}
+# Create a matrix
+flipp_leng_mtrx <- matrix(flipp_leng, nrow = 2, byrow = TRUE)
+
+# Add rownames
+rownames(flipp_leng_mtrx) <- c("A", "B")
+
+# Add colnames
+colnames(flipp_leng_mtrx) <- c("a", "b", "c", "d", "e")
+
+# print flipp_leng_mtrx
+flipp_leng_mtrx
+```
+
+Once you've created your matrices you can do useful stuff with them and as you would expect, R has numerous built in functions to perform matrix operations (very useful to do liner algebra).
+Some of the most common are matrix transpose (turn the matrix using `t()`), extract the diagonal (the value in the diagonal using `diag()`) and matrix multiplication (to do the dot product between two matrices using `%*%`).
+
+```{r Mtrx Funct}
+# transpose a matrix
+t(flipp_leng_mtrx)
+
+# Diagonal 
+diag(flipp_leng_mtrx)
+
+# Multiplication
+
+flipp_leng_mtrx %*% c(2,2,2,2,2)
+
+```
+
+**Lists**: Whilst vectors and matrices are constrained to contain data of the same type, lists are able to store mixtures of data types.
+In fact we can even store other data structures such as vectors and arrays within a list or even have a list of a list.
+This makes for a very flexible data structure which is ideal for storing irregular or non-rectangular data, like the outputs of many of the methods you will learn to implement in this course.
+
+To create a list we can use the `list()` function.
+As an example you will create a list with some information about the Palmer penguins:
+
+1)  The names.
+2)  The average bill length for each species.
+3)  The average flipper length for each species.
+4)  Is a big (\>5kg) or small (5kg\<) penguin.
+
+```{r CrtList}
+palm_pen_list <- list(c("Adelie", "Chinstrap", "Gentoo"),
+                    c(38.7, 48.8, 47.5),
+                    c(189.9, 195.8, 217.1),
+                    c("FALSE", "FALSE", "TRUE"))
+palm_pen_list
+```
+
+Elements of the list can be named during the construction of the list
+
+```{r CrtListNms}
+palm_pen_list <- list(Names = c("Adelie", "Chinstrap", "Gentoo"),
+                    bill_length_mm = c(38.7, 48.8, 47.5),
+                    flipper_length_mm = c(189.9, 195.8, 217.1),
+                    Big = c(FALSE, FALSE, TRUE))
+palm_pen_list
+
+```
+
+or after the list has been created using the `names()` function
+
+```{r CrtListNms2}
+# Print the current names
+names(palm_pen_list)
+# change the names
+names(palm_pen_list) <- c("NAMES", "BILL", "FLIP", "BIG")
+```
+
+**Data frames**: By far the most commonly used data structure to store data in is the data frame.
+A data frame is a powerful two-dimensional object made up of rows and columns which looks superficially very similar to a matrix.
+However, whilst matrices are restricted to containing data all of the same type, data frames can contain a mixture of different types of data.
+Typically, in a data frame each row corresponds to an individual observation and each column corresponds to a different measured or recorded variable - More on why this when we talk about [tidydata](EEEEEEEE).
+
+Now let's use the same information to create a list above and build a data frame.
+A useful way to think about data frames is that they are essentially made up of a bunch of vectors (columns) with each vector containing its own data type but the data type can be different between vectors.
+Lets use this principle to create a data frame with our summary data for Palemer's penguins.
+
+```{r DtaFrmFrmVct}
+# Vector of names
+palm_pen_names <-  c("Adelie", "Chinstrap", "Gentoo")
+# Vector of Avg Bill Length
+palm_pen_bill <- c(38.7, 48.8, 47.5)
+# Vector of Avg Flipper length
+palm_pen_flipp <- c(189.9, 195.8, 217.1)
+# Vector of weights above 5kg
+palm_pen_big <- c(FALSE, FALSE, TRUE)
+
+# Combine the vectors into a data frame
+palm_penDF <- data.frame(palm_pen_names,
+                        palm_pen_bill,
+                        palm_pen_flipp,
+                        palm_pen_big)
+palm_penDF
+```
+
+You'll notice that each of the columns are named with variable name of the vector.
+You could change this using the `colnames()` function as done for matrices, OR supply them when we using the `data.frame()` function.
+
+```{r DtaFrm}
+palm_pen_df <- data.frame(names = c("Adelie", "Chinstrap", "Gentoo"),
+                        bill_length_mm = c(38.7, 48.8, 47.5),
+                        flipper_length_mm = c(189.9, 195.8, 217.1),
+                        Big = c(FALSE, FALSE, TRUE))
+palm_pen_df
+```
+
+It also looks like the first column of the data frame is a series of numbers from one to five.
+Actually, this is not really a column but the name of each row.
+We can check this out by getting R to return the dimensions of the data object using the `dim()` function.
+We see that there are 3 rows and 4 columns.
+
+```{r DimofDF}
+dim(palm_pen_df)
+```
+
+Another really useful function which you will be use all the time is `str()` which will return a compact summary of the structure of the data frame object (or any object for that matter).
+
+```{r srt4DF}
+str(palm_pen_df)
+```
+
+The `str()` function gives us the data frame dimensions and also reminds us that `palm_penDF` is a data.frame type object.
+
+It also lists all of the variables (columns) contained in the data frame, tells us what type of data the variables contain and prints out the first five values.
+Notice that R has automatically decided that the `Names` variable should be a character (`chr`) class variable when we first created the data frame.
+Whether this is a good idea or not will depend on how you want to use this variable in later analysis.
+If we decide that this wasn’t such a good idea we can change the default behavior of the d`ata.frame()` function by including the argument `stringsAsFactors = TRUE`.
+
+```{r DtaFrmFct}
+palm_pen_df <- data.frame(Names = c("Adelie", "Chinstrap", "Gentoo"),
+                        bill_length_mm = c(38.7, 48.8, 47.5),
+                        flipper_length_mm = c(189.9, 195.8, 217.1),
+                        big = c(FALSE, FALSE, TRUE),
+                        stringsAsFactors = TRUE)
+str(palm_pen_df)
+```
+
+Now our strings are automatically converted to factors.
+The lecture notes describe in detail what factors are, but in short, you can think of factors as categories.
+
+## Some notes on Workflows.
+
+You now have some experience running R code, but it will be good to recap some key points from the Lecture Notes.
+
+**Comments**: These are annotations for your code added to your code after a `#`. Use comments to explain the *why* of your code, not the *how* or the *what*.
+
+**Names**: Make names of objects as descriptive as possible. Try to use only lowercase letters, numbers, and `_`.
+Use `_` to separate words within a name.
+
+**Spaces**: Put spaces on either side of mathematical operators apart from `^` (i.e. `+`, `-`, `==`, `<`, …), and around the assignment operator (`<-`). Always put a space after a comma, just like in standard English. Don’t put spaces inside or outside parentheses for regular function calls.
+
+**Sectioning comments**: As your scripts get longer, you can use sectioning comments to break up your file into manageable pieces. The section splits will look like this:
+```{r}
+# Load data --------------------------------------
+
+# Plot data --------------------------------------
+```
+
+
+## In class chalanges 
+
+
+
+
+
+

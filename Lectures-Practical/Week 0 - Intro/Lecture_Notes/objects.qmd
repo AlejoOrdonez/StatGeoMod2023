@@ -1,0 +1,1075 @@
+---
+editor: 
+  markdown: 
+    wrap: sentence
+format:
+  html:
+    embed-resources: true
+---
+
+# R Objects
+
+In this lesson, you'll use R to assemble Dummy species atributes matrix.
+You'll start by building simple R objects that represent species and then work your way up to a full-blown table of data.
+In short, you'll build the equivalent of an Excel spreadsheet from scratch.
+When you are finished, your deck of cards will look something like this:
+
+| Common name              | Scientific name             | Conservation status   | Max Body Mass (kg) |
+|------------------|-------------------|------------------|------------------|
+| African Elephant         | Loxodonta africana          |                       | 10400              |
+| African savanna elephant | Loxodonta africana africana | Endangered            | 6100               |
+| African Wild Dog         | Lycaon pictus               | Endangered            | 36                 |
+| Albacore Tuna            | Thunnus alalunga            | Near Threatened       | 60.3               |
+| Amazon River Dolphin     | Inia geoffrensis            |                       | 185                |
+| Amur Leopard             | Panthera pardus orientalis  | Critically Endangered | 65                 |
+| Arctic Fox               | Vulpes lagopus              | Least Concern         | 5.2                |
+| Arctic Wolf              | Canis lupus arctos          | Least Concern         | 80                 |
+| Asian Elephant           | Elephas maximus indicus     | Endangered            | 6000               |
+| Beluga                   | Delphinapterus leucas       | Near Threatened       | 1600               |
+| Bigeye Tuna              | Thunnus obesus              | Vulnerable            | 95                 |
+
+...
+
+Do you need to build a data set from scratch to use it in R?
+Not at all.
+You can load most data sets into R with one simple step.
+But this exercise will teach you how R stores data, and how you can assemble---or disassemble---your own data sets.
+You will also learn about the various types of objects available for you to use in R (not all R objects are the same!).
+Consider this exercise a rite of passage; by doing it, you will become an expert on storing data in R.
+
+We'll start with the very basics.
+The most simple type of object in R is an *atomic vector*.
+Atomic vectors are not nuclear powered, but they are very simple and they do show up everywhere.
+If you look closely enough, you'll see that most structures in R are built from atomic vectors.
+
+## Atomic Vectors
+
+An atomic vector is just a simple vector of data.
+You can make an atomic vector by grouping some values of data together with `c`:
+
+```{r}
+BodyMass <- c(10400, 6100, 36, 60.3, 185, 65, 5.2, 80, 6000, 1600)
+BodyMass
+
+##  Assess if BodyMass is a vectors
+is.vector(BodyMass)
+```
+
+::: callout
+**is.vector**
+
+The `is.vector` function tests whether an object is an atomic vector.
+It returns `TRUE` if the object is an atomic vector and `FALSE` otherwise.
+:::
+
+You can also make an atomic vector with just one value.
+R saves single values as an atomic vector of length 1:
+
+```{r}
+AfricanElephant <- 10400
+AfricanElephant
+
+##  Assess if AfricanElephant is a vectors
+is.vector(AfricanElephant)
+
+## How long is the vectors
+length(AfricanElephant)
+
+```
+
+::: callout
+**length**
+
+`length` returns the length of an atomic vector.
+:::
+
+Each atomic vector stores its values as a one-dimensional vector, and each atomic vector can only store one type of data.
+You can save different types of data in R by using different types of atomic vectors.
+Altogether, R recognizes six basic types of atomic vectors: *doubles*, *integers*, *characters*, *logicals*, *complex*, and *raw*.
+
+To create your card deck, you will need to use different types of atomic vectors to save different types of information (text and numbers).
+You can do this by using some simple conventions when you enter your data.
+For example, you can create an integer vector by including a capital `L` with your input.
+You can create a character vector by surrounding your input in quotation marks:
+
+```{r}
+## Define a one element integer vector
+int <- 1L
+## Print int
+int
+
+## Define a one element text vector
+text <- "African Elephant"
+## Print text
+text
+```
+
+Each type of atomic vector has its own convention (described below).
+R will recognize the convention and use it to create an atomic vector of the appropriate type.
+If you'd like to make atomic vectors that have more than one element in them, you can combine an element with the `c` function.
+Use the same convention with each element:
+
+```{r}
+## Define a two element integer vector
+int <- c(1L, 5L)
+## Print int
+int
+
+## Define a two element text vector
+text <- c("African Elephant" , "Bigeye Tuna")
+## Print text
+text
+```
+
+You may wonder why R uses multiple types of vectors.
+Vector types help R behave as you would expect.
+For example, R will do math with atomic vectors that contain numbers,
+
+```{r}
+sum(int)
+
+```
+
+but not with atomic vectors that contain character strings:
+
+``` r
+sum(text)
+## Error in sum(text) : invalid 'type' (character) of argument
+```
+
+But we're getting ahead of ourselves!
+
+Get ready to say hello to the six types of atomic vectors in R.
+
+### Doubles
+
+A double vector stores regular numbers.
+The numbers can be positive or negative, large or small, and have digits to the right of the decimal place or not.
+In general, R will save any number that you type in R as a double.
+So, for example, the BodyMass you made in \[Project 1: Weighted Dice\] was a double object:
+
+```{r}
+BodyMass <- c(10400, 6100, 36, 60.3, 185, 65, 5.2, 80, 6000, 1600)
+# Print the BodyMass object
+BodyMass
+```
+
+You'll usually know what type of object you are working with in R (it will be obvious), but you can also ask R what type of object an object is with `typeof`.
+For example:
+
+```{r}
+## Call the object class of BodyMass
+typeof(BodyMass)
+```
+
+Some R functions refer to doubles as "numerics," and I will often do the same.
+Double is a computer science term.
+It refers to the specific number of bytes your computer uses to store a number, but I find "numeric" to be much more intuitive when doing data science.
+
+### Integers
+
+Integer vectors store integers, numbers that can be written without a decimal component.
+As a data scientist, you won't use the integer type very often because you can save integers as a double object.
+
+You can specifically create an integer in R by typing a number followed by an uppercase `L`.
+For example:
+
+```{r}
+BodyMass <- c(10400L, 6100L, 36L, 60L, 185L, 65L, 5L, 80L, 6000L, 1600L)
+# Print the BodyMass object
+BodyMass
+
+## Call the object class of BodyMass
+typeof(BodyMass)
+
+```
+
+Note that R won't save a number as an integer unless you include the `L`.
+Integer numbers without the `L` will be saved as doubles.
+The only difference between `4` and `4L` is how R saves the number in your computer's memory.
+Integers are defined more precisely in your computer's memory than doubles (unless the integer is *very* large or small).
+
+::: callout
+**Why would you save your data as an integer instead of a double?** Sometimes a difference in precision can have surprising effects.
+Your computer allocates 64 bits of memory to store each double in an R program.
+This allows a lot of precision, but some numbers cannot be expressed exactly in 64 bits, the equivalent of a sequence of 64 ones and zeroes.
+For example, the number $\pi$ contains an endless sequences of digits to the right of the decimal place.
+:::
+
+Your computer must round $\pi$ to something close to, but not exactly equal to $\pi$ to store $\pi$ in its memory.
+Many decimal numbers share a similar fate.
+
+As a result, each double is accurate to about 16 significant digits.
+This introduces a little bit of error.
+In most cases, this rounding error will go unnoticed.
+However, in some situations, the rounding error can cause surprising results.
+For example, you may expect the result of the expression below to be zero, but it is not:
+
+```{r}
+sqrt(2)^2 - 2
+## 4.440892e-16
+```
+
+The square root of two cannot be expressed exactly in 16 significant digits.
+As a result, R has to round the quantity, and the expression resolves to something very close to---but not quite---zero.
+
+These errors are known as *floating-point* errors, and doing arithmetic in these conditions is known as *floating-point arithmetic*.
+Floating-point arithmetic is not a feature of R; it is a feature of computer programming.
+Usually floating-point errors won't be enough to ruin your day.
+Just keep in mind that they may be the cause of surprising results.
+
+You can avoid floating-point errors by avoiding decimals and only using integers.
+However, this is not an option in most data-science situations.
+You cannot do much math with integers before you need a noninteger to express the result.
+Luckily, the errors caused by floating-point arithmetic are usually insignificant (and when they are not, they are easy to spot).
+As a result, you'll generally use doubles instead of integers as a data scientist.
+
+### Characters
+
+A character vector stores small pieces of text.
+You can create a character vector in R by typing a character or string of characters surrounded by quotes:
+
+```{r}
+SpeciesNames <- c("Loxodonta africana", "Loxodonta africana africana","Lycaon pictus","Thunnus alalunga",
+                  "Inia geoffrensis", "Panthera pardus orientalis", "Vulpes lagopus", "Canis lupus arctos",
+                  "Elephas maximus indicus", "Delphinapterus leucas")
+# Print the SpeciesNames object
+SpeciesNames
+
+# Call the object class for SpeciesNames
+typeof(SpeciesNames)
+
+
+# Call the object class for a writen text
+typeof("Loxodonta africana")
+
+```
+
+The individual elements of a character vector are known as *strings*.
+Note that a string can contain more than just letters.
+You can assemble a character string from numbers or symbols as well.
+
+::: callout
+**QUESTION** *Can you spot the difference between a character string and a number?*
+
+Here's a test: Which of these are character strings and which are numbers?
+`1`, `"1"`, `"one"`.
+:::
+
+Character strings can contain number characters, but that doesn't make them numeric.
+They're just strings that happen to have numbers in them.
+You can tell strings from real numbers because strings come surrounded by quotes.
+In fact, anything surrounded by quotes in R will be treated as a character string---no matter what appears between the quotes.
+
+It is easy to confuse R objects with character strings.
+**Why?** Because both appear as pieces of text in R code.
+For example, `x` is the name of an R object named "x," `"x"` is a character string that contains the character "x." One is an object that contains raw data, the other is a piece of raw data itself.
+
+Expect an error whenever you forget your quotation marks; R will start looking for an object that probably does not exist.
+
+### Logicals
+
+Logical vectors store `TRUE`s and `FALSE`s, R's form of Boolean data.
+Logicals are very helpful for doing things like comparisons:
+
+```{r}
+3 > 4
+```
+
+Any time you type `TRUE` or `FALSE` in capital letters (without quotation marks), R will treat your input as logical data.
+R also assumes that `T` and `F` are shorthand for `TRUE` and `FALSE`, unless they are defined elsewhere (e.g. `T <- 500`).
+Since the meaning of `T` and `F` can change, its best to stick with `TRUE` and `FALSE`:
+
+```{r}
+# Create a vector with Logical values
+logic <- c(TRUE, FALSE, TRUE)
+logic
+
+# Call the object class of the object logical
+typeof(logic)
+
+# Call the object class of False
+typeof(F)
+
+# Call the object class of "F"
+typeof("F")
+```
+
+## Attributes
+
+An attribute is a piece of information that you can attach to an atomic vector (or any R object).
+The attribute won't affect any of the values in the object, and it will not appear when you display your object.
+You can think of an attribute as "metadata"; it is just a convenient place to put information associated with an object.
+R will normally ignore this metadata, but some R functions will check for specific attributes.
+These functions may use the attributes to do special things with the data.
+
+You can see which attributes an object has with `attributes`.
+`attributes` will return `NULL` if an object has no attributes.
+An atomic vector, like `BodyMass`, won't have any attributes unless you give it some:
+
+```{r}
+# Make A bodymass Object
+BodyMass <- c(10400, 6100, 36, 60.3, 185, 65, 5.2, 80, 6000, 1600)
+
+## Print the atributes of BodyMass
+attributes(BodyMass)
+```
+
+::: callout
+**NULL**
+
+R uses `NULL` to represent the null set, an empty object.
+`NULL` is often returned by functions whose values are undefined.
+You can create a `NULL` object by typing `NULL` in capital letters.
+:::
+
+### Names
+
+The most common attributes to give an atomic vector are names, dimensions (dim), and classes.
+Each of these attributes has its own helper function that you can use to give attributes to an object.
+You can also use the helper functions to look up the value of these attributes for objects that already have them.
+For example, you can look up the value of the names attribute of `BodyMass` with `names`:
+
+```{r}
+names(BodyMass)
+```
+
+`NULL` means that `BodyMass` does not have a names attribute.
+You can give one to `BodyMass` by assigning a character vector to the output of `names`.
+The vector should include one name for each element in `BodyMass`:
+
+```{r}
+# Assing the names to BodyMass
+names(BodyMass) <- c("Loxodonta africana", "Loxodonta africana africana","Lycaon pictus","Thunnus alalunga",
+                     "Inia geoffrensis", "Panthera pardus orientalis", "Vulpes lagopus", "Canis lupus arctos",
+                     "Elephas maximus indicus", "Delphinapterus leucas")
+## the function above could also 
+# Print the names of BodyMass
+names(BodyMass)
+```
+
+Now `BodyMass` has a names attribute:
+
+```{r}
+# Print the names of BodyMass
+names(BodyMass)
+
+# Print the attributes of BodyMass
+attributes(BodyMass)
+```
+
+R will display the names above the elements of `BodyMass` whenever you look at the vector:
+
+```{r}
+## Display the BodyMass vector
+BodyMass
+```
+
+However, the names won't affect the actual values of the vector, nor will the names be affected when you manipulate the values of the vector:
+
+```{r}
+# Operation on the BodyMass vector
+BodyMass + 1
+
+```
+
+You can also use `names` to change the names attribute or remove it all together.
+To change the names, assign a new set of labels to `names`:
+
+```{r}
+# Redefine the names of 
+names(BodyMass) <- c("Lox_afr", "Lox_afr-afr" , "Lyc_pic", "Thu_ala",
+                   "Ini_geof", "Pan_par-ori", "Vul_lag", "Can_lup-arc",
+                   "Ele_max-ind", "Del_leu")
+
+
+#Print the object BodyMass
+BodyMass
+
+```
+
+To remove the names attribute, set it to `NULL`:
+
+```{r}
+## Reset the names in the object BodyMass
+names(BodyMass) <- NULL
+
+## Print the object BodyMass
+BodyMass
+
+```
+
+### Dim
+
+You can transform an atomic vector into an *n*-dimensional array by giving it a dimensions attribute with `dim`.
+To do this, set the `dim` attribute to a numeric vector of length *n*.
+R will reorganize the elements of the vector into *n* dimensions.
+Each dimension will have as many rows (or columns, etc.) as the *nth* value of the `dim` vector.
+For example, you can reorganize `BodyMass` into a 2 × 3 matrix (which has 2 rows and 3 columns):
+
+```{r}
+## Trun the BodyMass into a 2-d array
+dim(BodyMass) <- c(2, 5)
+
+## Print the Object BodyMass 
+BodyMass
+```
+
+or a 1 × 2 × 2 hypercube (which has 1 row, 2 columns, and 3 "slices").
+This is a three-dimensional structure, but R will need to show it slice by slice by slice on your two-dimensional computer screen:
+
+```{r}
+# Transform the BodyMass object form a 2x2 matrix to a 1x2x5 arrqy
+dim(BodyMass) <- c(1, 2, 5)
+# Print the BodyMass Object
+BodyMass
+```
+
+R will always use the first value in `dim` for the number of rows and the second value for the number of columns.
+In general, rows always come first in R operations that deal with both rows and columns.
+
+You may notice that you don't have much control over how R reorganizes the values into rows and columns.
+For example, R always fills up each matrix by columns, instead of by rows.
+If you'd like more control over this process, you can use one of R's helper functions, `matrix` or `array`.
+They do the same thing as changing the `dim` attribute, but they provide extra arguments to customize the process.
+
+## Matrices
+
+Matrices store values in a two-dimensional array, just like a matrix from linear algebra.
+To create one, first give `matrix` an atomic vector to reorganize into a matrix.
+Then, define how many rows should be in the matrix by setting the `nrow` argument to a number.
+`matrix` will organize your vector of values into a matrix with the specified number of rows.
+Alternatively, you can set the `ncol` argument, which tells R how many columns to include in the matrix:
+
+```{r}
+# Turn the BodyMass object into a matrix
+BodyMassMatrix <- matrix(BodyMass, nrow = 2)
+
+# Print the object BodyMassMatrix
+BodyMassMatrix
+```
+
+`matrix` will fill up the matrix column by column by default, but you can fill the matrix row by row if you include the argument `byrow = TRUE`:
+
+```{r}
+# Turn the BodyMass object into a matrix
+BodyMassMatrix <- matrix(BodyMass, nrow = 2, byrow = TRUE)
+
+# Print the object BodyMassMatrix
+BodyMassMatrix
+
+```
+
+`matrix` also has other default arguments that you can use to customize your matrix.
+You can read about them at `matrix`'s help page (accessible by `?matrix`).
+
+## Arrays
+
+The `array` function creates an n-dimensional array.
+For example, you could use `array` to sort values into a cube of three dimensions or a hypercube in 4, 5, or *n* dimensions.
+`array` is not as customizeable as `matrix` and basically does the same thing as setting the `dim` attribute.
+To use `array`, provide an atomic vector as the first argument, and a vector of dimensions as the second argument, now called `dim`:
+
+```{r}
+ar <- array(c(11:14, 21:24, 31:34), dim = c(2, 2, 3))
+
+ar
+```
+
+::: callout
+**QUESTION** *Create the following matrix, which stores the genus and species of every species in the SpeciesNames object?*
+
+There is more than one way to build this matrix, but in every case, you will need to start by making a character vector with 10 values.
+If you start with the following character vector, you can turn it into a matrix with any of the following three commands:
+:::
+
+## Class
+
+Notice that changing the dimensions of your object will not change the type of the object, but it *will* change the object's `class` attribute:
+
+```{r}
+# Make bodymass a 2x5 object
+dim(BodyMass) <- c(2, 5)
+
+## Ask the type of information in the object
+typeof(BodyMass)
+
+## Ask the type of object
+class(BodyMass)
+
+```
+
+A matrix is a special case of an atomic vector.
+For example, the `BodyMass` matrix is a special case of a double vector.
+Every element in the matrix is still a double, but the elements have been arranged into a new structure.
+R added a `class` attribute to `BodyMass` when you changed its dimensions.
+This class describes `BodyMass`'s new format.
+Many R functions will specifically look for an object's `class` attribute, and then handle the object in a predetermined way based on the attribute.
+
+Note that an object's `class` attribute will not always appear when you run `attributes`; you may need to specifically search for it with `class`:
+
+```{r}
+attributes(BodyMass)
+
+```
+
+You can apply `class` to objects that do not have a `class` attribute.
+`class` will return a value based on the object's atomic type.
+Notice that the "class" of a double is "numeric," an odd deviation, but one I am thankful for.
+I think that the most important property of a double vector is that it contains numbers, a property that "numeric" makes obvious:
+
+```{r}
+# Class of a string
+class("Hello")
+
+# Class of a number
+class(5)
+```
+
+You can also use `class` to set an object's `class` attribute, but this is usually a bad idea.
+R will expect objects of a class to share certain traits, such as attributes, that your object may not possess.
+
+### Dates and Times
+
+The attribute system lets R represent more types of data than just doubles, integers, characters, logicals, complexes, and raws.
+
+The time looks like a character string when you display it, but its data type is actually `"double"`, and its class is `"POSIXct"` `"POSIXt"` (it has two classes):
+
+```{r}
+# Lok for the time NOW
+now <- Sys.time()
+now
+
+# Type of information in the object now
+typeof(now)
+
+
+# Class  of the object now
+class(now)
+```
+
+POSIXct is a widely used framework for representing dates and times.
+In the POSIXct framework, each time is represented by the number of seconds that have passed between the time and 12:00 AM January 1st 1970 ([in the Universal Time Coordinated (UTC) zone](https://en.wikipedia.org/wiki/Unix_time)).
+For example, the time above occurs 1,395,057,600 seconds after then.
+So in the POSIXct system, the time would be saved as 1395057600.
+
+R creates the time object by building a double vector with one element, `1395057600`.
+You can see this vector by removing the `class` attribute of `now`, or by using the `unclass` function, which does the same thing:
+
+```{r}
+unclass(now)
+## 1395057600
+```
+
+R then gives the double vector a `class` attribute that contains two classes, `"POSIXct"` and `"POSIXt"`.
+This attribute alerts R functions that they are dealing with a POSIXct time, so they can treat it in a special way.
+For example, R functions will use the POSIXct standard to convert the time into a user-friendly character string before displaying it.
+
+You can take advantage of this system by giving the `POSIXct` class to random R objects.
+For example, have you ever wondered what day it was a million seconds after 12:00 a.m.
+Jan. 1, 1970?
+
+```{r}
+#Define a given number
+mil <- 1000000
+# Print the number
+mil
+# Look for the class of the mil object
+class(mil)
+
+# Change the object class to POSIXct
+class(mil) <- c("POSIXct", "POSIXt")
+# Print the mil object after changing the object class
+mil
+```
+
+Jan. 12, 1970.
+Yikes.
+A million seconds goes by faster than you would think.
+This conversion worked well because the `POSIXct` class does not rely on any additional attributes, but in general, forcing the class of an object is a bad idea.
+
+There are many different classes of data in R and its packages, and new classes are invented every day.
+It would be difficult to learn about every class, but you do not have to.
+Most classes are only useful in specific situations.
+Since each class comes with its own help page, you can wait to learn about a class until you encounter it.
+However, there is one class of data that is so ubiquitous in R that you should learn about it alongside the atomic data types.
+That class is `factors`.
+
+### Factors
+
+Factors are R's way of storing categorical information, like ethnicity or eye color.
+Think of a factor as something like a SppComunName; it can only have certain values (male or female), and these values may have their own idiosyncratic order (laBodyMasss first).
+This arrangement makes factors very useful for recording the treatment levels of a study and other categorical variables.
+
+To make a factor, pass an atomic vector into the `factor` function.
+R will recode the data in the vector as integers and store the results in an integer vector.
+R will also add a `levels` attribute to the integer, which contains a set of labels for displaying the factor values, and a `class` attribute, which contains the class `factor`:
+
+```{r}
+# Create the  SppComunName object 
+SppComunName <- c("African Elephant", "African savanna elephant", "African Wild Dog",
+                  "Albacore Tuna", "Amazon River Dolphin", "Amur Leopard", "Arctic Fox",
+                  "Arctic Wolf", "Asian Elephant", "Beluga")
+# Type of information in the object SppComunName
+typeof(SppComunName)
+
+# Make the SppComunName object a factor
+SppComunName <- factor(c("African Elephant", "African savanna elephant", "African Wild Dog",
+                         "Albacore Tuna", "Amazon River Dolphin", "Amur Leopard", "Arctic Fox",
+                         "Arctic Wolf", "Asian Elephant", "Beluga"))
+# Type of information in the object SppComunName after making it a factor
+typeof(SppComunName)
+
+# Print the attributes of the SppComunName object
+attributes(SppComunName)
+```
+
+You can see exactly how R is storing your factor with `unclass`:
+
+```{r}
+# Look how R stored the Data in SppComunName
+unclass(SppComunName)
+```
+
+R uses the levels attribute when it displays the factor, as you will see.
+R will display each `1` as `African Elephant`, the first label in the levels vector, and each `2` as `African savanna`, the second label, and so on:
+
+```{r}
+# Print the SppComunName object
+SppComunName
+```
+
+Factors make it easy to put categorical variables into a statistical model because the variables are already coded as numbers.
+However, factors can be confusing since they look like character strings but behave like integers.
+
+R will often try to convert character strings to factors when you load and create data.
+In general, you will have a smoother experience if you do not let R make factors until you ask for them.
+I'll show you how to do this when we start reading in data.
+
+You can convert a factor to a character string with the `as.character` function.
+R will retain the display version of the factor, not the integers stored in memory:
+
+```{r}
+# Print the SppComunName using the atributes
+as.character(SppComunName)
+```
+
+Now that you understand the possibilities provided by R's atomic vectors, let's make a more complicated type of object.
+
+::: callout
+**QUESTION** *Make a object playing card by combining "African Elephant," "Loxodonta africana," and 10400 into a vector - the information for the first species in the original list.* What type of atomic vector will result?
+:::
+
+**Data types in vectors**: Each atomic vector can only store one type of data.
+As a result, R coerces all of your values to character strings.
+If you try to put multiple types of data into a vector, R will convert the elements to a single type of data.
+
+Since matrices and arrays are special cases of atomic vectors, they suffer from the same behavior.
+Each can only store one type of data.
+
+This creates a couple of problems.
+First, many data sets contain multiple types of data.
+Simple programs like Excel and Numbers can save multiple types of data in the same data set, and you should hope that R can too.
+Don't worry, it can.
+
+Second, coercion is a common behavior in R, so you'll want to know how it works.
+
+## Coercion
+
+R's coercion behavior may seem inconvenient, but it is not arbitrary.
+R always follows the same rules when it coerces data types.
+Once you are familiar with these rules, you can use R's coercion behavior to do surprisingly useful things.
+
+So how does R coerce data types?
+If a character string is present in an atomic vector, R will convert everything else in the vector to character strings.
+If a vector only contains logicals and numbers, R will convert the logicals to numbers; every `TRUE` becomes a 1, and every `FALSE` becomes a 0.
+
+```{r}
+#| label: hopr_0301.png
+#| echo: false
+#| out-width: null
+#| fig-cap: | 
+#|   R always uses the same rules to coerce data to a single type.
+#|   If character strings are present, everything will be coerced to a
+#|   character string. Otherwise, logicals are coerced to numerics.
+knitr::include_graphics("hopr_0301.png")
+```
+
+This arrangement preserves information.
+It is easy to look at a character string and tell what information it used to contain.
+For example, you can easily spot the origins of `"TRUE"` and `"5"`.
+You can also easily back-transform a vector of 1s and 0s to `TRUE`s and `FALSE`s.
+
+R uses the same coercion rules when you try to do math with logical values.
+So the following code:
+
+```{r}
+sum(c(TRUE, TRUE, FALSE, FALSE))
+```
+
+will become:
+
+```{r}
+sum(c(1, 1, 0, 0))
+```
+
+This means that `sum` will count the number of `TRUE`s in a logical vector (and `mean` will calculate the proportion of `TRUE`s).
+Neat, huh?
+
+You can explicitly ask R to convert data from one type to another with the `as` functions.
+R will convert the data whenever there is a sensible way to do so:
+
+```{r}
+# Make a number a string
+as.character(1)
+## "1"
+
+# Make a number a Logical value
+as.logical(1)
+## TRUE
+
+# Make a Logical value o number
+as.numeric(FALSE)
+## 0
+```
+
+You now know how R coerces data types, but this won't help you save a object with the information for a species.
+To do that, you will need to avoid coercion altogether.
+You can do this by using a new type of object, a *list*.
+
+Before we look at lists, let's address a question that might be on your mind.
+
+Many data sets contain multiple types of information.
+The inability of vectors, matrices, and arrays to store multiple data types seems like a major limitation.
+So why bother with them?
+
+In some cases, using only a single type of data is a huge advantage.
+Vectors, matrices, and arrays make it very easy to do math on large sets of numbers because R knows that it can manipulate each value the same way.
+Operations with vectors, matrices, and arrays also tend to be fast because the objects are so simple to store in memory.
+
+In other cases, allowing only a single type of data is not a disadvantage.
+Vectors are the most common data structure in R because they store variables very well.
+Each value in a variable measures the same property, so there's no need to use different types of data.
+
+## Lists
+
+Lists are like atomic vectors because they group data into a one-dimensional set.
+However, lists do not group together individual values; lists group together R objects, such as atomic vectors and other lists.
+For example, you can make a list that contains a numeric vector of length 31 in its first element, a character vector of length 1 in its second element, and a new list of length 2 in its third element.
+To do this, use the `list` function.
+
+`list` creates a list the same way `c` creates a vector.
+Separate each element in the list with a comma:
+
+```{r}
+# Create a Dummy List
+list1 <- list(100:130, "R", list(TRUE, FALSE))
+
+# Print the Dummy List
+list1
+```
+
+The double-bracketed indexes tell you which element of the list is being displayed.
+The single-bracket indexes tell you which subelement of an element is being displayed.
+For example, `100` is the first subelement of the first element in the list.
+`"R"` is the first sub-element of the second element.
+This two-system notation arises because each element of a list can be *any* R object, including a new vector (or list) with its own indexes.
+
+Lists are a basic type of object in R, on par with atomic vectors.
+Like atomic vectors, they are used as building blocks to create many more sophisticated types of R objects you will need to manipulate to extract relevant information.
+
+As you can imagine, the structure of lists can become quite complicated, but this flexibility makes lists a useful all-purpose storage tool in R: you can group together anything with a list.
+
+However, not every list needs to be complicated.
+You can store a the infortion for a given species in a very simple list.
+
+::: callout
+**QUESTION** \*Use a list to store the infortion of the African Elephant (see the table at the start) which has the flowing values: Commun Name = African Elephant, Species Name = Loxodonta africana, and Boddy mass = 10400.
+The list should save these elements in separate elements.
+:::
+
+You can also use a list to store a all the infortion you have on species.
+Since you can save a single species as a list, you can save the group of species as a list of 10 sublists (one for each species).
+But let's not bother---there's a much cleaner way to do the same thing.
+You can use a special class of list, known as a *data frame*.
+
+## Data Frames
+
+Data frames are the two-dimensional version of a list.
+They are far and away the most useful storage structure for data analysis, and they provide an ideal way to store an information.
+You can think of a data frame as R's equivalent to the Excel spreadsheet because it stores data in a similar format.
+
+Data frames group vectors together into a two-dimensional table.
+Each vector becomes a column in the table.
+As a result, each column of a data frame can contain a different type of data; but within a column, every cell must be the same type of data, as in Figure @fig-data-frame.
+
+```{r}
+#| label: fig-data-frame
+#| echo: false
+#| out-width: null
+#| fig-cap: | 
+#|   Data frames store data as a sequence of columns. Each column can be a
+#|   different data type. Every column in a data frame must be the same length.
+knitr::include_graphics("hopr_0302.png")
+```
+
+Creating a data frame by hand takes a lot of typing, but you can do it (if you like) with the `data.frame` function.
+Give `data.frame` any number of vectors, each separated with a comma.
+Each vector should be set equal to a name that describes the vector.
+`data.frame` will turn each vector into a column of the new data frame:
+
+| Common name              | Scientific name             | Conservation status   | Max Body Mass (kg) |
+|------------------|-------------------|------------------|------------------|
+| African Elephant         | Loxodonta africana          |                       | 10400              |
+| African savanna elephant | Loxodonta africana africana | Endangered            | 6100               |
+| African Wild Dog         | Lycaon pictus               | Endangered            | 36                 |
+| Albacore Tuna            | Thunnus alalunga            | Near Threatened       | 60.3               |
+| Amazon River Dolphin     | Inia geoffrensis            |                       | 185                |
+| Amur Leopard             | Panthera pardus orientalis  | Critically Endangered | 65                 |
+| Arctic Fox               | Vulpes lagopus              | Least Concern         | 5.2                |
+| Arctic Wolf              | Canis lupus arctos          | Least Concern         | 80                 |
+| Asian Elephant           | Elephas maximus indicus     | Endangered            | 6000               |
+| Beluga                   | Delphinapterus leucas       | Near Threatened       | 1600               |
+| Bigeye Tuna              | Thunnus obesus              | Vulnerable            | 95                 |
+
+```{r}
+# Build a DataFrame
+EndSppDF <- data.frame(CommonName = c("African Elephant", "African savanna elephant",
+                                      "African Wild Dog", "Albacore Tuna",
+                                      "Amazon River Dolphin", "Amur Leopard",
+                                      "Arctic Fox", "Arctic Wolf", "Asian Elephant",
+                                      "Beluga"),
+                       ScientificName = c("Loxodonta africana", "Loxodonta africana africana",
+                                          "Lycaon pictus", "Thunnus alalunga", "Inia geoffrensis",
+                                          "Panthera pardus orientalis", "Vulpes lagopus",
+                                          "Canis lupus arctos", "Elephas maximus indicus",
+                                          "Delphinapterus leucas"),
+                       BodyMass = c(10400.0, 6100.0, 36.0, 60.3, 185.0, 65.0, 5.2,
+                                    80.0, 6000.0, 1600.0))
+# Print the Data Frame
+EndSppDF
+```
+
+You'll need to make sure that each vector is the same length (or can be made so with R's recycling rules; as data frames cannot combine columns of different lengths.
+
+In the previous code, I named the arguments in `data.frame` `CommonName`, `ScientificName`, and `BodyMass`, but you can name the arguments whatever you like.
+`data.frame` will use your argument names to label the columns of the data frame.
+
+::: callout
+**Names**
+
+You can also give names to a list or vector when you create one of these objects.
+Use the same syntax as with `data.frame`:
+
+-   Naming a list:\* `list(CommonName = "African Elephant", ScientificName = "Loxodonta africana", BodyMass = 10400.0)`
+-   Naming a Vector:\* `c(CommonName = "African Elephant", ScientificName = "Loxodonta africana", BodyMass = 10400.0)`
+
+The names will be stored in the object's `names` attribute.
+:::
+
+You can see what types of objects are grouped together by a list (or data frame) with the `str` function:
+
+```{r}
+# What is the information in EndSppDF
+typeof(EndSppDF)
+
+# What is the class of infortion in EndSppDF
+class(EndSppDF)
+
+# Print the structure of EndSppDF
+str(EndSppDF)
+```
+
+Notice that R saved your character strings as is.
+You can prevent this, so that they are factors behavior by adding the argument `stringsAsFactors = FALSE` to `data.frame`:
+
+```{r}
+# Build a DataFrame
+EndSppDF <- data.frame(CommonName = c("African Elephant", "African savanna elephant",
+                                      "African Wild Dog", "Albacore Tuna",
+                                      "Amazon River Dolphin", "Amur Leopard",
+                                      "Arctic Fox", "Arctic Wolf", "Asian Elephant",
+                                      "Beluga"),
+                       ScientificName = c("Loxodonta africana", "Loxodonta africana africana",
+                                          "Lycaon pictus", "Thunnus alalunga", "Inia geoffrensis",
+                                          "Panthera pardus orientalis", "Vulpes lagopus",
+                                          "Canis lupus arctos", "Elephas maximus indicus",
+                                          "Delphinapterus leucas"),
+                       BodyMass = c(10400.0, 6100.0, 36.0, 60.3, 185.0, 65.0, 5.2,
+                                    80.0, 6000.0, 1600.0),
+                       stringsAsFactors = T)
+
+# Print the structure of EndSppDF
+str(EndSppDF)
+```
+
+A data frame is a great way to build the type of table we are aiming to produce.
+You can make each row in the data frame a spcies, and each column a type of value---each with its own appropriate data type.
+
+You could create the full data frame with the commun names, species, conservations staus and body mass typing it `data.frame`, but that will be quite an effort.
+You should avoid typing large data sets in by hand whenever possible.
+Typing invites typos and errors, not to mention RSI.
+It is always better to acquire large data sets as a computer file.
+You can then ask R to read the file and store the contents as an object.
+
+I've created a file for you to load that contains a data frame of Enderger species attributes, so don't worry about typing in the code.
+Instead, turn your attention toward loading data into R.
+
+## Loading Data
+
+You can load the `EndSppData` data frame from the file [*EndSppData.csv*](http://bit.ly/deck_CSV).
+Please take a moment to download the file before reading on.
+*EndSppData.csv* is a comma-separated values file, or CSV for short.
+CSVs are plain-text files, which means you can open them in a text editor (as well as many other programs).
+If you open *EndSppData.csv*, you'll notice that it contains a table of data that looks like the following table.
+
+```{r}
+#| echo: false
+EndSppDF <- read.csv2("EndSppData.csv")
+knitr::kable(head(EndSppDF))
+```
+
+Each row of the table is saved on its own line, and a comma(or semicolon) is used to separate the cells within each row.
+Every CSV file shares this basic format:
+
+``` r
+"Common name","Scientific name","Conservation status","BodyMass"
+"Giant Panda","Ailuropoda melanoleuca","Vulnerable",125
+"Red Panda","Ailurus fulgens","Endangered",6,2
+"Marine Iguana","Amblyrhynchus cristatus","Vulnerable",12
+... and so on.
+```
+
+Most data-science applications can open plain-text files and export data as plain-text files.
+This makes plain-text files a sort of lingua franca for data science.
+
+To load a plain-text file into R, click the Import Dataset icon in RStudio, shown in Figure @fig_import.
+Then select "From text file."
+
+```{r}
+#| label: fig_import
+#| echo: false
+#| out-width: null
+#| fig-cap: | 
+#|   You can import data from plain-text files with RStudio's Import Dataset.
+knitr::include_graphics("hopr_0303.png")
+```
+
+RStudio will ask you to select the file you want to import, then it will open a wizard to help you import the data, as in Figure @fig_wizard.
+Use the wizard to tell RStudio what name to give the data set.
+You can also use the wizard to tell RStudio which character the data set uses as a separator, which character it uses to represent decimals (usually a period in the United States and a comma in Europe), and whether or not the data set comes with a row of column names (known as a *header*).
+To help you out, the wizard shows you what the raw file looks like, as well as what your loaded data will look like based on the input settings.
+
+You can also unclick the box "Strings as factors" in the wizard.
+I recommend doing this.
+If you do, R will load all of your character strings as character strings.
+If you do not, R will convert them to factors.
+
+```{r}
+#| label: fig_wizard
+#| echo: false
+#| out-width: null
+#| fig-cap: | 
+#|   RStudio's import wizard.
+knitr::include_graphics("hopr_0304.png")
+```
+
+Once everything looks right, click Import.
+RStudio will read in the data and save it to a data frame.
+RStudio will also open a data viewer, so you can see your new data in a spreadsheet format.
+This is a good way to check that everything came through as expected.
+If all worked well, your file should appear in a View tab of RStudio, like in Figure @fig_view.
+You can examine the data frame in the console with *`head(deck)`*.
+
+```{r}
+#| label: fig_view.
+#| echo: false
+#| out-width: null
+#| fig-cap: | 
+#|   When you import a data set, RStudio will save the data to a data frame and
+#|   then display the data frame in a View tab. You can open any data frame in
+#|   a View tab at any time with the View function.
+knitr::include_graphics("hopr_0305.png")
+```
+
+::: callout
+**Online data**
+
+You can load a plain-text file straight from the Internet by clicking the "From Web URL..." option under Import Dataset.
+The file will need to have its own URL, and you will need to be connected.
+:::
+
+`head` and `tail` are two functions that provide an easy way to peek at large data sets.
+`head` will return just the first six rows of the data set, and `tail` will return just the last six rows.
+To see a different number of rows, give `head` or `tails` a second argument, the number of rows you would like to view, for example, `head(deck, 10)`.
+
+```{r}
+# Top rows
+head(EndSppDF)
+
+# bottom rows
+tail(EndSppDF)
+```
+
+## Saving Data
+
+Before we go any further, let's save a copy of `EndSppDF` as a new *.csv* file.
+That way you can email it to a colleague, store it on a thumb drive, or open it in a different program.
+You can save any data frame in R to a *.csv* file with the command `write.csv`.
+To save `EndSppDF`, run:
+
+```{r}
+write.csv(EndSppDF, file = "EndSppDFCopy.csv", row.names = FALSE)
+```
+
+R will turn your data frame into a plain-text file with the comma-separated values format and save the file to your working directory.
+To see where your working directory is, run *`getwd()`*.
+To change the location of your working directory, visit Session \> Set Working Directory \> Choose Directory in the RStudio menu bar.
+
+You can customize the save process with `write.csv`'s large set of optional arguments (see `?write.csv` for details).
+However, there are three arguments that you should use *every* time you run `write.csv`.
+
+1)  Ggive `write.csv` the name of the data frame that you wish to save.
+
+2)  Provide a file name to give your file.
+    R will take this name quite literally, so be sure to provide an extension.
+
+3)  Add the argument `row.names = FALSE`.
+    This will prevent R from adding a column of numbers at the start of your data frame.
+
+A couple things about row numbers.
+These numbers will identify your rows from 1 to 82, but it is unlikely that whatever program you open *EndSppDFCopy.csv* in will understand the row name system.
+More than likely, the program will assume that the row names are the first column of data in your data frame.
+In fact, this is exactly what R will assume if you reopen *EndSppDFCopy.csv*.
+If you save and open *EndSppDFCopy.csv* several times in R, you'll notice duplicate columns of row numbers forming at the start of your data frame.
+I can't explain why R does this, but I can explain how to avoid it: use `row.names = FALSE` whenever you save data with `write.csv`.
+
+## Summary 
+
+You can save data in R with five different objects, which let you store different types of values in different types of relationships, as in Figure @fig_structures.
+Of these objects, data frames are by far the most useful for data science.
+Data frames store one of the most common forms of data used in data science, tabular data.
+
+```{r}
+#| label: fig_structures
+#| echo: false
+#| out-width: null
+#| fig-cap: | 
+#|   R's most common data structures are vectors, matrices, arrays, lists, and data frames.
+knitr::include_graphics("hopr_0306.png")
+```
+
+You can load tabular data into a data frame with RStudio's Import Dataset button---so long as the data is saved as a plain-text file.
+This requirement is not as limiting as it sounds.
+Most software programs can export data as a plain-text file.
+So if you have an Excel file (for example) you can open the file in Excel and export the data as a CSV to use with R.
+In fact, opening a file in its original program is good practice.
+Excel files use metadata, like sheets and formulas, that help Excel work with the file.
+R can try to extract raw data from the file, but it won't be as good at doing this as Microsoft Excel is.
+No program is better at converting Excel files than Excel.
+Similarly, no program is better at converting SAS Xport files than SAS, and so on.
+
+However, you may find yourself with a program-specific file, but not the program that created it.
+You wouldn't want to buy a multi-thousand-dollar SAS license just to open a SAS file.
+Thankfully R *can* open many types of files, including files from other programs and databases.
+R even has its own program-specific formats that can help you save memory and time if you know that you will be working entirely in R.

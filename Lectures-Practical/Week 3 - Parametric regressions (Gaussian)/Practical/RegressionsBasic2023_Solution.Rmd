@@ -1,0 +1,596 @@
+---
+title: "Multiple Linear Regressions (GLMs) - Solution"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(tidyverse)
+```
+
+# **The Set-up**
+
+## *Learning objectives.*
+1. Explore your dataset to avoid common statistical problems when performing a simple/multiple linear regression.
+2.	Implement as simple/multiple linear regression in `R`.  
+3.	Discriminate between raw and standardised regressions coefficients. 
+4.	Determine the fit of a linear regression and establish how good a model is.  
+5.	Reduce a model to the minimum adequate number of predictors using a stepwise procedure.   
+
+# **Environmental factors driving Denmark's biodiversity patterns.**
+
+## About the data you will use.
+
+The data to be used in this week practical is a combination of the biodiversity data  from the [Biowide](https://ecos.au.dk/forskningraadgivning/temasider/biowide) project, which aimed at collecting biodiversity data from 130 terrestrial sampling sites across Denmark. The dataset contains data for Plants (vascular plants and bryophytes), fungi (lichens and macrofungi), gastropods, and arthropods. You can get the [biodiversity data](https://www.gbif.org/dataset/cd4eb3ec-0a18-42b4-bda4-155716ddd7b1#description) from the Danish Biodiversity Information Facility. For further information on the project check the publication.
+
+Although environmental variables were collected as part of Biowide, this data is not available for our use. The data on environmental variables included in the table you will use comes from multiple Geospatial datasets I complied for this course.
+
+Here you will focus on the flowing variables:
+
+**1) decimalLongitude**: East-West position in decimal-degrees of a sample site coming from [Biowide](https://ecos.au.dk/forskningraadgivning/temasider/biowide).
+
+**2) decimalLatitude**: North-South position in decimal-degrees of a sample site coming from [Biowide](https://ecos.au.dk/forskningraadgivning/temasider/biowide). 
+
+**3) Log.S.AllGrp**: Logarithm of the total species richness of a sample site (sum of the unique species of all sampled groups in a site) coming from [Biowide](https://ecos.au.dk/forskningraadgivning/temasider/biowide).
+
+**4) landsdele**: Regional political unit of Denmark coming form the Database of Global Administrative Areas [GADAM](https://gadm.org).
+
+**5) Geology**: Geological formation coming from the [Denamrk's geological service](https://eng.geus.dk/products-services-facilities/data-and-maps/maps-of-denmark).
+
+**6) NatDensBasMp**: Density of natural land cover types as defined by [BASEMAP](https://envs.au.dk/en/research-areas/society-environment-and-resources/land-use-and-gis/basemap).
+
+**7) Dis2Cost**: Distance in km of a sampled site to the coast estimated by me using Denmark high resolution contour map coming form the Database of Global Administrative Areas [GADAM](https://gadm.org).
+
+**8) HII**: [Human Influence Index](https://sedac.ciesin.columbia.edu/data/set/wildareas-v2-human-influence-index-geographic), a measurement of the anthropogenic impacts on the environment.
+
+**9) Slope30mAgg**: the maximum rate of change in value from that cell to its neighbours estimated based on the [SRTM-30m DEM](https://www2.jpl.nasa.gov/srtm/).
+
+**10) PrecSea**: Seasonality of precipitation measured as the variability of monthly values (using the CV) coming the [CHELSA-climatologies](https://chelsa-climate.org) .
+
+
+## 1. Load the Data
+
+<div class="alert alert-info">
+**Your task:**
+Load the data in *Biowide_AllSppRich.csv*, located in the files of the project
+
+Use `read_csv`/`read.csv` to load the file - The file is comma-separated
+
+Save the object as an object named `DK.Biodiv`.
+</div >
+
+```{r LoadData}
+# Read the file and save it as an object named `DK.Biodiv`
+DK.Biodiv <-  read_csv("Data/Biowide_AllSppRich.csv")
+
+```
+
+
+## 2. Data Exploration: oultiers in X and Y
+
+<div class="alert alert-info">
+**Your task:**
+
+Using the object `DK.Biodiv`, you will now build a box plot for each continuous predictor variables adding a "title" to each plot.
+
+To be clear the response variable is  *Richness of all sampled species* [`Log.S.AllGrp`].
+
+The predictors are:
+1) *Nature Density* [`NatDensBasMp`]
+2) *Distance to coast* [`Dis2Cost`]
+3) *Human Impact Index* [`HII`]
+4) *Slope* [`Slope30mAgg`]
+5) *Precipitation Seasonality* [`PrecSea`]
+</div>
+
+```{r Outlier1,fig.width=8, fig.height=8}
+# Set a plotting space with 6 regions (two columns and three rows). For this, use the function 
+library(cowplot)
+
+# Plot a box-plot for Nature Density
+plot_1 <- ggplot(DK.Biodiv, aes(y=NatDensBasMp)) + geom_boxplot() + ggtitle("Nature Density")
+plot_1
+
+# Plot a box-plot for Distance to coast
+plot_2 <- ggplot(DK.Biodiv, aes(y=Dis2Cost)) + geom_boxplot() + ggtitle("Distance to coast")
+plot_2
+
+# Plot a box-plot for Human Impact Index
+plot_3 <- ggplot(DK.Biodiv, aes(y=HII)) + geom_boxplot() + ggtitle("Human Impact Index")
+plot_3
+
+# Plot a box-plot for Slope
+plot_4 <- ggplot(DK.Biodiv, aes(y=Slope30mAgg)) + geom_boxplot() + ggtitle("Slope")
+plot_4
+
+# Plot a box-plot for Precipitation Seasonality
+plot_5 <- ggplot(DK.Biodiv, aes(y=PrecSea)) + geom_boxplot() + ggtitle("Precipitation Seasonality")
+plot_5
+
+# Placing them in a grid
+#library(cowplot)
+#plot_grid(plot_1, plot_2, plot_3, plot_4, plot_5, labels = c('A', 'B', 'C', 'D', 'E'))
+
+
+# Using just two lines of code
+#for( var in c(names(DK.Biodiv)[7:11])){
+#  print(ggplot(DK.Biodiv, aes(y=.data[[var]])) + geom_boxplot() + ggtitle(var))
+### Note that:
+#### i) The use of the print function to make sure the object is printed
+#### ii) The use of .data[[var]] to call and variable from a data frame using an object
+#}
+
+```
+
+<div class="alert alert-success">
+**Question**: For which variable can you detect outlier observation.
+
+For Distance to coast, slope and HII there are some outliers.
+</div>
+
+
+# Data Exploration: Is there homogeneity of variances - 1?
+<div class="alert alert-info">
+**Your task:**
+
+Here you will evaluate if the variance in the richness of all sampled species in the **Biowide** project are homogeneous across all predictors. **Remember that the response variable here is `Log.S.AllGrp`**.
+
+For this, you will assess this assumption for each of the five predictors **individually**. 
+
+Try to use a `for()` loop for this task.
+
+</div>
+
+```{r HomVar2,fig.width=8, fig.height=8}
+# Create a Vector named PredNames with the predictors names
+PredNames <- names(DK.Biodiv)[7:11]
+
+# Loop using i as an iterator and cycle through PredNames
+for (i in PredNames){ #i <- PredNames[1]
+# Create a new subset data.frame named DK.Div.Tmp that only contains ONLY the log-richness and the evaluated predictors as variables
+  DK.Div.Tmp <- DK.Biodiv[,c("Log.S.AllGrp",i)]
+  
+# Build a regression model, using the lm() function, and store it as an object named Lm.Mod 
+  Lm.Mod <- lm(Log.S.AllGrp ~ ., 
+               data = DK.Div.Tmp) 
+  
+# Save the residuals into an object named Lm.Resid
+  Lm.Resid <- residuals(Lm.Mod)
+
+# Save the fitted/predicted values into an object named Lm.Fitt
+  Lm.Fitt <- predict(Lm.Mod)
+
+# Plot the Residuals vs Predicted values
+  
+  print(ggplot(tibble(Lm.Resid,Lm.Fitt),
+         aes(x=Lm.Fitt,y=Lm.Resid)) +
+    # add the points
+    geom_point() +
+    #plot the smutter
+    geom_smooth() +
+    # Define the text to be added as main title and the x/y-axis label
+    ggtitle(PredNames) + xlab("Fitted values") + ylab("Residuals") +
+    # Add a horizontal line using the abline() function at zero for reference
+    geom_hline(yintercept=0, linetype="dashed", 
+                color = "red", size=2))
+}
+```
+<div class="alert alert-success">
+**Question:** Is the variance of log-richness for all sampled species homoscedastic for individual variables?
+
+Distance to coast, and Slope show a funnel shape
+</div>
+
+# Data Exploration: Is there homogeneity of variances - 2?
+
+<div class="alert alert-info">
+**Your task:**
+
+Now you will evaluate the variance in the log-richness for all sampled species is homogeneous across all predictors **simultaneously**.
+
+For this, you will build a multiple regression where all five (5) continuous predictors are combined into a single additive model **with no interactions**.
+
+**Remember that your response variable is `Log.S.AllGrp`**.
+</div>
+
+```{r HomVar1}
+# Build a regression model using the lm() function where all six variables predict the log-richness for all sampled species. # save the model as an object named FullMod
+FullMod <- lm(Log.S.AllGrp ~ NatDensBasMp + Dis2Cost + HII + Slope30mAgg + PrecSea,
+              data = DK.Biodiv)
+# Call the model
+FullMod
+
+# Now extract the residuals and save them into an object named Lm.Resid. For this, use the residuals() function
+Lm.Resid <- residuals(FullMod)
+
+# Now extract the fitted values and save them into an object named Lm.Fitt.  For this, use the predict() function
+Lm.Fitt <- predict(FullMod)
+
+# Plot the Residuals vs Predicted values
+ggplot(tibble(Lm.Resid,Lm.Fitt),
+         aes(x=Lm.Fitt,y=Lm.Resid)) +
+    # add the points
+    geom_point() +
+    #plot the smutter
+    geom_smooth() +
+    # Define the text to be added as main title and the x/y-axis label
+    ggtitle(PredNames) + xlab("Fitted values") + ylab("Residuals") +
+    # Add a horizontal line using the abline() function at zero for reference
+    geom_hline(yintercept=0, linetype="dashed", 
+                color = "red", size=2)
+```
+
+<div class="alert alert-success">
+**Question:** Is the variance of log-richness for all sampled species homoscedastic?
+
+The residual variation appears to be similar across all levels of fitted values (the spread does not show clear trends - but there are empty areas.
+</div>
+
+# Data Exploration: Are the residuals normally distributed?
+
+<div class="alert alert-info">
+**Your task:**
+
+Using a simple multivariate additive model (that is and additive combination of the used predictors) build in the section above (that is the `Lm.Resid` object), you will now assess if the residuals are normally distributed. For this, you will:
+
+* Generate a histogram (using the `hist()` function) of the **frequency** of the residuals from the simple multivariate additive model.
+</div>
+```{r NormRes2}
+# Plot the Residuals vs Predicted values - density plot
+  ggplot(tibble(Lm.Resid,Lm.Fitt),
+         aes(Lm.Resid, after_stat(density))) +
+  geom_histogram(bins =15) + geom_density()
+```
+<div class="alert alert-success">
+**Question:** Based on this histogram, is the residual variation normally distributed?**
+
+The histogram would appear to be normal
+</div>
+
+<div class="alert alert-info">
+**Your task:**
+Using a simple multivariate additive model (that is and additive combination of the used predictors) build in the section above (that is the `Lm.Resid` object), you will now assess if the residuals are normally distributed. For this, you will:
+
+* Plot a q-q plot of the residuals, using the `qqnorm()` and `qqline()` functions.
+
+</div>
+
+```{r NormRes3}
+# Plot a q-q plot of the residuals
+ggplot(tibble(Lm.Resid,Lm.Fitt), aes(sample = Lm.Resid)) + stat_qq() + stat_qq_line()
+
+
+```
+<div class="alert alert-success">
+**Question:** Based on the q-q plot, is the residual variation normally distributed?
+
+Although there is variability in the high end of the theoretical-observed trend, the residuals appear normally distributed
+</div>
+
+<div class="alert alert-info">
+**Your task:**
+
+Using a simple multivariate additive model (that is and additive combination of the used predictors) build in the section above (that is the `Lm.Resid` object), you will now assess if the residuals are normally distributed. For this, you will:
+
+* Use the Shapiro–Wilk test (executed using the `shapiro.test()` function) to assess the normality of the residuals.
+</div>
+
+```{r NormRes4}
+# Implement the shapiro.test() function to assess normality of the residuals. Remember that a non-significant test (p>0.05) means that the observed and expected distribution (in this case, normal) are the same.
+shapiro.test(Lm.Resid)
+```
+
+<div class="alert alert-success">
+**Question**: Based on this Shapiro–Wilk test, is the residual variation normally distributed?
+
+The residual variation is just normally distributed because the p-value (0.1275) is larger than 0.05.
+</div>
+
+# Data Exploration: Is there collinearity among the covariates?
+
+<div class="alert alert-info">
+**Your task:**
+
+Estimate the tolerance and VIF for all six predictors in the `DK.Biodiv` object. Use the `vif()` function form the `car` package.
+
+</div>
+
+```{r Collin3}
+# estimate the variance inflation. 
+    car::vif(FullMod)
+```
+
+<div class="alert alert-success">
+**Question:** Which variable should be removed due to high collinearity variable?
+
+**PLACE YOUR ANSWER HERE**
+</div>
+
+# Data Exploration: What are the relationships between `Y` and `X` variables?
+
+<div class="alert alert-info">
+**Your task:**
+
+Make multi-panel scatter-plots showing the relation between log-richness for all sampled species and each predictors.
+
+For each panel add the regression line (using the `abline()` function) and the Pearson correlation coefficient (using the `legend()` function).
+
+</div>
+
+```{r BivarRel,fig.width=8, fig.height=8}
+
+#Plot a bivariate between Log.S.AllGrp and Nature Density
+plot_1 <- ggplot(DK.Biodiv,
+            aes(x = NatDensBasMp,
+                y = Log.S.AllGrp)) +
+          geom_point() + # Add the points
+          geom_smooth(method = lm) + # Add the regression
+          # Add the titles
+          ggtitle("Nature Density") + xlab("Nature Density") + ylab("Species richness")
+plot_1
+
+#Plot a bivariate between Log.S.AllGrp and Distance to coast
+plot_2 <- ggplot(DK.Biodiv,
+            aes(x = Dis2Cost,
+                y = Log.S.AllGrp)) +
+          geom_point() + # Add the points
+          geom_smooth(method = lm) + # Add the regression
+          # Add the titles
+          ggtitle("Distance to coast") + xlab("Distance to coast") + ylab("Species richness")
+plot_2
+
+#Plot a bivariate between Log.S.AllGrp and Human Impact Index
+plot_3 <- ggplot(DK.Biodiv,
+            aes(x = HII,
+                y = Log.S.AllGrp)) +
+          geom_point() + # Add the points
+          geom_smooth(method = lm) + # Add the regression
+          # Add the titles
+          ggtitle("Human Impact Index") + xlab("Human Impact Indext") + ylab("Species richness")
+plot_3
+
+#Plot a bivariate between Log.S.AllGrp and Slope
+plot_4 <- ggplot(DK.Biodiv,
+            aes(x = Slope30mAgg,
+                y = Log.S.AllGrp)) +
+          geom_point() + # Add the points
+          geom_smooth(method = lm) + # Add the regression
+          # Add the titles
+          ggtitle("Slope") + xlab("Slope") + ylab("Species richness")
+plot_4
+
+#Plot a bivariate between Log.S.AllGrp and Precipitation Seasonality
+plot_5 <- ggplot(DK.Biodiv,
+            aes(x = PrecSea,
+                y = Log.S.AllGrp)) +
+          geom_point() + # Add the points
+          geom_smooth(method = lm) + # Add the regression
+          # Add the titles
+          ggtitle("Precipitation Seasonality") + xlab("Precipitation Seasonality") + ylab("Species richness")
+plot_5
+
+# place them in a grid
+#library(cowplot)
+#plot_grid(plot_1, plot_2, plot_3, plot_4, plot_5, labels = c('A', 'B', 'C', 'D', 'E'))
+
+
+```
+
+<div class="alert alert-success">
+**Question:** Which variables show a relation with `Log.S.AllGrp`?
+
+Of the predictors `Slope`, and `Precipitation` seasonality show a significant correlation with Log.S.AllGrp.
+</div> 
+
+# Data Exploration: Are observations of the response variable independent?
+
+<div class="alert alert-info">
+**Your task:**
+Now you will evaluate if the independence of the Observations. For this, plot the residuals (`Lm.Resid`) vs. the response variable (`Log.S.AllGrp`).
+</div>
+
+```{r Independ1}
+# Plot the Residuals vs response variable
+ggplot(tibble(Lm.Resid,DK.Biodiv),
+         aes(x = Log.S.AllGrp, y = Lm.Resid)) +
+    # add the points
+    geom_point() +
+    #plot the smutter
+    geom_smooth() +
+    # Define the text to be added as main title and the x/y-axis label
+    ggtitle("All variables") + xlab("Log.S.AllGrp") + ylab("Residuals") +
+    # Add a horizontal line using the abline() function at zero for reference
+    geom_hline(yintercept=0, linetype="dashed", 
+                color = "red", size=2)
+```
+
+<div class="alert alert-success">
+**Question:** Do you see any patterns in the residuals?
+
+There is CLEAR a consistent upward trend in the residuals. This means the observations are not independent of each other - something you can expect if you consider that this is spatial data
+</div> 
+
+# Multiple Linear Regressions - first implementation
+
+<div class="alert alert-info">
+**Your task:**
+You have a regression object (`FullMod`). Plot the regression object to see what is shown.
+</div>
+
+```{r Reg2}
+# Build 2x2 plotting space filled row-wise 
+par(mfrow = c(2,2), # you need to specify two values here the number of rows and the number of columns
+    mar=c(4,4,2,2)) # here you define the 'margins" - blank space between plotting areas)
+# use the plot function on the lm object named FullMod
+plot(FullMod)
+```
+
+<div class="alert alert-success">
+**Question:** What is represented in this figure?
+  * The upper/lower left panel shows if there is homogeneity in the variances.
+  * The upper right panel show that the residuals are mostly normally distributed.
+  * The lower right panel show that no value has large leverage (has a strong influence on the regression parameters.
+  * The lower right panel show that no value has large leverage (has a strong influence on the regression parameters - but observation 130,107 and 79 has some influence as it has large leverage, and they might be a issue as they have very negative residuals.
+</div>
+
+# Multiple Linear Regressions - standardised regression coefficients
+
+<div class="alert alert-info">
+**Your task:**
+Create a new `data.frame` including `Log.S.AllGrp` and all six predictors, and use the `scale()` function to standardise both the response and the predictor variables.
+</div>
+
+```{r StdzPred1}
+# For ease, generate an object named Stdz.DK.Biodiv where you will store `Log.S.AllGrp` and the used of predictors
+Stdz.DK.Biodiv <- DK.Biodiv[,c("Log.S.AllGrp", # the name of the response
+                            PredNames)]# the name of the predictors
+# Use the scale() function on Stdz.DK.Biodiv to scale the predictors
+Stdz.DK.Biodiv <- scale(Stdz.DK.Biodiv)
+
+# Print the Five first rows of Stdz.DK.Biodiv
+head(Stdz.DK.Biodiv)
+
+```
+<div class="alert alert-info">
+**Your task:**
+
+Estimate the standardised regression coefficients using the standardised `data.frame` you just created (`Stdz.DK.Biodiv`).
+
+</div>
+
+```{r StdzPred2}
+# use the Stdz.DK.Biodiv object to generate a regression object named Stdz.Model1
+Stdz.Model <- lm(Log.S.AllGrp ~ NatDensBasMp + Dis2Cost + HII + Slope30mAgg + PrecSea,
+              data = as.data.frame(Stdz.DK.Biodiv)) # Call the object with the Scaled data
+
+# use the summary() function to see the regression coefficients
+summary(Stdz.Model)
+
+```
+
+
+# Multiple Linear Regressions - Summary of the Results
+
+<div class="alert alert-info">
+**Your task:**
+
+Build a `data.frame` that contains the points in the table below. Do this by extracting information of the objects you have created beforehand, **NOT BY TYPING THE VALUES!**
+
++-------------+----------+----------------+--------------------------+-----------+---+---+
+| Coefficient | Estimate | Standard Error | Standardised Coefficient | Tolerance | t |$p$|
++=============+==========+================+==========================+===========+===+===+
+| Intercept   |          |                |                          |           |   |   |
++-------------+----------+----------------+--------------------------+-----------+---+---+
+| LAT         |          |                |                          |           |   |   |
++-------------+----------+----------------+--------------------------+-----------+---+---+
+| LONG        |          |                |                          |           |   |   |
++-------------+----------+----------------+--------------------------+-----------+---+---+
+| MAP         |          |                |                          |           |   |   |
++-------------+----------+----------------+--------------------------+-----------+---+---+
+| MAT         |          |                |                          |           |   |   |
++-------------+----------+----------------+--------------------------+-----------+---+---+
+| JJAMAP      |          |                |                          |           |   |   |
++-------------+----------+----------------+--------------------------+-----------+---+---+
+| DJFMAP      |          |                |                          |           |   |   |
++-------------+----------+----------------+--------------------------+-----------+---+---+
+
+</div>
+
+```{r SummTbl}
+# Generate three objects 
+# 1. Store the summary of the regression carried out on original data (FullMod). name this sum.par.lm 
+sum.par.lm <- summary(FullMod)
+
+#2.  Store the summary of the regression carried out on standardised data (Stdz.Model). name this sum.par.lm.scaled 
+sum.par.lm.scaled <- summary(Stdz.Model)
+
+#3. Create a vector called tolerances with the tolerance for each variable - use the function vif() for this
+tolerances <- car::vif(Stdz.Model)
+
+# Merge all the elements into a single data.frame
+par.table <- cbind(sum.par.lm$coefficients[, 1:2], # un-standardised coefficients and SD
+                   sum.par.lm.scaled$coefficients[, 1], # standardized coefficients
+                   c(NA, tolerances), # Tolerances
+                   sum.par.lm$coefficients[, 3:4]) # un-standardised coefficients T value and P value
+
+colnames(par.table) <- c("Estimate", "Standard error", "Stdandard coefficient", "Tolerance", "t", "p")
+
+# print the table using Kable
+knitr::kable(round(par.table,3))
+```
+
+# Multiple Linear Regressions - How good is my model
+
+<div class="alert alert-info">
+**Your task:**
+
+Extract the model coefficient of determination and adjusted-coefficient of determination for both the modes. Do this for both the original model and the one run with standardised data.
+  
+</div>
+
+```{r Rsqrd}
+# To extract the R^2 and adjusted-R^2 you need to use the `adj.r.squared` and `r.squared` subscripts on an object that builds the summary of an object created with the function `lm`
+# r.squared for a regression carried out on original data 
+summary(FullMod)$r.squared
+
+# adj.r.squared for a regression carried out on original data 
+summary(FullMod)$adj.r.squared
+
+# r.squared for a regression carried out on standardised data 
+summary(Stdz.Model)$r.squared
+
+# adj.r.squared for a regression carried out on standardised data 
+summary(Stdz.Model)$adj.r.squared
+
+```
+
+<div class="alert alert-success">
+**Question:** Does the fit of the model change if you use standardised or the original data?
+The fit is not affected by the use of standardized predictors.
+</div>
+
+# Multiple Linear Regressions - Minimum Adequate Model
+
+
+<div class="alert alert-info">
+**Your task:**
+
+Run a forward selection procedure. For each process, extract the regression coefficients of the reduced model.
+</div>
+
+```{r MAM1}
+# Using the step() function, make a forward stepwise selection on the model with standardised regression coefficients. Save this into a object call FrwdSel
+FrwdSel <- step(Stdz.Model, # an object representing a model to simplify
+                direction = "forward") # forward or backward
+#extract the regression coefficients using the function coef()
+coef(FrwdSel)
+#Get the adjusted R-squared
+summary(FrwdSel)$adj.r.squared
+```
+<div class="alert alert-info">
+**Your task:**
+
+Run a backward selection procedure. For each process, extract the regression coefficients of the reduced model.
+</div>
+
+```{r MAM2}
+# Using the step() function, make a Backwards stepwise selection on the model with standardised regression coefficients. Save this into a object call BackSel
+BackSel <- step(Stdz.Model, # an object representing a model to simplify
+                direction = "backward",
+                na.rm=T) # forward or backward
+#extract the regression coefficients using the function coef()
+coef(BackSel)
+#Get the adjusted R-squared
+summary(BackSel)$adj.r.squared
+```
+
+<div class="alert alert-success">
+**Question:** Are the same variables selected by the backwards and forward selection procedures?
+
+The backwards stepwise selection selects a shorter list of variables (`NatDensBasMp`, `Slope30mAgg`, `decimalLatitude`), while the forward selection includes all variables."
+</div>
+
+<div class="alert alert-success">
+**Question:** Based on the adjusted R-squared, which selection procedure resulted in a better fitting model?
+Based on the adjusted R-squared, the backwards stepwise selection results in a better model.
+</div>
